@@ -83,3 +83,21 @@ export const checkEmail = asyncHandler(async (req, res) => {
     throw new Error("Email already Exists")
   }
 })
+
+// @desc get user profile
+// @route GET /api/users/profile
+// @access Private
+export const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id)
+
+  if (user) {
+    res.json({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+    })
+  } else {
+    res.status(404)
+    throw new error("User not found")
+  }
+})
