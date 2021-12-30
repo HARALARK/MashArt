@@ -71,6 +71,9 @@ export const checkUsername = asyncHandler(async (req, res) => {
   if (usernameExists) {
     throw new Error("Username already Exists")
   }
+  res.json({
+    username,
+  })
 })
 
 // @desc check if email exists
@@ -82,6 +85,9 @@ export const checkEmail = asyncHandler(async (req, res) => {
   if (emailExists) {
     throw new Error("Email already Exists")
   }
+  res.json({
+    email,
+  })
 })
 
 // @desc get user profile
