@@ -101,3 +101,33 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     throw new error("User not found")
   }
 })
+
+// @desc update user profile
+// @route POST /api/users/profile
+// @access Private
+export const updateUserProfile = asyncHandler(async (req, res) => {
+  const { username, email, password } = req.body
+
+  const user = await User.findById(req.user._id)
+
+  if (user) {
+    user.username = username || user.username
+    user.email = email || user.email
+
+    if (password) {
+      user.password = password
+    }
+
+    const updatedUser = await user.save()
+
+    res.json({
+      _id: updatedUser._id,
+      usename: updatedUser.username,
+      email: updatedUser.email,
+      token: generateToken(updatedUser._id),
+    })
+  } else {
+    res.status(404)
+    throw new Error("User not found")
+  }
+})
