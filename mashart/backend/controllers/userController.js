@@ -61,3 +61,25 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid user data")
   }
 })
+
+// @desc check if usename exists
+// @route POST /api/users/username
+// @access Public
+export const checkUsername = asyncHandler(async (req, res) => {
+  const { username } = req.body
+  const usernameExists = await User.findOne({ username })
+  if (usernameExists) {
+    throw new Error("Username already Exists")
+  }
+})
+
+// @desc check if email exists
+// @route POST /api/users/email
+// @access Public
+export const checkEmail = asyncHandler(async (req, res) => {
+  const { email } = req.body
+  const emailExists = await User.findOne({ email })
+  if (emailExists) {
+    throw new Error("Email already Exists")
+  }
+})
