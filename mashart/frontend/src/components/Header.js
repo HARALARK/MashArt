@@ -57,7 +57,6 @@ const Container = styled.div`
   align-items: center;
   padding: 0 2rem;
   color: #fff;
-  font-family: "Poppins";
 `
 
 const Logo = styled.a`
