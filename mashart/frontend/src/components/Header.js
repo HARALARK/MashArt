@@ -23,7 +23,7 @@ const Header = () => {
   }
 
   return (
-    <Container>
+    <Container userLoggedIn={userInfo ? "flex" : "none"}>
       <Logo href="/">
         <LogoImage src="/images/logo/logo.png" alt="logo" />
         <LogoTxt>MashArt</LogoTxt>
@@ -52,11 +52,15 @@ const Header = () => {
 const Container = styled.div`
   background-color: #24003e;
   height: 80px;
-  display: flex;
+  display: ${(props) => props.userLoggedIn};
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
   color: #fff;
+
+  @media ${device.tablet} {
+    display: flex;
+  }
 `
 
 const Logo = styled.a`
