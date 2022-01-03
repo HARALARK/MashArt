@@ -11,16 +11,30 @@ const WelcomeScreen = () => {
         <p className="para">
           Est et duis pariatur deserunt esse eu est ut velit dolore eu elit esse
           quis. Quis occaecat consequat non amet est magna sint dolore eiusmod
-          cupidatat quis fugiat veniam nulla. In dolore est labore consequat
-          adipisicing cupidatat ad velit et dolor fugiat nisi irure. In proident
-          culpa do Lorem tempor deserunt dolor aute velit do. Dolor ea proident
-          culpa labore.
+          cupidatat quis fugiat veniam nulla.Quis occaecat consequat non amet
+          est magna sint dolore eiusmod cupidatat quis fugiat veniam nulla.
         </p>
         <div className="button-container">
           <Button primary>Sign Up</Button>
           <Button>Login</Button>
         </div>
       </Left>
+      <Right>
+        <div className="container">
+          <SVG src="./images/blob.svg" alt="blob" boxSize="320" />
+          <SVG
+            className="collab"
+            src="./images/collab.svg"
+            alt="collab"
+            boxSize="250"
+          />
+          <div className="text-design">
+            <p className="collaborate">Collaborate</p>
+            <p className="share">Share</p>
+            <p className="enjoy">Enjoy!!!</p>
+          </div>
+        </div>
+      </Right>
     </Container>
   )
 }
@@ -28,11 +42,17 @@ const WelcomeScreen = () => {
 const Container = styled.div`
   display: flex;
   align-items: center;
-  flex-direction: column;
-  margin: 1.2rem;
+  justify-content: center;
+  flex-direction: column-reverse;
+  margin: 0 1.2rem;
+
+  height: 100vh;
 
   @media ${device.tablet} {
     flex-direction: row;
+    height: calc(100vh - 80px);
+    justify-content: space-between;
+    gap: 2rem;
   }
 `
 
@@ -51,21 +71,69 @@ const Left = styled.div`
     font-size: 2rem;
     letter-spacing: 2px;
     line-height: 0.5;
-    margin-bottom: 2rem;
   }
 
   .para {
-    text-align: justify;
     font-size: 0.9rem;
-    margin-bottom: 1rem;
+    margin: 1rem;
+    line-height: 92%;
   }
 
   .button-container {
+    text-align: center;
+  }
+
+  @media ${device.tablet} {
+    width: 400px;
     text-align: left;
+
+    .button-container {
+      text-align: left;
+    }
+
+    .para {
+      text-align: justify;
+      margin: 1rem 0;
+    }
   }
 `
 
-const Right = styled.div``
+const Right = styled.div`
+  .container {
+    position: relative;
+  }
+  .collab {
+    position: absolute;
+    left: 0;
+  }
+
+  .text-design {
+    position: absolute;
+    top: 60%;
+    font-weight: 900;
+    font-size: 2rem;
+    line-height: 65%;
+    letter-spacing: -2px;
+  }
+
+  .text-design .collaborate {
+    color: #ffffff;
+  }
+
+  .text-design .share {
+    color: #7c41a7;
+  }
+
+  .text-design .enjoy {
+    color: #dd4a5c;
+  }
+
+  @media ${device.tablet} {
+    .text-design {
+      font-size: 2.35rem;
+    }
+  }
+`
 
 const Button = styled.a`
   display: inline-block;
@@ -88,6 +156,17 @@ const Button = styled.a`
     border-bottom: 3px solid #24003e;
     border-radius: 0;
     color: #24003e;
+  }
+`
+
+const SVG = styled.img`
+  height: ${(props) => props.boxSize || props.height}px;
+  width: ${(props) => props.boxSize || props.width}px;
+  color: ${(props) => props.color || "#DD4A5C"};
+
+  @media ${device.tablet} {
+    height: ${(props) => (props.boxSize || props.height) * 1.2}px;
+    width: ${(props) => (props.boxSize || props.width) * 1.2}px;
   }
 `
 
