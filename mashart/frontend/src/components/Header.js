@@ -9,7 +9,7 @@ import device from "../screen_sizes/devices"
 
 const Header = () => {
   const userLogin = useSelector((state) => state.userLogin)
-  let { userInfo } = userLogin
+  const { userInfo } = userLogin
   const dispatch = useDispatch()
 
   const navLinks = {
@@ -22,7 +22,6 @@ const Header = () => {
     dispatch(logout())
   }
 
-  userInfo = true
   return (
     <Container userLoggedIn={userInfo ? "flex" : "none"}>
       <SubContainer>
