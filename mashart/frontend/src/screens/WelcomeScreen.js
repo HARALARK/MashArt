@@ -4,47 +4,59 @@ import device from "../screen_sizes/devices"
 
 const WelcomeScreen = () => {
   return (
-    <Container>
-      <Left>
-        <h1 className="welcome">Welcome to</h1>
-        <h2 className="mashart">MashArt</h2>
-        <p className="para">
-          Est et duis pariatur deserunt esse eu est ut velit dolore eu elit esse
-          quis. Quis occaecat consequat non amet est magna sint dolore eiusmod
-          cupidatat quis fugiat veniam nulla.Quis occaecat consequat non amet
-          est magna sint dolore eiusmod cupidatat quis fugiat veniam nulla.
-        </p>
-        <div className="button-container">
-          <Button primary>Sign Up</Button>
-          <Button>Login</Button>
-        </div>
-      </Left>
-      <Right>
-        <div className="container">
-          <SVG src="./images/blob.svg" alt="blob" boxSize="320" />
-          <SVG
-            className="collab"
-            src="./images/collab.svg"
-            alt="collab"
-            boxSize="250"
-          />
-          <div className="text-design">
-            <p className="collaborate">Collaborate</p>
-            <p className="share">Share</p>
-            <p className="enjoy">Enjoy!!!</p>
+    <Hero>
+      <Container>
+        <Left>
+          <h1 className="welcome">Welcome to</h1>
+          <h2 className="mashart">MashArt</h2>
+          <p className="para">
+            Est et duis pariatur deserunt esse eu est ut velit dolore eu elit
+            esse quis. Quis occaecat consequat non amet est magna sint dolore
+            eiusmod cupidatat quis fugiat veniam nulla.Quis occaecat consequat
+            non amet est magna sint dolore eiusmod cupidatat quis fugiat veniam
+            nulla.
+          </p>
+          <div className="button-container">
+            <Button primary>Sign Up</Button>
+            <Button>Login</Button>
           </div>
-        </div>
-      </Right>
-    </Container>
+        </Left>
+        <Right>
+          <div className="container">
+            <SVG src="./images/blob.svg" alt="blob" boxSize="320" />
+            <SVG
+              className="collab"
+              src="./images/collab.svg"
+              alt="collab"
+              boxSize="250"
+            />
+            <div className="text-design">
+              <p className="collaborate">Collaborate</p>
+              <p className="share">Share</p>
+              <p className="enjoy">Enjoy!!!</p>
+            </div>
+          </div>
+        </Right>
+      </Container>
+    </Hero>
   )
 }
+
+const Hero = styled.section`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column-reverse;
-  margin: 0 1.2rem;
+  padding: 0 2rem;
+
+  width: 1200px;
 
   height: 100vh;
 
@@ -77,6 +89,7 @@ const Left = styled.div`
     font-size: 0.9rem;
     margin: 1rem;
     line-height: 92%;
+    max-width: 400px;
   }
 
   .button-container {
@@ -84,7 +97,6 @@ const Left = styled.div`
   }
 
   @media ${device.tablet} {
-    width: 400px;
     text-align: left;
 
     .button-container {
@@ -133,6 +145,12 @@ const Right = styled.div`
       font-size: 2.35rem;
     }
   }
+
+  @media ${device.laptop} {
+    .text-design {
+      font-size: 2.7rem;
+    }
+  }
 `
 
 const Button = styled.a`
@@ -167,6 +185,11 @@ const SVG = styled.img`
   @media ${device.tablet} {
     height: ${(props) => (props.boxSize || props.height) * 1.2}px;
     width: ${(props) => (props.boxSize || props.width) * 1.2}px;
+  }
+
+  @media ${device.laptop} {
+    height: ${(props) => (props.boxSize || props.height) * 1.4}px;
+    width: ${(props) => (props.boxSize || props.width) * 1.4}px;
   }
 `
 
