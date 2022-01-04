@@ -73,7 +73,6 @@ const SubContainer = styled.div`
 
 const Logo = styled.a`
   display: flex;
-  flex: 1;
   justify-content: flex-start;
   align-items: center;
   text-decoration: none;
