@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 import { register } from "../actions/userActions"
 import Design from "../components/Design"
@@ -9,7 +9,11 @@ import Input from "../components/styled-components/Input"
 import Message from "../components/styled-components/Message"
 import device from "../screen_sizes/devices"
 
-const SignupScreen = ({ location, navigate }) => {
+const SignupScreen = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  console.log(location, navigate)
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
