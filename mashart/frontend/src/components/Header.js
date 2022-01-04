@@ -74,7 +74,7 @@ const SubContainer = styled.div`
   justify-content: space-between;
 `
 
-const Logo = styled.a`
+const Logo = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;

@@ -102,7 +102,7 @@ const Left = styled.div`
   }
 `
 
-const Button = styled.a`
+const Button = styled.p`
   display: inline-block;
   width: 100px;
   text-align: center;
