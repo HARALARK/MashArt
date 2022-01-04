@@ -18,8 +18,10 @@ const WelcomeScreen = () => {
             nulla.
           </p>
           <div className="button-container">
-            <Button primary>Sign Up</Button>
-            <Button>Login</Button>
+            <Button primary href="/signup">
+              Sign Up
+            </Button>
+            <Button href="/login">Login</Button>
           </div>
         </Left>
         <Design />
@@ -105,6 +107,7 @@ const Button = styled.a`
   background-color: ${(props) => (props.primary ? "#24003e" : "#ffb500")};
   border: 3px solid #24003e;
   color: ${(props) => (props.primary ? "#ffb500" : "#24003e")};
+  text-decoration: none;
   border-radius: 5px;
   font-size: 0.9rem;
   font-weight: 600;
