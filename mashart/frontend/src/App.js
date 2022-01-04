@@ -1,19 +1,28 @@
 import React from "react"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom"
 import "./App.css"
+
 import Header from "./components/Header"
-import Homepage from "./screens/HomeScreen"
+import HomeScreen from "./screens/HomeScreen"
+import SignupScreen from "./screens/SignupScreen"
 
 function App() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
   return (
-    <Router>
+    <>
       <Header />
       <div className="App">
         <Routes>
-          <Route path="/" element={<Homepage />} />
+          <Route exact path="/" element={<HomeScreen />} />
+          <Route
+            path="/signup"
+            element={<SignupScreen location={location} navigate={navigate} />}
+          />
         </Routes>
       </div>
-    </Router>
+    </>
   )
 }
 
