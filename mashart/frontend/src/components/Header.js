@@ -9,7 +9,7 @@ import device from "../screen_sizes/devices"
 
 const Header = () => {
   const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
+  let { userInfo } = userLogin
   const dispatch = useDispatch()
 
   const navLinks = {
@@ -22,29 +22,32 @@ const Header = () => {
     dispatch(logout())
   }
 
+  userInfo = true
   return (
     <Container userLoggedIn={userInfo ? "flex" : "none"}>
-      <Logo href="/">
-        <LogoImage src="/images/logo/logo.png" alt="logo" />
-        <LogoTxt>MashArt</LogoTxt>
-      </Logo>
-      {userInfo && (
-        <NavMenuContainer>
-          <FontAwesomeIcon className="nav-icon" icon={faBars} size="2x" />
-          <NavMenu>
-            {Object.entries(navLinks).map((obj) => {
-              return (
-                <li key={obj[0]}>
-                  <LinkButton href={obj[1]}>{obj[0]}</LinkButton>
-                </li>
-              )
-            })}
-            <li>
-              <LinkButton onClick={logoutHandler}>Logout</LinkButton>
-            </li>
-          </NavMenu>
-        </NavMenuContainer>
-      )}
+      <SubContainer>
+        <Logo href="/">
+          <LogoImage src="/images/logo/logo.png" alt="logo" />
+          <LogoTxt>MashArt</LogoTxt>
+        </Logo>
+        {userInfo && (
+          <NavMenuContainer>
+            <FontAwesomeIcon className="nav-icon" icon={faBars} size="2x" />
+            <NavMenu>
+              {Object.entries(navLinks).map((obj) => {
+                return (
+                  <li key={obj[0]}>
+                    <LinkButton href={obj[1]}>{obj[0]}</LinkButton>
+                  </li>
+                )
+              })}
+              <li>
+                <LinkButton onClick={logoutHandler}>Logout</LinkButton>
+              </li>
+            </NavMenu>
+          </NavMenuContainer>
+        )}
+      </SubContainer>
     </Container>
   )
 }
@@ -53,14 +56,20 @@ const Container = styled.div`
   background-color: #24003e;
   height: 80px;
   display: ${(props) => props.userLoggedIn};
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 0 2rem;
   color: #fff;
 
   @media ${device.tablet} {
     display: flex;
   }
+`
+
+const SubContainer = styled.div`
+  width: 1200px;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
 `
 
 const Logo = styled.a`
