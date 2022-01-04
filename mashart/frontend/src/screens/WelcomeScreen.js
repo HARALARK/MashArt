@@ -1,5 +1,7 @@
 import React from "react"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
+
 import Design from "../components/Design"
 import device from "../screen_sizes/devices"
 
@@ -18,10 +20,12 @@ const WelcomeScreen = () => {
             nulla.
           </p>
           <div className="button-container">
-            <Button primary href="/signup">
-              Sign Up
-            </Button>
-            <Button href="/login">Login</Button>
+            <Link to="/signup">
+              <Button primary>Sign Up</Button>
+            </Link>
+            <Link to="/login">
+              <Button>Login</Button>
+            </Link>
           </div>
         </Left>
         <Design />

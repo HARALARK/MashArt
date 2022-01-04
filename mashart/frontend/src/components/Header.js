@@ -3,8 +3,9 @@ import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
 import { useDispatch, useSelector } from "react-redux"
-import { logout } from "../actions/userActions"
+import { Link } from "react-router-dom"
 
+import { logout } from "../actions/userActions"
 import device from "../screen_sizes/devices"
 
 const Header = () => {
@@ -25,10 +26,12 @@ const Header = () => {
   return (
     <Container userLoggedIn={userInfo ? "flex" : "none"}>
       <SubContainer>
-        <Logo href="/">
-          <LogoImage src="/images/logo/logo.png" alt="logo" />
-          <LogoTxt>MashArt</LogoTxt>
-        </Logo>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <Logo>
+            <LogoImage src="/images/logo/logo.png" alt="logo" />
+            <LogoTxt>MashArt</LogoTxt>
+          </Logo>
+        </Link>
         {userInfo && (
           <NavMenuContainer>
             <FontAwesomeIcon className="nav-icon" icon={faBars} size="2x" />
