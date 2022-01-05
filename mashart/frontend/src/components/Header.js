@@ -3,12 +3,14 @@ import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons"
 import { useDispatch, useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { logout } from "../actions/userActions"
 import device from "../screen_sizes/devices"
 
 const Header = () => {
+  const navigate = useNavigate()
+
   const [dropDownOpen, setDropDownOpen] = useState(false)
 
   const userLogin = useSelector((state) => state.userLogin)
@@ -24,6 +26,7 @@ const Header = () => {
   const logoutHandler = () => {
     dispatch(logout())
     setDropDownOpen(false)
+    navigate("/")
   }
 
   return (
