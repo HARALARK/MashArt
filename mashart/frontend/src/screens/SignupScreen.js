@@ -13,7 +13,6 @@ const SignupScreen = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  console.log(location, navigate)
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -28,7 +27,7 @@ const SignupScreen = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate.push(redirect)
+      navigate(redirect)
     }
   }, [navigate, userInfo, redirect])
 
@@ -119,7 +118,7 @@ const Container = styled.div`
 
   width: 1200px;
 
-  height: 100vh;
+  height: calc(100vh - 80px);
 
   .design-container {
     display: none;
