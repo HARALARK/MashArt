@@ -4,6 +4,7 @@ import "./App.css"
 
 import Header from "./components/Header"
 import HomeScreen from "./screens/HomeScreen"
+import LoginScreen from "./screens/LoginScreen"
 import SignupScreen from "./screens/SignupScreen"
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<HomeScreen />} />
           <Route path="/signup" element={<SignupScreen />} />
+          <Route path="/login" element={<LoginScreen />} />
         </Routes>
       </div>
     </>
