@@ -18,9 +18,9 @@ const Header = () => {
   const dispatch = useDispatch()
 
   const navLinks = {
-    Home: "/",
-    Profile: "/profile",
     Collab: "/collab",
+    Activity: "/activity",
+    Chat: "/chat",
   }
 
   const logoutHandler = () => {
@@ -50,7 +50,7 @@ const Header = () => {
               <NavMenu>
                 {Object.entries(navLinks).map((obj) => {
                   return (
-                    <li key={obj[0]} onClick={() => console.log("clicked")}>
+                    <li key={obj[0]}>
                       <Link to={obj[1]} style={{ textDecoration: "none" }}>
                         <LinkButton>{obj[0]}</LinkButton>
                       </Link>
@@ -211,8 +211,6 @@ const Dropdown = styled(NavMenu)`
 const LinkButton = styled.div`
   font-weight: 600;
   text-decoration: none;
-  border: 1px solid transparent;
-  border-radius: 15px;
   cursor: pointer;
   color: #fff;
 
