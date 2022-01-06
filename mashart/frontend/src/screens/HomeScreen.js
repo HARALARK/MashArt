@@ -6,7 +6,7 @@ const Homepage = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
-  return userInfo ? <div> Home Page </div> : <WelcomeScreen />
+  return userInfo ? <div>Home Screen</div> : <WelcomeScreen />
 }
 
 export default Homepage
