@@ -32,12 +32,12 @@ const SignupScreen = () => {
     }
   }, [navigate, userInfo, redirect])
 
-  //TODO: add reducer to check if the username is valid in real time
+  //TODO: add reducer to check if the username exists in real time through the api
   const checkUsername = (e) => {
     setUsername(e.target.value)
   }
 
-  //TODO: add reducer to check if the email is valid in real time
+  //TODO: add reducer to check if the email exists in real time through the api
   const checkEmail = (e) => {
     setEmail(e.target.value)
   }
