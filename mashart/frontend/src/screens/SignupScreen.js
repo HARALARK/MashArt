@@ -17,6 +17,7 @@ const SignupScreen = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [message, setMessage] = useState("")
 
   const dispatch = useDispatch()
 
@@ -31,19 +32,43 @@ const SignupScreen = () => {
     }
   }, [navigate, userInfo, redirect])
 
-  //TODO: add reducer to check if the username is valid in real time
+  //TODO: add reducer to check if the username exists in real time through the api
   const checkUsername = (e) => {
     setUsername(e.target.value)
   }
 
-  //TODO: add reducer to check if the email is valid in real time
+  //TODO: add reducer to check if the email exists in real time through the api
   const checkEmail = (e) => {
     setEmail(e.target.value)
   }
 
+  const validation = () => {
+    if (
+      username.trim().length < 6 ||
+      username.trim().length > 15 ||
+      username.trim().includes(" ")
+    ) {
+      setMessage(
+        "Username should be of length 6-15 characters (spaces not allowed)"
+      )
+      return false
+    }
+    if (!email.trim().includes("@") || !email.trim().includes(".")) {
+      setMessage("Not a valid email")
+      return false
+    }
+    if (password.trim().length < 8 || password.trim().includes(" ")) {
+      setMessage("Password should be atleast 8 characters (spaces not allowed)")
+      return false
+    }
+    return true
+  }
+
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(register(username, email, password, confirmPassword))
+    if (validation()) {
+      dispatch(register(username, email, password, confirmPassword))
+    }
   }
 
   return (
@@ -57,6 +82,7 @@ const SignupScreen = () => {
             <p className="heading">Sign Up</p>
             {loading && <Message>Loading...</Message>}
             {error && <Message variant="error">{error}</Message>}
+            {message && <Message variant="error">{message}</Message>}
 
             <Input
               type="text"

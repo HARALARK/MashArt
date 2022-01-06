@@ -16,7 +16,6 @@ const Message = styled.p`
   font-size: 0.8rem;
 
   padding: 0.5rem 1rem;
-  margin-bottom: 1rem;
   border-radius: 5px;
 
   width: 300px;

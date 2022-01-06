@@ -22,8 +22,6 @@ const LoginScreen = () => {
 
   const redirect = location.search ? location.search.split("=")[1] : "/"
 
-  console.log(userLogin)
-
   useEffect(() => {
     if (userInfo) {
       navigate(redirect)
@@ -43,7 +41,7 @@ const LoginScreen = () => {
         </div>
         <div className="form-container">
           <Form>
-            <p className="heading">Sign Up</p>
+            <p className="heading">Login</p>
             {loading && <Message>Loading...</Message>}
             {error && <Message variant="error">{error}</Message>}
 
