@@ -86,6 +86,10 @@ const TabMenu = styled.ul`
     gap: 0.5rem;
   }
 
+  .tab-icon {
+    font-size: 1.5rem;
+  }
+
   .tab-link.active {
     color: #ffb800;
   }
