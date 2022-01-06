@@ -43,7 +43,6 @@ const SignupScreen = () => {
   }
 
   const validation = () => {
-    console.log(username.trim().length)
     if (
       username.trim().length < 6 ||
       username.trim().length > 15 ||
