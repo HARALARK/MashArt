@@ -13,6 +13,7 @@ const Homepage = () => {
 const Container = styled.section`
   padding: 1rem 2rem;
   height: calc(100vh - 160px);
+  width: 1200px;
 `
 
 export default Homepage

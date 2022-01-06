@@ -1,5 +1,6 @@
 import React from "react"
 import { Routes, Route } from "react-router-dom"
+import styled from "styled-components"
 import "./App.css"
 import Footer from "./components/Footer"
 
@@ -13,15 +14,22 @@ function App() {
     <>
       <Header />
       <div className="App">
-        <Routes>
-          <Route exact path="/" element={<HomeScreen />} />
-          <Route path="/signup" element={<SignupScreen />} />
-          <Route path="/login" element={<LoginScreen />} />
-        </Routes>
+        <AppContainer>
+          <Routes>
+            <Route exact path="/" element={<HomeScreen />} />
+            <Route path="/signup" element={<SignupScreen />} />
+            <Route path="/login" element={<LoginScreen />} />
+          </Routes>
+        </AppContainer>
       </div>
       <Footer />
     </>
   )
 }
+
+const AppContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`
 
 export default App
