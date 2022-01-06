@@ -86,13 +86,15 @@ const Header = () => {
 }
 
 const Container = styled.div`
+  position: sticky;
+  top: 0;
+  left: 0;
   background-color: #24003e;
   height: 80px;
   display: ${(props) => props.userLoggedIn};
   justify-content: center;
   align-items: center;
   color: #fff;
-  position: sticky;
   z-index: 100;
 
   @media ${device.tablet} {
@@ -185,6 +187,7 @@ const Dropdown = styled(NavMenu)`
   background-color: #381452;
   top: -100%;
   width: 100%;
+  height: 100vh;
   text-align: center;
   left: 0;
   transition: 400ms ease-in-out;
@@ -193,6 +196,7 @@ const Dropdown = styled(NavMenu)`
 
   &.active {
     top: 80px;
+    position: fixed;
   }
 
   & li:hover {
