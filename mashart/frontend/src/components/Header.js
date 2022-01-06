@@ -3,12 +3,15 @@ import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons"
 import { useDispatch, useSelector } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 import { logout } from "../actions/userActions"
 import device from "../screen_sizes/devices"
 
 const Header = () => {
+  const location = useLocation()
+  const path = location.pathname.split("/")[1]
+
   const navigate = useNavigate()
 
   const [dropDownOpen, setDropDownOpen] = useState(false)
@@ -52,7 +55,13 @@ const Header = () => {
                   return (
                     <li key={obj[0]}>
                       <Link to={obj[1]} style={{ textDecoration: "none" }}>
-                        <LinkButton>{obj[0]}</LinkButton>
+                        <LinkButton
+                          className={
+                            path === obj[0].toLowerCase() ? "active" : ""
+                          }
+                        >
+                          {obj[0]}
+                        </LinkButton>
                       </Link>
                     </li>
                   )
@@ -71,7 +80,15 @@ const Header = () => {
             return (
               <li key={obj[0]}>
                 <Link to={obj[1]} style={{ textDecoration: "none" }}>
-                  <LinkButton>{obj[0]}</LinkButton>
+                  <LinkButton
+                    className={
+                      location.pathname.split("/")[1] === obj[0].toLowerCase()
+                        ? "active"
+                        : ""
+                    }
+                  >
+                    {obj[0]}
+                  </LinkButton>
                 </Link>
               </li>
             )
@@ -215,6 +232,10 @@ const LinkButton = styled.div`
   color: #fff;
 
   padding: 1rem 0;
+
+  &.active {
+    color: #ffb800;
+  }
 
   &:hover {
     color: #ffb800;

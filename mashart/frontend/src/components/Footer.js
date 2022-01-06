@@ -7,11 +7,18 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import styled from "styled-components"
 import device from "../screen_sizes/devices"
 
 const Footer = () => {
+  const location = useLocation()
+
+  const path =
+    location.pathname.split("/")[1] === ""
+      ? "home"
+      : location.pathname.split("/")[1]
+
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
@@ -28,7 +35,12 @@ const Footer = () => {
         {Object.entries(tabLinks).map((obj) => {
           return (
             <li key={obj[0]}>
-              <Link className="tab-link" to={obj[1][0]}>
+              <Link
+                className={`tab-link ${
+                  path === obj[0].toLowerCase() ? "active" : ""
+                }`}
+                to={obj[1][0]}
+              >
                 <FontAwesomeIcon
                   className="tab-icon"
                   icon={obj[1][1]}
@@ -72,6 +84,10 @@ const TabMenu = styled.ul`
     padding: 1rem;
     display: flex;
     gap: 0.5rem;
+  }
+
+  .tab-link.active {
+    color: #ffb800;
   }
 
   .tab-link:hover {
