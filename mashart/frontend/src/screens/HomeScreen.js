@@ -7,13 +7,17 @@ const Homepage = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
-  return userInfo ? <Container>Home Screen</Container> : <WelcomeScreen />
+  return userInfo ? (
+    <Container>Home Screen</Container>
+  ) : (
+    <div className="welcome-container">
+      <WelcomeScreen />
+    </div>
+  )
 }
 
 const Container = styled.section`
   padding: 1rem 2rem;
-  height: calc(100vh - 160px);
-  width: 1200px;
 `
 
 export default Homepage

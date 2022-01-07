@@ -48,7 +48,7 @@ const Container = styled.div`
   flex-direction: column-reverse;
   padding: 0 2rem;
 
-  width: 1200px;
+  width: 100%;
 
   height: 100vh;
 

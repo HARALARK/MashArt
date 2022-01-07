@@ -15,11 +15,13 @@ function App() {
       <Header />
       <div className="App">
         <AppContainer>
-          <Routes>
-            <Route exact path="/" element={<HomeScreen />} />
-            <Route path="/signup" element={<SignupScreen />} />
-            <Route path="/login" element={<LoginScreen />} />
-          </Routes>
+          <ScreensContainer>
+            <Routes>
+              <Route exact path="/" element={<HomeScreen />} />
+              <Route path="/signup" element={<SignupScreen />} />
+              <Route path="/login" element={<LoginScreen />} />
+            </Routes>
+          </ScreensContainer>
         </AppContainer>
       </div>
       <Footer />
@@ -30,6 +32,16 @@ function App() {
 const AppContainer = styled.div`
   display: flex;
   justify-content: center;
+`
+
+const ScreensContainer = styled.div`
+  height: calc(100vh - 160px);
+  width: 1200px;
+
+  & .welcome-container {
+    display: flex;
+    justify-content: center;
+  }
 `
 
 export default App
