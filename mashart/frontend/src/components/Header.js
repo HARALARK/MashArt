@@ -187,7 +187,6 @@ const NavMenu = styled.ul`
 
     li {
       margin: 0 0rem 0 3rem;
-      width: 70px;
     }
 
     & li:hover {
