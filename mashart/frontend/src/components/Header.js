@@ -3,12 +3,15 @@ import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons"
 import { useDispatch, useSelector } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 import { logout } from "../actions/userActions"
 import device from "../screen_sizes/devices"
 
 const Header = () => {
+  const location = useLocation()
+  const path = location.pathname.split("/")[1]
+
   const navigate = useNavigate()
 
   const [dropDownOpen, setDropDownOpen] = useState(false)
@@ -18,9 +21,9 @@ const Header = () => {
   const dispatch = useDispatch()
 
   const navLinks = {
-    Home: "/",
-    Profile: "/profile",
     Collab: "/collab",
+    Activity: "/activity",
+    Chat: "/chat",
   }
 
   const logoutHandler = () => {
@@ -50,9 +53,15 @@ const Header = () => {
               <NavMenu>
                 {Object.entries(navLinks).map((obj) => {
                   return (
-                    <li key={obj[0]} onClick={() => console.log("clicked")}>
+                    <li key={obj[0]}>
                       <Link to={obj[1]} style={{ textDecoration: "none" }}>
-                        <LinkButton>{obj[0]}</LinkButton>
+                        <LinkButton
+                          className={
+                            path === obj[0].toLowerCase() ? "active" : ""
+                          }
+                        >
+                          {obj[0]}
+                        </LinkButton>
                       </Link>
                     </li>
                   )
@@ -71,7 +80,15 @@ const Header = () => {
             return (
               <li key={obj[0]}>
                 <Link to={obj[1]} style={{ textDecoration: "none" }}>
-                  <LinkButton>{obj[0]}</LinkButton>
+                  <LinkButton
+                    className={
+                      location.pathname.split("/")[1] === obj[0].toLowerCase()
+                        ? "active"
+                        : ""
+                    }
+                  >
+                    {obj[0]}
+                  </LinkButton>
                 </Link>
               </li>
             )
@@ -86,13 +103,15 @@ const Header = () => {
 }
 
 const Container = styled.div`
+  position: sticky;
+  top: 0;
+  left: 0;
   background-color: #24003e;
   height: 80px;
   display: ${(props) => props.userLoggedIn};
   justify-content: center;
   align-items: center;
   color: #fff;
-  position: sticky;
   z-index: 100;
 
   @media ${device.tablet} {
@@ -101,7 +120,7 @@ const Container = styled.div`
 `
 
 const SubContainer = styled.div`
-  width: 1200px;
+  width: 900px;
   padding: 0 2rem;
   display: flex;
   justify-content: space-between;
@@ -168,7 +187,6 @@ const NavMenu = styled.ul`
 
     li {
       margin: 0 0rem 0 3rem;
-      width: 70px;
     }
 
     & li:hover {
@@ -185,6 +203,7 @@ const Dropdown = styled(NavMenu)`
   background-color: #381452;
   top: -100%;
   width: 100%;
+  height: 100vh;
   text-align: center;
   left: 0;
   transition: 400ms ease-in-out;
@@ -193,6 +212,7 @@ const Dropdown = styled(NavMenu)`
 
   &.active {
     top: 80px;
+    position: fixed;
   }
 
   & li:hover {
@@ -207,12 +227,14 @@ const Dropdown = styled(NavMenu)`
 const LinkButton = styled.div`
   font-weight: 600;
   text-decoration: none;
-  border: 1px solid transparent;
-  border-radius: 15px;
   cursor: pointer;
   color: #fff;
 
   padding: 1rem 0;
+
+  &.active {
+    color: #ffb800;
+  }
 
   &:hover {
     color: #ffb800;

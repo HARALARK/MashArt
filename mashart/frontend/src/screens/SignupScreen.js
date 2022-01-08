@@ -142,8 +142,6 @@ const Container = styled.div`
   flex-direction: column-reverse;
   padding: 0 2rem;
 
-  width: 1200px;
-
   height: calc(100vh - 80px);
 
   .design-container {
