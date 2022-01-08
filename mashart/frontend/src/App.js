@@ -38,7 +38,7 @@ const AppContainer = styled.div`
 
 const ScreensContainer = styled.div`
   height: calc(100vh - 160px);
-  width: 1200px;
+  width: 900px;
 
   & .welcome-container {
     display: flex;
