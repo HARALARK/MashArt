@@ -60,7 +60,7 @@ const Footer = () => {
 
 const Container = styled.footer`
   display: flex;
-  position: sticky;
+  position: fixed;
   width: 100%;
   justify-content: center;
   bottom: 0;
