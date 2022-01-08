@@ -85,10 +85,6 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column-reverse;
-  padding: 0 2rem;
-
-  width: 1200px;
 
   height: calc(100vh - 80px);
 
@@ -107,6 +103,7 @@ const Container = styled.div`
     height: calc(100vh - 80px);
     justify-content: space-between;
     gap: 2rem;
+    padding: 0 2rem;
 
     .design-container {
       display: inline-block;
