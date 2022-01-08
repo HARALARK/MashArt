@@ -7,6 +7,7 @@ import Footer from "./components/Footer"
 import Header from "./components/Header"
 import HomeScreen from "./screens/HomeScreen"
 import LoginScreen from "./screens/LoginScreen"
+import ProfileScreen from "./screens/ProfileScreen"
 import SignupScreen from "./screens/SignupScreen"
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
               <Route exact path="/" element={<HomeScreen />} />
               <Route path="/signup" element={<SignupScreen />} />
               <Route path="/login" element={<LoginScreen />} />
+              <Route path="/profile" element={<ProfileScreen />} />
             </Routes>
           </ScreensContainer>
         </AppContainer>
