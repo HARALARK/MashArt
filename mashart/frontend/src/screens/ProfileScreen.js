@@ -84,10 +84,6 @@ const InfoSection = styled.section`
   .link {
     text-decoration: none;
   }
-
-  @media ${device.tablet} {
-    padding: 2rem 2rem 1rem;
-  }
 `
 
 const Button = styled.p`
@@ -152,11 +148,12 @@ const ProfileUsername = styled.p`
 const MiscHolder = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-
+  justify-content: space-between;
+  padding: 0 1rem;
   width: 100%;
   @media ${device.tablet} {
     padding: 0;
+    justify-content: flex-end;
   }
 `
 
@@ -165,12 +162,15 @@ const MiscInfo = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 0.5rem 1rem;
   border-radius: 5px;
   font-size: 1.1rem;
 
   & .title {
     font-weight: 500;
+  }
+
+  @media ${device.tablet} {
+    padding-left: 1rem;
   }
 `
 
