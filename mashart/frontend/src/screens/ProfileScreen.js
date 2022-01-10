@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import styled from "styled-components"
 import { getUserDetails } from "../actions/userActions"
@@ -31,33 +31,37 @@ const ProfileScreen = () => {
     <Container>
       {loading && <Message>Loading...</Message>}
       {error && <Message variant="error">{error}</Message>}
-      <InfoContainer>
-        <ProfileHolder>
-          <ProfileImageHolder>
-            {user.profileImg ? (
-              <ProfileImage src={user.profileImg} alt="profile" />
-            ) : (
-              <FontAwesomeIcon icon={faUser} size="3x" />
-            )}
-          </ProfileImageHolder>
-          <ProfileUsername>{user.username}</ProfileUsername>
-        </ProfileHolder>
-        <MiscHolder>
-          <MiscInfo>
-            <p className="title">Followers</p>
-            <p>{user.followers || 0}</p>
-          </MiscInfo>
-          <MiscInfo>
-            <p className="title">Posts</p>
-            <p>{user.posts || 0}</p>
-          </MiscInfo>
-
-          <MiscInfo>
-            <p className="title">Following</p>
-            <p>{user.following || 0}</p>
-          </MiscInfo>
-        </MiscHolder>
-      </InfoContainer>
+      <InfoSection>
+        <InfoContainer>
+          <ProfileHolder>
+            <ProfileImageHolder>
+              {user.profileImg ? (
+                <ProfileImage src={user.profileImg} alt="profile" />
+              ) : (
+                <FontAwesomeIcon icon={faUser} size="3x" />
+              )}
+            </ProfileImageHolder>
+            <ProfileUsername>{user.username}</ProfileUsername>
+          </ProfileHolder>
+          <MiscHolder>
+            <MiscInfo>
+              <p className="title">Followers</p>
+              <p>{user.followers || 0}</p>
+            </MiscInfo>
+            <MiscInfo>
+              <p className="title">Posts</p>
+              <p>{user.posts || 0}</p>
+            </MiscInfo>
+            <MiscInfo>
+              <p className="title">Following</p>
+              <p>{user.following || 0}</p>
+            </MiscInfo>
+          </MiscHolder>
+        </InfoContainer>
+        <Link className="link" to="/profile/edit">
+          <Button>Edit Profile</Button>
+        </Link>
+      </InfoSection>
       <PostContainer>
         {user.posts ? <></> : <p className="no-posts">No Posts</p>}
       </PostContainer>
@@ -71,37 +75,70 @@ const Container = styled.div`
   flex-direction: column;
   padding-bottom: 100px;
 `
-const InfoContainer = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  align-items: center;
+
+const InfoSection = styled.section`
   background: #e98e24;
-  padding: 2rem 0rem 1rem;
+  padding: 2rem 2rem 1rem;
+  width: 100%;
+
+  .link {
+    text-decoration: none;
+  }
 
   @media ${device.tablet} {
-    flex-direction: row;
     padding: 2rem 2rem 1rem;
   }
 `
 
+const Button = styled.p`
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border: 3px solid #000;
+  color: #000;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 250ms ease-in-out;
+
+  &:hover {
+    background-color: #dd4a5c;
+    color: #fff;
+    border: 3px solid #dd4a5c;
+  }
+
+  @media ${device.tablet} {
+    margin: 0;
+    width: 150px;
+  }
+`
+
+const InfoContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`
+
 const ProfileHolder = styled.div`
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  @media ${device.tablet} {
+    margin: 0 0 0.5rem 35px;
+  }
 `
 
 const ProfileImage = styled.img`
-  height: 100px;
-  width: 100px;
+  height: 80px;
+  width: 80px;
 `
 
 const ProfileImageHolder = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: ${(props) => props.height || "100px"};
-  width: ${(props) => props.width || "100px"};
+  height: ${(props) => props.height || "80px"};
+  width: ${(props) => props.width || "80px"};
   background-color: ${(props) => props.background || "#ffffff"};
   border-radius: 10px;
 `
@@ -114,13 +151,12 @@ const ProfileUsername = styled.p`
 
 const MiscHolder = styled.div`
   display: flex;
-  padding: 0 2rem;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
+
   width: 100%;
   @media ${device.tablet} {
     padding: 0;
-    justify-content: flex-end;
   }
 `
 
