@@ -1,10 +1,16 @@
 import styled from "styled-components"
 
-const Input = styled.input`
+export const Input = styled.input`
   padding: 0.7rem 1rem;
   border: none;
   border-radius: 5px;
-  width: 300px;
+  &:focus {
+    outline: none;
+  }
 `
 
-export default Input
+export const PasswordInput = styled(Input)`
+  flex: 1;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+`

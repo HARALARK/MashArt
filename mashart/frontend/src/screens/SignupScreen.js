@@ -5,9 +5,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 
 import { register } from "../actions/userActions"
 import Design from "../components/Design"
-import Input from "../components/styled-components/Input"
+import { Input, PasswordInput } from "../components/styled-components/Input"
 import Message from "../components/styled-components/Message"
 import device from "../screen_sizes/devices"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 
 const SignupScreen = () => {
   const location = useLocation()
@@ -16,6 +18,7 @@ const SignupScreen = () => {
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [confirmPassword, setConfirmPassword] = useState("")
   const [message, setMessage] = useState("")
 
@@ -96,11 +99,21 @@ const SignupScreen = () => {
               onChange={checkEmail}
               required
             />
-            <Input
-              type="password"
-              placeholder="Password*"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <PasswordInputContainer>
+              <PasswordInput
+                type={showPassword ? "text" : "password"}
+                placeholder="Password*"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <div
+                className="icon-container"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <FontAwesomeIcon
+                  icon={showPassword ? faEyeSlash : faEye}
+                ></FontAwesomeIcon>
+              </div>
+            </PasswordInputContainer>
             <Input
               type="password"
               placeholder="Confirm Password*"
@@ -183,6 +196,24 @@ const Form = styled.form`
 
   .login-link {
     color: #dd4a5c;
+  }
+`
+
+const PasswordInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 5px;
+
+  .icon-container {
+    padding: 0.4rem;
+    cursor: pointer;
+
+    color: #555;
+
+    &:hover {
+      color: #000;
+    }
   }
 `
 

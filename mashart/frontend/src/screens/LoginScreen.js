@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useLocation, useNavigate } from "react-router-dom"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import styled from "styled-components"
 import { login } from "../actions/userActions"
 import Design from "../components/Design"
-import Input from "../components/styled-components/Input"
+import { Input, PasswordInput } from "../components/styled-components/Input"
 import Message from "../components/styled-components/Message"
 import device from "../screen_sizes/devices"
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 
 const LoginScreen = () => {
   const location = useLocation()
@@ -14,6 +16,7 @@ const LoginScreen = () => {
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -51,11 +54,21 @@ const LoginScreen = () => {
               onChange={(e) => setUsername(e.target.value)}
               required
             />
-            <Input
-              type="password"
-              placeholder="Password*"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <PasswordInputContainer>
+              <PasswordInput
+                type={showPassword ? "text" : "password"}
+                placeholder="Password*"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <div
+                className="icon-container"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <FontAwesomeIcon
+                  icon={showPassword ? faEyeSlash : faEye}
+                ></FontAwesomeIcon>
+              </div>
+            </PasswordInputContainer>
             <SubmitButton type="button" value="Login" onClick={submitHandler} />
             <p className="signup-container">
               Don't have an account?{" "}
@@ -128,6 +141,24 @@ const Form = styled.form`
 
   .signup-link {
     color: #dd4a5c;
+  }
+`
+
+const PasswordInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 5px;
+
+  .icon-container {
+    padding: 0.4rem;
+    cursor: pointer;
+
+    color: #555;
+
+    &:hover {
+      color: #000;
+    }
   }
 `
 
