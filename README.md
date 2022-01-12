@@ -53,6 +53,7 @@ A collaborative website application to allow users to create, post and edit comi
    cd frontend
    npm install
    ```
+4. Copy & Paste the .env file in the `/MashArt/mashart` folder
 
 ## Scripts
 
