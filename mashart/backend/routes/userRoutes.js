@@ -7,6 +7,7 @@ import {
   checkUsername,
   checkEmail,
   forgotPassword,
+  resetPassword,
 } from "../controllers/userController.js"
 import { protect } from "../middleware/authMiddleware.js"
 
@@ -21,5 +22,6 @@ router
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile)
 router.route("/forgot-password").put(forgotPassword)
+router.route("/reset-password").put(resetPassword)
 
 export default router
