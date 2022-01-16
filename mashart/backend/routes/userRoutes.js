@@ -6,6 +6,7 @@ import {
   updateUserProfile,
   checkUsername,
   checkEmail,
+  forgotPassword,
 } from "../controllers/userController.js"
 import { protect } from "../middleware/authMiddleware.js"
 
@@ -19,5 +20,6 @@ router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile)
+router.route("/forgot-password").post(forgotPassword)
 
 export default router
