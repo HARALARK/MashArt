@@ -64,13 +64,18 @@ const SignupScreen = () => {
       setMessage("Password should be atleast 8 characters (spaces not allowed)")
       return false
     }
+    if (password !== confirmPassword) {
+      setMessage("Passwords dont match")
+      return false
+    }
+
     return true
   }
 
   const submitHandler = (e) => {
     e.preventDefault()
     if (validation()) {
-      dispatch(register(username, email, password, confirmPassword))
+      dispatch(register(username, email, password))
     }
   }
 
