@@ -1,9 +1,11 @@
 import asyncHandler from "express-async-handler"
+import jwt from "jsonwebtoken"
 import generateToken from "../utils/generateToken.js"
 import User from "../models/userModel.js"
+import { getTransporter } from "../utils/emailSetup.js"
 
 // @desc user auth & get token
-// @route POST /api/users/login
+// @route POST /api/user/login
 // @access Public
 export const authUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body
@@ -24,15 +26,10 @@ export const authUser = asyncHandler(async (req, res) => {
 })
 
 // @desc register new user
-// @route POST /api/users
+// @route POST /api/user
 // @access Public
 export const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password, confirmPassword } = req.body
-
-  if (password !== confirmPassword) {
-    res.status(400)
-    throw new Error("Passwords dont match")
-  }
+  const { username, email, password } = req.body
 
   const userExists =
     (await User.findOne({ username })) || (await User.findOne({ email }))
@@ -63,7 +60,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 })
 
 // @desc check if usename exists
-// @route POST /api/users/username
+// @route POST /api/user/username
 // @access Public
 export const checkUsername = asyncHandler(async (req, res) => {
   const { username } = req.body
@@ -77,7 +74,7 @@ export const checkUsername = asyncHandler(async (req, res) => {
 })
 
 // @desc check if email exists
-// @route POST /api/users/email
+// @route POST /api/user/email
 // @access Public
 export const checkEmail = asyncHandler(async (req, res) => {
   const { email } = req.body
@@ -91,7 +88,7 @@ export const checkEmail = asyncHandler(async (req, res) => {
 })
 
 // @desc get user profile
-// @route GET /api/users/profile
+// @route GET /api/user/profile
 // @access Private
 export const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id)
@@ -104,12 +101,12 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     })
   } else {
     res.status(404)
-    throw new error("User not found")
+    throw new Error("User not found")
   }
 })
 
 // @desc update user profile
-// @route POST /api/users/profile
+// @route POST /api/user/profile
 // @access Private
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body
@@ -136,4 +133,89 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     res.status(404)
     throw new Error("User not found")
   }
+})
+
+// @desc send email to the user for the reset link
+// @route PUT /api/user/forgot-password
+// @access Public
+export const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body
+
+  const user = await User.findOne({ email })
+
+  if (!user) {
+    res.status(404)
+    throw new Error("User doesnt exist")
+  }
+
+  const token = generateToken(
+    user._id,
+    "15m",
+    process.env.RESET_LINK_JWT_SECRET
+  )
+  // setup e-mail data, even with unicode symbols
+  const mailOptions = {
+    from: `"MashArt" <${process.env.EMAIL}>`, // sender address (who sends)
+    to: email, // list of receivers (who receives)
+    subject: "Password Reset Link", // Subject line
+    html: `<b>Hi ${user.username} </b>
+    <br> 
+    <p>Your Password Reset Link:  
+    <a href='http://localhost:3000/forgot-password/${token}'>
+    http://localhost:3000/forgot-password/${token}
+    </a>
+    <br>
+    This link is only valid for the next 15 minutes.
+    </p>
+    <br>
+    Thank You
+    <br>
+    MashArt
+    `, // html body
+  }
+
+  const transporter = getTransporter()
+  transporter.sendMail(mailOptions, async (err, info) => {
+    if (err) {
+      res.status(500)
+      throw new Error(err.message)
+    }
+
+    user.resetLink = token
+    await user.save()
+
+    res.status(200)
+    res.json({
+      success: "Reset link has been sent to your email.(valid for 15min)",
+    })
+  })
+})
+
+// @desc send email to the user for the reset link
+// @route PUT /api/user/reset-password
+// @access Private
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { password, resetLink } = req.body
+
+  if (!resetLink) {
+    res.status(401)
+    throw new Error("Authentication Error!")
+  }
+
+  jwt.verify(resetLink, process.env.RESET_LINK_JWT_SECRET)
+
+  const user = await User.findOne({ resetLink })
+
+  if (!user) {
+    res.status(404)
+    throw new Error("User with this token does not exist.")
+  }
+
+  user.password = password
+  user.resetLink = ""
+  await user.save()
+
+  res.json({
+    success: "Password has been changed successfully",
+  })
 })
