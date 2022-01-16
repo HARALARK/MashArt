@@ -136,7 +136,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 })
 
 // @desc send email to the user for the reset link
-// @route POST /api/user/forgot-password
+// @route PUT /api/user/forgot-password
 // @access Public
 export const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body
@@ -186,7 +186,36 @@ export const forgotPassword = asyncHandler(async (req, res) => {
 
     res.status(200)
     res.json({
-      message: "Reset link email sent (valid for 15min)",
+      success: "Reset link has been sent to your email.(valid for 15min)",
     })
+  })
+})
+
+// @desc send email to the user for the reset link
+// @route PUT /api/user/reset-password
+// @access Private
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { password, resetLink } = req.body
+
+  if (!resetLink) {
+    res.status(401)
+    throw new Error("Authentication Error!")
+  }
+
+  jwt.verify(resetLink, process.env.RESET_LINK_JWT_SECRET)
+
+  const user = await User.findOne({ resetLink })
+
+  if (!user) {
+    res.status(404)
+    throw new Error("User with this token does not exist.")
+  }
+
+  user.password = password
+  user.resetLink = ""
+  await user.save()
+
+  res.json({
+    success: "Password has been changed successfully",
   })
 })
