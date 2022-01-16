@@ -27,12 +27,7 @@ export const authUser = asyncHandler(async (req, res) => {
 // @route POST /api/users
 // @access Public
 export const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password, confirmPassword } = req.body
-
-  if (password !== confirmPassword) {
-    res.status(400)
-    throw new Error("Passwords dont match")
-  }
+  const { username, email, password } = req.body
 
   const userExists =
     (await User.findOne({ username })) || (await User.findOne({ email }))
