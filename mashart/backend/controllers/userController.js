@@ -3,7 +3,7 @@ import generateToken from "../utils/generateToken.js"
 import User from "../models/userModel.js"
 
 // @desc user auth & get token
-// @route POST /api/users/login
+// @route POST /api/user/login
 // @access Public
 export const authUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body
@@ -24,7 +24,7 @@ export const authUser = asyncHandler(async (req, res) => {
 })
 
 // @desc register new user
-// @route POST /api/users
+// @route POST /api/user
 // @access Public
 export const registerUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body
@@ -58,7 +58,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 })
 
 // @desc check if usename exists
-// @route POST /api/users/username
+// @route POST /api/user/username
 // @access Public
 export const checkUsername = asyncHandler(async (req, res) => {
   const { username } = req.body
@@ -72,7 +72,7 @@ export const checkUsername = asyncHandler(async (req, res) => {
 })
 
 // @desc check if email exists
-// @route POST /api/users/email
+// @route POST /api/user/email
 // @access Public
 export const checkEmail = asyncHandler(async (req, res) => {
   const { email } = req.body
@@ -86,7 +86,7 @@ export const checkEmail = asyncHandler(async (req, res) => {
 })
 
 // @desc get user profile
-// @route GET /api/users/profile
+// @route GET /api/user/profile
 // @access Private
 export const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id)
@@ -99,12 +99,12 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     })
   } else {
     res.status(404)
-    throw new error("User not found")
+    throw new Error("User not found")
   }
 })
 
 // @desc update user profile
-// @route POST /api/users/profile
+// @route POST /api/user/profile
 // @access Private
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body
