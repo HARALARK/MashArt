@@ -12,7 +12,7 @@ import LoginScreen from "./screens/LoginScreen"
 import ProfileScreen from "./screens/ProfileScreen"
 import SignupScreen from "./screens/SignupScreen"
 import ResetPasswordScreen from "./screens/ResetPasswordScreen"
-
+import RoomStartScreen from "./screens/RoomStartScreen"
 function App() {
   return (
     <>
@@ -34,6 +34,7 @@ function App() {
                 path="/reset-password/:resetLink"
                 element={<ResetPasswordScreen />}
               />
+              {/* <Route path="/room-start" element={<RoomStartScreen />} /> */}
             </Routes>
           </ScreensContainer>
         </AppContainer>

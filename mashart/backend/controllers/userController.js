@@ -136,7 +136,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 })
 
 // @desc send email to the user for the reset link
-// @route PUT /api/user/forgot-password
+// @route POST /api/user/forgot-password
 // @access Public
 export const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body
@@ -161,8 +161,8 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     html: `<b>Hi ${user.username} </b>
     <br> 
     <p>Your Password Reset Link:  
-    <a href='http://localhost:3000/reset-password/${token}'>
-    http://localhost:3000/reset-password/${token}
+    <a href='http://localhost:3000/forgot-password/${token}'>
+    http://localhost:3000/forgot-password/${token}
     </a>
     <br>
     This link is only valid for the next 15 minutes.
@@ -186,36 +186,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
 
     res.status(200)
     res.json({
-      message: "Reset link has been sent to your email.(valid for 15min)",
+      message: "Reset link email sent (valid for 15min)",
     })
-  })
-})
-
-// @desc send email to the user for the reset link
-// @route PUT /api/user/reset-password
-// @access Private
-export const resetPassword = asyncHandler(async (req, res) => {
-  const { password, resetLink } = req.body
-
-  if (!resetLink) {
-    res.status(401)
-    throw new Error("Authentication Error!")
-  }
-
-  jwt.verify(resetLink, process.env.RESET_LINK_JWT_SECRET)
-
-  const user = await User.findOne({ resetLink })
-
-  if (!user) {
-    res.status(404)
-    throw new Error("User with this token does not exist.")
-  }
-
-  user.password = password
-  user.resetLink = ""
-  await user.save()
-
-  res.json({
-    message: "Password has been changed successfully",
   })
 })

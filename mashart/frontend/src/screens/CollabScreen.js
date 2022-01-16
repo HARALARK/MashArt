@@ -1,10 +1,11 @@
 import React, {useState} from "react"
-import { useDispatch, useSelector } from "react-redux";
-import Tabs from "../components/TabComponent/Tabs";
+import {useDispatch, useSelector } from "react-redux";
+// import Tabs from "../components/TabComponent/Tabs";
 import styled from "styled-components"
 import Message from "../components/styled-components/Message"
 import device from "../screen_sizes/devices"
 import { Input } from "../components/styled-components/Input";
+import { Link } from "react-router-dom";
 
 
 
@@ -14,7 +15,7 @@ const CollabScreen = () => {
     const [roomCode] = useState("")
 
     const userLogin = useSelector((state) => state.userLogin)
-    const { loading, userInfo, error } = userLogin
+    const { loading, error } = userLogin
 
     return (
         <Hero>
@@ -25,8 +26,7 @@ const CollabScreen = () => {
                         <p className="heading">Collaborate!</p>
                         {loading && <Message>Loading...</Message>}
                         {error && <Message variant="error">{error}</Message>}
-                        <SubmitButton type = "button" value="Start Room"  />
-
+                          <SubmitButton type = "button" value="Start Room"  />
                         <Divider></Divider>
                         <Input
                             type="text"
