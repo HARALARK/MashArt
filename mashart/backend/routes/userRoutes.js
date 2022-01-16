@@ -20,6 +20,6 @@ router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile)
-router.route("/forgot-password").post(forgotPassword)
+router.route("/forgot-password").put(forgotPassword)
 
 export default router
