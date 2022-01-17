@@ -161,8 +161,8 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     html: `<b>Hi ${user.username} </b>
     <br> 
     <p>Your Password Reset Link:  
-    <a href='http://localhost:3000/forgot-password/${token}'>
-    http://localhost:3000/forgot-password/${token}
+    <a href='http://localhost:3000/reset-password/${token}'>
+    http://localhost:3000/reset-password/${token}
     </a>
     <br>
     This link is only valid for the next 15 minutes.
