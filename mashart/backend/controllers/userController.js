@@ -186,7 +186,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
 
     res.status(200)
     res.json({
-      success: "Reset link has been sent to your email.(valid for 15min)",
+      message: "Reset link has been sent to your email.(valid for 15min)",
     })
   })
 })
