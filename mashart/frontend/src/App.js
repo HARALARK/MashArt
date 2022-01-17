@@ -5,10 +5,12 @@ import "./App.css"
 import Footer from "./components/Footer"
 
 import Header from "./components/Header"
+import ForgotPasswordScreen from "./screens/ForgotPasswordScreen"
 import HomeScreen from "./screens/HomeScreen"
 import LoginScreen from "./screens/LoginScreen"
 import ProfileScreen from "./screens/ProfileScreen"
 import SignupScreen from "./screens/SignupScreen"
+import ResetPasswordScreen from "./screens/ResetPasswordScreen"
 
 function App() {
   return (
@@ -22,6 +24,14 @@ function App() {
               <Route path="/signup" element={<SignupScreen />} />
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/profile" element={<ProfileScreen />} />
+              <Route
+                path="/forgot-password"
+                element={<ForgotPasswordScreen />}
+              />
+              <Route
+                path="/reset-password/:resetLink"
+                element={<ResetPasswordScreen />}
+              />
             </Routes>
           </ScreensContainer>
         </AppContainer>

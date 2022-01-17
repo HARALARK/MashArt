@@ -161,8 +161,8 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     html: `<b>Hi ${user.username} </b>
     <br> 
     <p>Your Password Reset Link:  
-    <a href='http://localhost:3000/forgot-password/${token}'>
-    http://localhost:3000/forgot-password/${token}
+    <a href='http://localhost:3000/reset-password/${token}'>
+    http://localhost:3000/reset-password/${token}
     </a>
     <br>
     This link is only valid for the next 15 minutes.
@@ -186,7 +186,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
 
     res.status(200)
     res.json({
-      success: "Reset link has been sent to your email.(valid for 15min)",
+      message: "Reset link has been sent to your email.(valid for 15min)",
     })
   })
 })
@@ -216,6 +216,6 @@ export const resetPassword = asyncHandler(async (req, res) => {
   await user.save()
 
   res.json({
-    success: "Password has been changed successfully",
+    message: "Password has been changed successfully",
   })
 })
