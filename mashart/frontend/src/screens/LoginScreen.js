@@ -54,21 +54,28 @@ const LoginScreen = () => {
               onChange={(e) => setUsername(e.target.value)}
               required
             />
-            <PasswordInputContainer>
-              <PasswordInput
-                type={showPassword ? "text" : "password"}
-                placeholder="Password*"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <div
-                className="icon-container"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                <FontAwesomeIcon
-                  icon={showPassword ? faEyeSlash : faEye}
-                ></FontAwesomeIcon>
-              </div>
-            </PasswordInputContainer>
+
+            <div>
+              <PasswordInputContainer>
+                <PasswordInput
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password*"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <div
+                  className="icon-container"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <FontAwesomeIcon
+                    icon={showPassword ? faEyeSlash : faEye}
+                  ></FontAwesomeIcon>
+                </div>
+              </PasswordInputContainer>
+              <Link to="/forgot-password" className="forgot-password">
+                Forgot Password
+              </Link>
+            </div>
+
             <SubmitButton type="button" value="Login" onClick={submitHandler} />
             <p className="signup-container">
               Don't have an account?{" "}
@@ -140,6 +147,14 @@ const Form = styled.form`
   }
 
   .signup-link {
+    color: #dd4a5c;
+  }
+
+  .forgot-password {
+    display: inline-block;
+    text-align: right;
+    width: 100%;
+    font-size: 0.8rem;
     color: #dd4a5c;
   }
 `
