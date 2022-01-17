@@ -1,5 +1,8 @@
 import axios from "axios"
 import {
+  FORGOT_PASSWORD_FAIL,
+  FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_SUCCESS,
   USER_DETAILS_FAIL,
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
@@ -167,6 +170,39 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_UPDATE_PROFILE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const forgotPassword = (email) => async (dispatch) => {
+  try {
+    dispatch({
+      type: FORGOT_PASSWORD_REQUEST,
+    })
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+
+    const { data } = await axios.put(
+      "/api/user/forgot-password",
+      { email },
+      config
+    )
+
+    dispatch({
+      type: FORGOT_PASSWORD_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: FORGOT_PASSWORD_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
