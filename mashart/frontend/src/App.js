@@ -10,6 +10,7 @@ import HomeScreen from "./screens/HomeScreen"
 import LoginScreen from "./screens/LoginScreen"
 import ProfileScreen from "./screens/ProfileScreen"
 import SignupScreen from "./screens/SignupScreen"
+import ResetPasswordScreen from "./screens/ResetPasswordScreen"
 
 function App() {
   return (
@@ -26,6 +27,10 @@ function App() {
               <Route
                 path="/forgot-password"
                 element={<ForgotPasswordScreen />}
+              />
+              <Route
+                path="/reset-password/:resetLink"
+                element={<ResetPasswordScreen />}
               />
             </Routes>
           </ScreensContainer>
