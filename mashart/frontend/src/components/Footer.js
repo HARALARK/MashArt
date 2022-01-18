@@ -80,7 +80,7 @@ const TabMenu = styled.ul`
 
   .tab-link {
     text-decoration: none;
-    color: var(--white);
+    color: var(--light);
     padding: 1rem;
     display: flex;
     gap: 0.5rem;
@@ -91,11 +91,11 @@ const TabMenu = styled.ul`
   }
 
   .tab-link.active {
-    color: var(--background);
+    color: var(--background-dark);
   }
 
   .tab-link:hover {
-    color: var(--background);
+    color: var(--background-dark);
   }
 `
 

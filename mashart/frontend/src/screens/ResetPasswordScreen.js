@@ -102,7 +102,7 @@ const Container = styled.div`
   height: 100vh;
 
   .heading {
-    color: var(--white);
+    color: var(--light);
     font-size: 1.5rem;
     text-align: center;
   }
@@ -135,7 +135,7 @@ const Form = styled.form`
 const PasswordInputContainer = styled.div`
   display: flex;
   align-items: center;
-  background-color: var(--white);
+  background-color: var(--light);
   border-radius: 5px;
 
   .icon-container {
@@ -145,14 +145,14 @@ const PasswordInputContainer = styled.div`
     color: var(--grey-dark);
 
     &:hover {
-      color: var(--black);
+      color: var(--dark);
     }
   }
 `
 
 const SubmitButton = styled(Input)`
   background-color: var(--primary);
-  color: var(--white);
+  color: var(--light);
   font-weight: 600;
   margin: 0 0 1.2rem;
 

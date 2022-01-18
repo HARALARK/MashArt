@@ -111,7 +111,7 @@ const Container = styled.div`
   display: ${(props) => props.userLoggedIn};
   justify-content: center;
   align-items: center;
-  color: var(--white);
+  color: var(--light);
   z-index: 100;
 
   @media ${device.tablet} {
@@ -228,7 +228,7 @@ const LinkButton = styled.div`
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  color: var(--white);
+  color: var(--light);
 
   padding: 1rem 0;
 

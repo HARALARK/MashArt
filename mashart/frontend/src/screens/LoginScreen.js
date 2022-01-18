@@ -113,7 +113,7 @@ const Container = styled.div`
   }
 
   .heading {
-    color: var(--white);
+    color: var(--light);
     font-size: 1.5rem;
     text-align: center;
   }
@@ -143,7 +143,7 @@ const Form = styled.form`
   gap: 1.2rem;
 
   .signup-container {
-    color: var(--white);
+    color: var(--light);
     text-align: center;
     margin-bottom: 1rem;
     font-size: 0.9rem;
@@ -165,7 +165,7 @@ const Form = styled.form`
 const PasswordInputContainer = styled.div`
   display: flex;
   align-items: center;
-  background-color: var(--white);
+  background-color: #fff;
   border-radius: 5px;
 
   .icon-container {
@@ -175,14 +175,14 @@ const PasswordInputContainer = styled.div`
     color: var(--grey-dark);
 
     &:hover {
-      color: var(--black);
+      color: var(--dark);
     }
   }
 `
 
 const SubmitButton = styled(Input)`
   background-color: var(--primary);
-  color: var(--white);
+  color: var(--light);
   font-weight: 600;
   margin: 0rem 0 0rem;
 

@@ -42,7 +42,7 @@ const Right = styled.div`
   }
 
   .text-design .collaborate {
-    color: var(--white);
+    color: var(--light);
   }
 
   .text-design .share {
