@@ -75,7 +75,7 @@ const Container = styled.div`
   }
 
   .heading {
-    color: #fff;
+    color: var(--white);
     font-size: 1.5rem;
     text-align: center;
   }
@@ -94,7 +94,7 @@ const Container = styled.div`
 `
 
 const Form = styled.form`
-  background-color: #2f2e41;
+  background-color: var(--secondary);
   padding: 1rem 2rem;
   border-radius: 5px;
   width: 350px;
@@ -109,20 +109,20 @@ const Form = styled.form`
     text-align: right;
     width: 100%;
     font-size: 0.8rem;
-    color: #dd4a5c;
+    color: var(--primary);
   }
 `
 
 const SubmitButton = styled(Input)`
-  background-color: #dd4a5c;
-  color: #fff;
+  background-color: var(--primary);
+  color: var(--white);
   font-weight: 600;
   margin: 0 0 1.2rem;
 
   cursor: pointer;
 
   &:hover {
-    background-color: #dd4a5cee;
+    background-color: var(--primary-dark);
   }
 `
 

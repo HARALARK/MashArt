@@ -42,15 +42,15 @@ const Right = styled.div`
   }
 
   .text-design .collaborate {
-    color: #ffffff;
+    color: var(--white);
   }
 
   .text-design .share {
-    color: #7c41a7;
+    color: var(--secondary);
   }
 
   .text-design .enjoy {
-    color: #dd4a5c;
+    color: var(--primary);
   }
 
   @media ${device.tablet} {
@@ -69,7 +69,7 @@ const Right = styled.div`
 const SVG = styled.img`
   height: ${(props) => props.boxSize || props.height}px;
   width: ${(props) => props.boxSize || props.width}px;
-  color: ${(props) => props.color || "#DD4A5C"};
+  color: ${(props) => props.color || "var(--primary)"};
 
   @media ${device.tablet} {
     height: ${(props) => (props.boxSize || props.height) * 1.2}px;

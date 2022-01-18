@@ -106,12 +106,12 @@ const Container = styled.div`
   position: sticky;
   top: 0;
   left: 0;
-  background-color: #24003e;
+  background-color: var(--secondary);
   height: 80px;
   display: ${(props) => props.userLoggedIn};
   justify-content: center;
   align-items: center;
-  color: #fff;
+  color: var(--white);
   z-index: 100;
 
   @media ${device.tablet} {
@@ -200,7 +200,7 @@ const Dropdown = styled(NavMenu)`
   display: flex;
   flex-direction: column;
   position: absolute;
-  background-color: #381452;
+  background-color: var(--secondary-light);
   top: -100%;
   width: 100%;
   height: 100vh;
@@ -216,7 +216,7 @@ const Dropdown = styled(NavMenu)`
   }
 
   & li:hover {
-    background-color: #2f1145;
+    background-color: var(--secondary);
   }
 
   @media ${device.tablet} {
@@ -228,16 +228,16 @@ const LinkButton = styled.div`
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  color: #fff;
+  color: var(--white);
 
   padding: 1rem 0;
 
   &.active {
-    color: #ffb800;
+    color: var(--background);
   }
 
   &:hover {
-    color: #ffb800;
+    color: var(--background);
   }
 
   @media ${device.tablet} {

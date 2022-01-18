@@ -74,12 +74,13 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   padding-bottom: 100px;
+  color: var(--secondary-dark);
 `
 
 const InfoSection = styled.section`
-  background: #e98e24;
   padding: 2rem 2rem 1rem;
   width: 100%;
+  border-bottom: 2px solid var(--background-dark);
 
   .link {
     text-decoration: none;
@@ -89,18 +90,17 @@ const InfoSection = styled.section`
 const Button = styled.p`
   text-align: center;
   padding: 0.5rem 1rem;
-  border: 3px solid #000;
-  color: #000;
+  border: 3px solid var(--secondary);
+  color: var(--secondary);
   border-radius: 5px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: 250ms ease-in-out;
+  transition: 100ms ease-in-out;
 
   &:hover {
-    background-color: #dd4a5c;
-    color: #fff;
-    border: 3px solid #dd4a5c;
+    background-color: var(--secondary);
+    color: var(--white);
   }
 
   @media ${device.tablet} {
@@ -135,7 +135,7 @@ const ProfileImageHolder = styled.div`
   align-items: center;
   height: ${(props) => props.height || "80px"};
   width: ${(props) => props.width || "80px"};
-  background-color: ${(props) => props.background || "#ffffff"};
+  background-color: ${(props) => props.background || "var(--white)"};
   border-radius: 10px;
 `
 
@@ -184,7 +184,7 @@ const PostContainer = styled.div`
     width: 100%;
     text-align: center;
     font-size: 2rem;
-    color: #dd4a5c;
+    color: var(--primary-dark);
     font-weight: 500;
   }
 `
