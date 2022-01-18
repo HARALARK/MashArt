@@ -75,7 +75,7 @@ const Container = styled.div`
   }
 
   .heading {
-    color: var(--white);
+    color: var(--light);
     font-size: 1.5rem;
     text-align: center;
   }
@@ -115,7 +115,7 @@ const Form = styled.form`
 
 const SubmitButton = styled(Input)`
   background-color: var(--primary);
-  color: var(--white);
+  color: var(--light);
   font-weight: 600;
   margin: 0 0 1.2rem;
 

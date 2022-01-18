@@ -100,7 +100,7 @@ const Button = styled.p`
 
   &:hover {
     background-color: var(--secondary);
-    color: var(--white);
+    color: var(--light);
   }
 
   @media ${device.tablet} {
@@ -135,7 +135,7 @@ const ProfileImageHolder = styled.div`
   align-items: center;
   height: ${(props) => props.height || "80px"};
   width: ${(props) => props.width || "80px"};
-  background-color: ${(props) => props.background || "var(--white)"};
+  background-color: ${(props) => props.background || "var(--light)"};
   border-radius: 10px;
 `
 
