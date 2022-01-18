@@ -167,7 +167,7 @@ const Container = styled.div`
   }
 
   .heading {
-    color: #fff;
+    color: var(--white);
     font-size: 1.5rem;
     text-align: center;
   }
@@ -185,7 +185,7 @@ const Container = styled.div`
 `
 
 const Form = styled.form`
-  background-color: #2f2e41;
+  background-color: var(--secondary);
   padding: 1rem 2rem;
   border-radius: 5px;
   width: 350px;
@@ -195,45 +195,45 @@ const Form = styled.form`
   gap: 1.2rem;
 
   .login-container {
-    color: #fff;
+    color: var(--white);
     text-align: center;
     margin-bottom: 1rem;
     font-size: 0.9rem;
   }
 
   .login-link {
-    color: #dd4a5c;
+    color: var(--primary);
   }
 `
 
 const PasswordInputContainer = styled.div`
   display: flex;
   align-items: center;
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 5px;
 
   .icon-container {
     padding: 0.4rem;
     cursor: pointer;
 
-    color: #555;
+    color: var(--grey-dark);
 
     &:hover {
-      color: #000;
+      color: var(--black);
     }
   }
 `
 
 const SubmitButton = styled(Input)`
-  background-color: #dd4a5c;
-  color: #fff;
+  background-color: var(--primary);
+  color: var(--white);
   font-weight: 600;
   margin: 0rem 0 0rem;
 
   cursor: pointer;
 
   &:hover {
-    background-color: #dd4a5cee;
+    background-color: var(--primary-dark);
   }
 `
 
