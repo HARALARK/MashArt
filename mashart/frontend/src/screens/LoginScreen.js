@@ -173,7 +173,7 @@ const Form = styled.form`
 const PasswordInputContainer = styled.div`
   display: flex;
   align-items: center;
-  background-color: var(--white);
+  background-color: #fff;
   border-radius: 5px;
 
   .icon-container {
