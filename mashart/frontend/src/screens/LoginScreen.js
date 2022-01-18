@@ -166,14 +166,14 @@ const Form = styled.form`
     text-align: right;
     width: 100%;
     font-size: 0.8rem;
-    color: #dd4a5c;
+    color: var(--primary);
   }
 `
 
 const PasswordInputContainer = styled.div`
   display: flex;
   align-items: center;
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 5px;
 
   .icon-container {
