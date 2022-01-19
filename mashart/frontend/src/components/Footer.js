@@ -65,7 +65,7 @@ const Container = styled.footer`
   justify-content: center;
   bottom: 0;
   left: 0;
-  background-color: #24003e;
+  background-color: var(--secondary);
   height: 80px;
 `
 
@@ -80,7 +80,7 @@ const TabMenu = styled.ul`
 
   .tab-link {
     text-decoration: none;
-    color: #fff;
+    color: var(--light);
     padding: 1rem;
     display: flex;
     gap: 0.5rem;
@@ -91,11 +91,11 @@ const TabMenu = styled.ul`
   }
 
   .tab-link.active {
-    color: #ffb800;
+    color: var(--background-dark);
   }
 
   .tab-link:hover {
-    color: #ffb800;
+    color: var(--background-dark);
   }
 `
 

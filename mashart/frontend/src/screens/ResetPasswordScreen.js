@@ -102,7 +102,7 @@ const Container = styled.div`
   height: 100vh;
 
   .heading {
-    color: #fff;
+    color: var(--light);
     font-size: 1.5rem;
     text-align: center;
   }
@@ -117,7 +117,7 @@ const Container = styled.div`
 `
 
 const Form = styled.form`
-  background-color: #2f2e41;
+  background-color: var(--secondary);
   padding: 1rem 2rem;
   border-radius: 5px;
   width: 350px;
@@ -135,24 +135,24 @@ const Form = styled.form`
 const PasswordInputContainer = styled.div`
   display: flex;
   align-items: center;
-  background-color: #fff;
+  background-color: var(--light);
   border-radius: 5px;
 
   .icon-container {
     padding: 0.4rem;
     cursor: pointer;
 
-    color: #555;
+    color: var(--grey-dark);
 
     &:hover {
-      color: #000;
+      color: var(--dark);
     }
   }
 `
 
 const SubmitButton = styled(Input)`
-  background-color: #dd4a5c;
-  color: #fff;
+  background-color: var(--primary);
+  color: var(--light);
   font-weight: 600;
   margin: 0 0 1.2rem;
 
@@ -163,7 +163,7 @@ const SubmitButton = styled(Input)`
   cursor: pointer;
 
   &:hover {
-    background-color: #dd4a5cee;
+    background-color: var(--primary-dark);
   }
 `
 
@@ -171,7 +171,7 @@ const Button = styled.p`
   width: 100%;
   text-align: center;
   padding: 0.5rem;
-  color: #dd4a5c;
+  color: var(--primary);
   text-decoration: none;
   border-radius: 5px;
   font-size: 0.8rem;
@@ -180,7 +180,7 @@ const Button = styled.p`
   transition: 250ms ease-in-out;
 
   &:hover {
-    color: #fff;
+    color: var(--primary-light);
   }
 `
 

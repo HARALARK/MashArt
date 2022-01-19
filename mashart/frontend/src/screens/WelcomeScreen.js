@@ -63,14 +63,14 @@ const Container = styled.div`
 const Left = styled.div`
   text-align: center;
   .welcome {
-    color: #2f2e41;
+    color: var(--grey-dark);
     font-weight: 700;
     font-size: 2.5rem;
     font-family: "Emblema One", cursive;
   }
 
   .mashart {
-    color: #dd4a5c;
+    color: var(--primary);
     font-weight: 600;
     font-size: 2rem;
     letter-spacing: 2px;
@@ -108,9 +108,11 @@ const Button = styled.p`
   text-align: center;
   margin-right: 1rem;
   padding: 0.5rem 1rem;
-  background-color: ${(props) => (props.primary ? "#24003e" : "#ffb500")};
-  border: 3px solid #24003e;
-  color: ${(props) => (props.primary ? "#ffb500" : "#24003e")};
+  background-color: ${(props) =>
+    props.primary ? "var(--secondary)" : "transparent"};
+  border: 3px solid var(--secondary);
+  color: ${(props) =>
+    props.primary ? "var(--background)" : "var(--secondary)"};
   text-decoration: none;
   border-radius: 5px;
   font-size: 0.9rem;
@@ -119,11 +121,11 @@ const Button = styled.p`
   transition: 250ms ease-in-out;
 
   &:hover {
-    background-color: #ffb500;
-    border: 3px solid #ffb500;
-    border-bottom: 3px solid #24003e;
+    background-color: transparent;
+    border: 3px solid transparent;
+    border-bottom: 3px solid var(--secondary);
     border-radius: 0;
-    color: #24003e;
+    color: var(--secondary);
   }
 `
 
