@@ -188,6 +188,7 @@ const Form = styled.form`
   background-color: #2f2e41;
   padding: 1rem 2rem;
   border-radius: 5px;
+  width: 350px;
 
   display: flex;
   flex-direction: column;
@@ -197,6 +198,7 @@ const Form = styled.form`
     color: #fff;
     text-align: center;
     margin-bottom: 1rem;
+    font-size: 0.9rem;
   }
 
   .login-link {
@@ -226,7 +228,7 @@ const SubmitButton = styled(Input)`
   background-color: #dd4a5c;
   color: #fff;
   font-weight: 600;
-  margin: 1rem 0 0rem;
+  margin: 0rem 0 0rem;
 
   cursor: pointer;
 

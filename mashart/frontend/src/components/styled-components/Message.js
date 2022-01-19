@@ -17,8 +17,7 @@ const Message = styled.p`
 
   padding: 0.5rem 1rem;
   border-radius: 5px;
-
-  width: 300px;
+  width: 100%;
 `
 
 export default Message

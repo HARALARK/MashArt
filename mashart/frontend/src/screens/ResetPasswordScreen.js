@@ -1,59 +1,53 @@
-import React, { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import React, { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { Link, useParams } from "react-router-dom"
 import styled from "styled-components"
-import { login } from "../actions/userActions"
-import Design from "../components/Design"
+
+import { resetPassword } from "../actions/userActions"
 import { Input, PasswordInput } from "../components/styled-components/Input"
 import Message from "../components/styled-components/Message"
 import device from "../screen_sizes/devices"
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 
-const LoginScreen = () => {
-  const location = useLocation()
-  const navigate = useNavigate()
-
-  const [username, setUsername] = useState("")
+const ForgotPasswordScreen = () => {
+  const { resetLink } = useParams()
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [message, setMessage] = useState("")
 
   const dispatch = useDispatch()
 
-  const userLogin = useSelector((state) => state.userLogin)
-  const { loading, userInfo, error } = userLogin
-
-  const redirect = location.search ? location.search.split("=")[1] : "/"
-
-  useEffect(() => {
-    if (userInfo) {
-      navigate(redirect)
-    }
-  }, [navigate, userInfo, redirect])
+  const resetPasswordInfo = useSelector((state) => state.resetPassword)
+  const { loading, success, error } = resetPasswordInfo
 
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(login(username, password))
+
+    if (password.trim().length < 8 || password.trim().includes(" ")) {
+      setMessage("Password should be atleast 8 characters (spaces not allowed)")
+      return false
+    }
+    if (password !== confirmPassword) {
+      setMessage("Passwords dont match")
+      return false
+    }
+
+    setMessage("")
+    dispatch(resetPassword(password, resetLink))
   }
 
   return (
     <Hero>
       <Container>
-        <div className="design-container">
-          <Design />
-        </div>
         <div className="form-container">
           <Form>
-            <p className="heading">Login</p>
+            <p className="heading">Reset Password</p>
             {loading && <Message>Loading...</Message>}
             {error && <Message variant="error">{error}</Message>}
-
-            <Input
-              type="text"
-              placeholder="Username*"
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
+            {message && <Message variant="error">{message}</Message>}
+            {success && <Message variant="success">{success.message}</Message>}
 
             <div>
               <PasswordInputContainer>
@@ -71,23 +65,22 @@ const LoginScreen = () => {
                   ></FontAwesomeIcon>
                 </div>
               </PasswordInputContainer>
-              <Link to="/forgot-password" className="forgot-password">
-                Forgot Password
-              </Link>
             </div>
+            <Input
+              type="password"
+              placeholder="Confirm Password*"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
 
-            <SubmitButton type="button" value="Login" onClick={submitHandler} />
-            <p className="signup-container">
-              Don't have an account?{" "}
-              <span>
-                <Link
-                  className="signup-link"
-                  to={redirect ? `/signup?redirect=${redirect}` : "/signup"}
-                >
-                  Sign Up
-                </Link>
-              </span>
-            </p>
+            <SubmitButton
+              className="no-margin"
+              type="button"
+              value="Change Password"
+              onClick={submitHandler}
+            />
+            <Link to="/" className="return-link">
+              <Button>return to HomePage</Button>
+            </Link>
           </Form>
         </div>
       </Container>
@@ -106,11 +99,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
 
-  height: calc(100vh - 80px);
-
-  .design-container {
-    display: none;
-  }
+  height: 100vh;
 
   .heading {
     color: #fff;
@@ -124,10 +113,6 @@ const Container = styled.div`
     justify-content: space-between;
     gap: 2rem;
     padding: 0 2rem;
-
-    .design-container {
-      display: inline-block;
-    }
   }
 `
 
@@ -135,30 +120,15 @@ const Form = styled.form`
   background-color: #2f2e41;
   padding: 1rem 2rem;
   border-radius: 5px;
-
   width: 350px;
+
+  gap: 1.2rem;
 
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
 
-  .signup-container {
-    color: #fff;
-    text-align: center;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-  }
-
-  .signup-link {
-    color: #dd4a5c;
-  }
-
-  .forgot-password {
-    display: inline-block;
-    text-align: right;
-    width: 100%;
-    font-size: 0.8rem;
-    color: #dd4a5c;
+  .return-link {
+    text-decoration: none;
   }
 `
 
@@ -184,7 +154,11 @@ const SubmitButton = styled(Input)`
   background-color: #dd4a5c;
   color: #fff;
   font-weight: 600;
-  margin: 0rem 0 0rem;
+  margin: 0 0 1.2rem;
+
+  &.no-margin {
+    margin: 0;
+  }
 
   cursor: pointer;
 
@@ -193,4 +167,21 @@ const SubmitButton = styled(Input)`
   }
 `
 
-export default LoginScreen
+const Button = styled.p`
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem;
+  color: #dd4a5c;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 250ms ease-in-out;
+
+  &:hover {
+    color: #fff;
+  }
+`
+
+export default ForgotPasswordScreen
