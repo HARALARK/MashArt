@@ -5,6 +5,7 @@ import "./App.css"
 import Footer from "./components/Footer"
 
 import Header from "./components/Header"
+import CollabScreen from "./screens/CollabScreen"
 import HomeScreen from "./screens/HomeScreen"
 import LoginScreen from "./screens/LoginScreen"
 import ProfileScreen from "./screens/ProfileScreen"
@@ -22,6 +23,7 @@ function App() {
               <Route path="/signup" element={<SignupScreen />} />
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/profile" element={<ProfileScreen />} />
+              <Route path="/collab" element={<CollabScreen />} />
             </Routes>
           </ScreensContainer>
         </AppContainer>
