@@ -1,38 +1,38 @@
 import React from "react"
+import Tabs from "../components/TabComponent/Tabs";
 import styled from "styled-components"
-import { useDispatch, useSelector } from "react-redux"
-//import { Link, useNavigate } from "react-router-dom"
+
 import device from "../screen_sizes/devices"
 const CollabScreen = () => {
     
 
     return (
         <>
-            <Searchbar>
-                    <p>Search for tags</p>
-            </Searchbar>
-            <Container> 
-                
-                <CollabHolder> 
-                    <p className="heading"> Comic Collaborate with others </p>
-                </CollabHolder>
-
+            
+            <CreateCollab>
                 <CollabHolder> 
                     <p className="heading"> Create your own Collaborate Project </p>
                 </CollabHolder>
-
+            </CreateCollab>
+            <Container> 
                 
+                <Tabs />
             </Container>
 
-            <Container>
-                <CollabHolder> 
-                    <p className="heading"> Recommended for you </p>
-                </CollabHolder>
-            </Container>
         </>
         
-    )
+    ) 
 }
+
+const CreateCollab = styled.div`
+
+`
+const PostsDisplay = styled.div `
+    display: flex;
+    color: white;
+    height: 100%;
+    width: 50%;
+`
 
 const Container = styled.div`
     display: flex;
@@ -56,13 +56,10 @@ const Container = styled.div`
             display: inline-block;
         }
     }
+    
+    outline: 1px dashed red;  For debugging
+`
 
-    outline: 1px dashed red;
-`
-const Searchbar = styled.div`
-    width: 100%;
-    outline: 1px dashed blue;
-`
 const CollabHolder = styled.div`
 background-color: #EBDFCE;
 padding: 1rem 2rem;
@@ -76,4 +73,5 @@ flex-direction: column;
 gap: 1.2rem;
 outline: 1px dashed green;
 `
-export default CollabScreen
+
+export default CollabScreen;
