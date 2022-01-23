@@ -53,7 +53,6 @@ const Hero = styled.section`
 const Divider = styled.section`
   outline: 1px dashed white;
 `
-
 const Container = styled.div`
   display: flex;
   align-items: center;
