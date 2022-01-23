@@ -36,11 +36,8 @@ const Tabs = () => {
         </div>
     );
 };
+export default Tabs;
 
-<<<<<<< HEAD
-export default Tabs;
-=======
-export default Tabs;
 
 
 
@@ -138,6 +135,3 @@ export default Tabs;
           
 //       }
 // `
-
-// export default Tabs;
->>>>>>> 0f52738 (Added tabs component with styling)
