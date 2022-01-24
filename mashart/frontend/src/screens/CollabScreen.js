@@ -9,12 +9,12 @@ import { Input } from "../components/styled-components/Input";
 
 
 const CollabScreen = () => {
-    
+  
 
     const [roomCode] = useState("")
 
     const userLogin = useSelector((state) => state.userLogin)
-    const { loading, userInfo, error } = userLogin
+    const { loading, error } = userLogin
 
     return (
         <Hero>
@@ -25,8 +25,7 @@ const CollabScreen = () => {
                         <p className="heading">Collaborate!</p>
                         {loading && <Message>Loading...</Message>}
                         {error && <Message variant="error">{error}</Message>}
-                        <SubmitButton type = "button" value="Start Room"  />
-
+                          <SubmitButton type = "button" value="Start Room"  />
                         <Divider></Divider>
                         <Input
                             type="text"
@@ -40,6 +39,7 @@ const CollabScreen = () => {
                 </div>
             </Container>
         </Hero>
+
         
     ) 
 }
@@ -75,9 +75,6 @@ const Container = styled.div`
     justify-content: space-between;
     gap: 2rem;
     padding: 0 2rem;
-
-  }
-
 `
 
 const Form = styled.form`
@@ -106,5 +103,4 @@ const SubmitButton = styled(Input)`
     background-color: var(--primary-dark);
   }
 `
-
 export default CollabScreen;

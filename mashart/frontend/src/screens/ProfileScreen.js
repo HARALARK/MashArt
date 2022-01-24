@@ -58,7 +58,7 @@ const ProfileScreen = () => {
             </MiscInfo>
           </MiscHolder>
         </InfoContainer>
-        <Link className="link" to="/profile/edit">
+        <Link className="link" to="/edit-profile">
           <Button>Edit Profile</Button>
         </Link>
       </InfoSection>

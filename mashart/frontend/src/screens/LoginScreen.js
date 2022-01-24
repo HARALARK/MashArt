@@ -160,6 +160,14 @@ const Form = styled.form`
     font-size: 0.8rem;
     color: var(--primary);
   }
+
+  .forgot-password {
+    display: inline-block;
+    text-align: right;
+    width: 100%;
+    font-size: 0.8rem;
+    color: var(--primary);
+  }
 `
 
 const PasswordInputContainer = styled.div`
