@@ -7,7 +7,6 @@ import Footer from "./components/Footer"
 import Header from "./components/Header"
 import CollabScreen from "./screens/CollabScreen"
 import ForgotPasswordScreen from "./screens/ForgotPasswordScreen"
-
 import HomeScreen from "./screens/HomeScreen"
 import LoginScreen from "./screens/LoginScreen"
 import ProfileScreen from "./screens/ProfileScreen"
@@ -35,7 +34,6 @@ function App() {
                 path="/reset-password/:resetLink"
                 element={<ResetPasswordScreen />}
               />
-
             </Routes>
           </ScreensContainer>
         </AppContainer>

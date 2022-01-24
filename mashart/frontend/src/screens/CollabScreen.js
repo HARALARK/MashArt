@@ -1,79 +1,110 @@
-import React from "react"
+import React, {useState} from "react"
+import { useDispatch, useSelector } from "react-redux";
+import Tabs from "../components/TabComponent/Tabs";
 import styled from "styled-components"
-import { useDispatch, useSelector } from "react-redux"
-//import { Link, useNavigate } from "react-router-dom"
+import Message from "../components/styled-components/Message"
 import device from "../screen_sizes/devices"
+import { Input } from "../components/styled-components/Input";
+
+
+
 const CollabScreen = () => {
     
 
+    const [roomCode] = useState("")
+
+    const userLogin = useSelector((state) => state.userLogin)
+    const { loading, userInfo, error } = userLogin
+
     return (
-        <>
-            <Searchbar>
-                    <p>Search for tags</p>
-            </Searchbar>
-            <Container> 
-                
-                <CollabHolder> 
-                    <p className="heading"> Comic Collaborate with others </p>
-                </CollabHolder>
-
-                <CollabHolder> 
-                    <p className="heading"> Create your own Collaborate Project </p>
-                </CollabHolder>
-
-                
-            </Container>
-
+        <Hero>
             <Container>
-                <CollabHolder> 
-                    <p className="heading"> Recommended for you </p>
-                </CollabHolder>
+                
+                <div className="join-container">
+                    <Form>
+                        <p className="heading">Collaborate!</p>
+                        {loading && <Message>Loading...</Message>}
+                        {error && <Message variant="error">{error}</Message>}
+                        <SubmitButton type = "button" value="Start Room"  />
+
+                        <Divider></Divider>
+                        <Input
+                            type="text"
+                            placeholder="Room Code"
+                            // Need something here to search for valid room
+                            required
+                        />
+
+                        <SubmitButton type = "button" value="Join Room"  />
+                    </Form>
+                </div>
             </Container>
-        </>
+        </Hero>
         
-    )
+    ) 
 }
 
+const Hero = styled.section`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+const Divider = styled.section`
+  outline: 1px dashed white;
+`
 const Container = styled.div`
-    display: flex;
-    align-items: inline;
-    // overflow-y: scroll;
-    // overflow-style: none;
-    height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    .design-container {
+  height: calc(100vh - 80px);
+  .design-container {
     display: none;
-    }
-    
-    @media ${device.laptop} {
+  }
+
+  .heading {
+    color: var(--light);
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  @media ${device.laptop} {
     flex-direction: row;
     height: calc(100vh - 80px);
     justify-content: space-between;
     gap: 2rem;
-    padding: 3rem 2rem;
+    padding: 0 2rem;
 
-        .design-container {
-            display: inline-block;
-        }
-    }
+  }
 
-    outline: 1px dashed red;
 `
-const Searchbar = styled.div`
-    width: 100%;
-    outline: 1px dashed blue;
-`
-const CollabHolder = styled.div`
-background-color: #EBDFCE;
-padding: 1rem 2rem;
-align-items: inline;
-border-radius: 5px;
 
-height: 40%;
-width: 100%;
-display: flex;
-flex-direction: column;
-gap: 1.2rem;
-outline: 1px dashed green;
+const Form = styled.form`
+  background-color: var(--secondary-dark);
+  padding: 2rem 2rem 1rem;
+  border-radius: 5px;
+
+  width: 500px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+
 `
-export default CollabScreen
+
+const SubmitButton = styled(Input)`
+  background-color: var(--primary);
+  color: var(--dark);
+  font-weight: 600;
+  margin: 0rem 0 0rem;
+  font-size: 1rem;
+  padding-bottom: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--primary-dark);
+  }
+`
+
+export default CollabScreen;
