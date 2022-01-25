@@ -219,3 +219,19 @@ export const resetPassword = asyncHandler(async (req, res) => {
     message: "Password has been changed successfully",
   })
 })
+
+// @desc search for users using their username
+// @route GET /api/user/search
+// @access Private
+export const searchUser = asyncHandler(async (req, res) => {
+  const { username } = req.body
+
+  const users = await User.find(
+    { username: { $regex: username } },
+    { username: 1 }
+  )
+
+  res.json({
+    users,
+  })
+})
