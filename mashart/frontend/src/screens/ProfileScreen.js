@@ -89,7 +89,7 @@ const InfoSection = styled.section`
 
 const Button = styled.p`
   text-align: center;
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 1rem;
   border: 3px solid var(--secondary);
   color: var(--secondary);
   border-radius: 5px;

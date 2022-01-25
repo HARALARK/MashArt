@@ -10,7 +10,8 @@ const EditProfileScreen = () => {
     <Hero>
         <Container>
             <Form>
-                <p className="heading">Edit Profile</p>
+                <p1 className="heading">Edit Profile</p1>
+                
                 <p className="subheading"> Update your Username </p>
                 <Input
                             type="text"
@@ -22,15 +23,28 @@ const EditProfileScreen = () => {
                             placeholder="New Password"
                             required
                         />
+                
+                <Input
+                            type="text"
+                            placeholder="New Password"
+                            required
+                        /> 
+                <p className="subheading"> Edit Bio </p>
+                <Input
+                            type="text"
+                            placeholder="Enter text"
+                            required
+                        />
+    
                 <p className = "subheading"> Change your profile pic</p>
                 
                 <SubmitButton type = "button" value="Upload Picture"  />
-
             </Form>
         </Container>
     </Hero>
   </div>
 )};
+
 
 const Hero = styled.section`
   width: 100%;
@@ -39,6 +53,7 @@ const Hero = styled.section`
   align-items: center;
   
 `
+
 
 const Container = styled.div`
   display: flex;
@@ -75,7 +90,7 @@ const Form = styled.form`
 
   // TODO: adjust h and w for different sizes
   width: 500px;
-  height: 90%;;
+  height: 90%;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
