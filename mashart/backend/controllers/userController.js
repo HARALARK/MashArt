@@ -242,17 +242,52 @@ export const searchUser = asyncHandler(async (req, res) => {
 // access Private
 export const followUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id) //current user
-  const follUser = await User.findById(req.body.userId) //user to follow
+  const follUser = await User.findById(req.body._id) //user to follow
 
   if (user && follUser){
     if (!follUser.followers.includes(user._id)) { 
-      await user.updateOne({$push:{ following: req.body.userId }}) 
-      await follUser.updateOne({$push:{ followers: user._id }})
+      //update current user's following list
+      await user.updateOne({
+        $push:{ following: req.body._id }
+      }) 
+      //update new user's follower list
+      await follUser.updateOne({
+        $push:{ followers: user._id }
+      })
       res.status(200).json("User Followed")
     } 
     else {
       res.status(400)
       throw new Error("User already followed")
+    }  
+  }
+  else{
+    res.status(404)
+    throw new Error("User not found")
+  }
+})
+
+
+// @desc unfollow a user
+// @route PUT /api/user/profile/unfollow
+// access Private
+export const unfollowUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id) //current user
+  const unfollUser = await User.findById(req.body._id) //user to unfollow
+
+  if (user && unfollUser){
+    if (unfollUser.followers.includes(user._id)) { 
+      await user.updateOne({
+        $pull:{ following: req.body._id }
+      }) 
+      await unfollUser.updateOne({
+        $pull:{ followers: user._id }
+      })
+      res.status(200).json("User Unfollowed")
+    } 
+    else {
+      res.status(400)
+      throw new Error("Invalid Request")
     }  
   }
   else{
