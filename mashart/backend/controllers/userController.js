@@ -235,3 +235,28 @@ export const searchUser = asyncHandler(async (req, res) => {
     users,
   })
 })
+
+
+// @desc follow a user
+// @route PUT /api/user/profile/follow
+// access Private
+export const followUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id) //current user
+  const follUser = await User.findById(req.body.userId) //user to follow
+
+  if (user && follUser){
+    if (!follUser.followers.includes(user._id)) { 
+      await user.updateOne({$push:{ following: req.body.userId }}) 
+      await follUser.updateOne({$push:{ followers: user._id }})
+      res.status(200).json("User Followed")
+    } 
+    else {
+      res.status(400)
+      throw new Error("User already followed")
+    }  
+  }
+  else{
+    res.status(404)
+    throw new Error("User not found")
+  }
+})
