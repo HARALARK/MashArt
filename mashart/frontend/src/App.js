@@ -12,7 +12,6 @@ import LoginScreen from "./screens/LoginScreen"
 import ProfileScreen from "./screens/ProfileScreen"
 import SignupScreen from "./screens/SignupScreen"
 import ResetPasswordScreen from "./screens/ResetPasswordScreen"
-//import RoomStartScreen from "./screens/RoomStartScreen"
 import EditProfileScreen from "./screens/EditProfileScreen"
 
 function App() {
