@@ -9,7 +9,8 @@ const EditProfileScreen = () => {
     <Hero>
         <Container>
             <Form>
-                <p className="heading">Edit Profile</p>
+                <p1 className="heading">Edit Profile</p1>
+                
                 <p className="subheading"> Update your Username </p>
                 <Input
                             type="text"
@@ -35,11 +36,19 @@ const EditProfileScreen = () => {
                             placeholder="New Password"
                             required
                         /> 
+                <p className="subheading"> Edit Bio </p>
+                <Input
+                            type="text"
+                            placeholder="Enter text"
+                            required
+                        />
+
             </Form>
         </Container>
     </Hero>
   </div>
 )};
+
 
 const Hero = styled.section`
   width: 100%;
@@ -47,6 +56,7 @@ const Hero = styled.section`
   justify-content: center;
   align-items: center;
 `
+
 
 const Container = styled.div`
   display: flex;
@@ -81,7 +91,7 @@ const Form = styled.form`
   border-radius: 5px;
 
   width: 500px;
-  height: 400px;
+  height: 600px;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
