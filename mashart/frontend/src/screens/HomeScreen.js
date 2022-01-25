@@ -18,7 +18,6 @@ const Homepage = () => {
 
 const Container = styled.section`
   padding: 1rem 2rem;
-  // test commit
 `
 
 export default Homepage
