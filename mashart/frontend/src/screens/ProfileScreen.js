@@ -46,7 +46,7 @@ const ProfileScreen = () => {
           <MiscHolder>
             <MiscInfo>
               <p className="title">Followers</p>
-              <p>{user.followers.length || 0}</p>
+              <p>{user.followers || 0}</p>
             </MiscInfo>
             <MiscInfo>
               <p className="title">Posts</p>
