@@ -38,7 +38,7 @@ const Header = () => {
         <SubContainer>
           <Link to="/" style={{ textDecoration: "none" }}>
             <Logo>
-              <LogoImage src="/images/logo/logo.png" alt="logo" />
+              <LogoImage src="/images/logo/watermark.png" alt="logo" />
               <LogoTxt>MashArt</LogoTxt>
             </Logo>
           </Link>
@@ -107,7 +107,7 @@ const Container = styled.div`
   top: 0;
   left: 0;
   background-color: var(--secondary);
-  height: 80px;
+  height: 40px;
   display: ${(props) => props.userLoggedIn};
   justify-content: center;
   align-items: center;
@@ -135,12 +135,11 @@ const Logo = styled.div`
 `
 
 const LogoImage = styled.img`
-  height: 45px;
-  width: 45px;
-  background-color: #ffe6aa;
-  border-radius: 15px;
+  height: 40px;
+  width: 40px;
+  border-radius: 5px;
   padding: 5px;
-  margin-right: 16px;
+  margin-right: 3px;
 `
 
 const LogoTxt = styled.p`

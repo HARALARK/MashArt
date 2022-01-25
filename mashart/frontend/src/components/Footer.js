@@ -66,7 +66,7 @@ const Container = styled.footer`
   bottom: 0;
   left: 0;
   background-color: var(--secondary);
-  height: 80px;
+  height: 40px;
 `
 
 const TabMenu = styled.ul`
