@@ -50,7 +50,7 @@ const Right = styled.div`
   }
 
   .text-design .enjoy {
-    color: var(--primary);
+    color: var(--primary-dark);
   }
 
   @media ${device.tablet} {

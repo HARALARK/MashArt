@@ -70,7 +70,7 @@ const Left = styled.div`
   }
 
   .mashart {
-    color: var(--primary);
+    color: var(--secondary);
     font-weight: 600;
     font-size: 2rem;
     letter-spacing: 2px;
