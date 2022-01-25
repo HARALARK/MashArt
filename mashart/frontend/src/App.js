@@ -13,6 +13,7 @@ import ProfileScreen from "./screens/ProfileScreen"
 import SignupScreen from "./screens/SignupScreen"
 import ResetPasswordScreen from "./screens/ResetPasswordScreen"
 import EditProfileScreen from "./screens/EditProfileScreen"
+import PageNotFoundScreen from "./screens/PageNotFoundScreen"
 
 function App() {
   return (
@@ -36,7 +37,9 @@ function App() {
                 element={<ResetPasswordScreen />}
               />
               {/* <Route path="/room-start" element={<RoomStartScreen />} /> */}
-              <Route path = "/edit-profile" element={<EditProfileScreen />} />
+              <Route path="/edit-profile" element={<EditProfileScreen />} />
+
+              <Route path="*" element={<PageNotFoundScreen />} />
             </Routes>
           </ScreensContainer>
         </AppContainer>
