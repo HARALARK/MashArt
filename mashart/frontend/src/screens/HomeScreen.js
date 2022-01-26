@@ -19,11 +19,15 @@ const Homepage = () => {
 
           <PostCollaborators> </PostCollaborators>
           <PostPicture> </PostPicture>
-          <PostCaption> </PostCaption>
+          <PostCaption> 
+            <PostIcons> 
+              <likeButton> </likeButton>
+              <commentButton> </commentButton>
+            </PostIcons>
+          </PostCaption>
 
         </PostSection>
         
-
 
 
       </Container>
@@ -73,7 +77,20 @@ const PostCaption = styled.section`
  // padding: 1rem 2rem;
   
 `
+const PostIcons = styled.section`
+ // padding: 1rem 2rem;
+  
+`
+const likeButton = styled.section`
+ // padding: 1rem 2rem;
+  
+`
+const commentButton = styled.section`
+ // padding: 1rem 2rem;
+  
+`
 
 export default Homepage
+
 
 
