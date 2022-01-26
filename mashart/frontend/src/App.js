@@ -27,7 +27,7 @@ function App() {
               <Route exact path="/" element={<HomeScreen />} />
               <Route path="/signup" element={<SignupScreen />} />
               <Route path="/login" element={<LoginScreen />} />
-              <Route path="/profile/:id" element={<ProfileScreen />} />
+              <Route path="/profile" element={<ProfileScreen />} />
               <Route path="/collab" element={<CollabScreen />} />
               <Route
                 path="/forgot-password"
