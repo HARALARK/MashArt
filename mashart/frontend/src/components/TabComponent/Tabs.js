@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import CollabTab from '../AllTabs/CollabTab';
-import PostsTab from '../AllTabs/PostsTab';
-
+import CollabTab from '../TabComponent/CollabTab';
+import PostsTab from '../TabComponent/PostsTab';
+import "../TabComponent/TabStyle.css"
 const Tabs = () => {
 
     const [activeTab, setActiveTab] = useState("CollabTab");
@@ -16,7 +16,7 @@ const Tabs = () => {
         setActiveTab("PostsTab");
     }
     return (
-        <div className="Tabs">
+        <div className='Tabs'>
             {/* Tab nav */}
             <ul className='nav'>
                 <li className={activeTab === "PostsTab" ? "active" : ""}
