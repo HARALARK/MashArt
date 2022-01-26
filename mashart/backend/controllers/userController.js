@@ -224,10 +224,10 @@ export const resetPassword = asyncHandler(async (req, res) => {
 // @route GET /api/user/search
 // @access Private
 export const searchUser = asyncHandler(async (req, res) => {
-  const { username } = req.body
+  const username = req.query.username
 
   const users = await User.find(
-    { username: { $regex: username } },
+    { username: { $regex: username, $options: "i" } },
     { username: 1 }
   )
 
