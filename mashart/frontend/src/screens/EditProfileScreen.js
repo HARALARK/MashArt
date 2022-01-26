@@ -24,11 +24,6 @@ const EditProfileScreen = () => {
                             required
                         />
                 
-                <Input
-                            type="text"
-                            placeholder="New Password"
-                            required
-                        /> 
                 <p className="subheading"> Edit Bio </p>
                 <Input
                             type="text"
