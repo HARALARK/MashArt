@@ -14,6 +14,7 @@ import SignupScreen from "./screens/SignupScreen"
 import ResetPasswordScreen from "./screens/ResetPasswordScreen"
 import EditProfileScreen from "./screens/EditProfileScreen"
 import PageNotFoundScreen from "./screens/PageNotFoundScreen"
+import SearchScreen from "./screens/SearchScreen"
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
               <Route exact path="/" element={<HomeScreen />} />
               <Route path="/signup" element={<SignupScreen />} />
               <Route path="/login" element={<LoginScreen />} />
-              <Route path="/profile" element={<ProfileScreen />} />
+              <Route path="/profile/:id" element={<ProfileScreen />} />
               <Route path="/collab" element={<CollabScreen />} />
               <Route
                 path="/forgot-password"
@@ -38,7 +39,7 @@ function App() {
               />
               {/* <Route path="/room-start" element={<RoomStartScreen />} /> */}
               <Route path="/edit-profile" element={<EditProfileScreen />} />
-
+              <Route path="/search" element={<SearchScreen />} />
               <Route path="*" element={<PageNotFoundScreen />} />
             </Routes>
           </ScreensContainer>
