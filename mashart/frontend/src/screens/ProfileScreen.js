@@ -7,6 +7,7 @@ import { getUserDetails } from "../actions/userActions"
 import Message from "../components/styled-components/Message"
 import { faUser } from "@fortawesome/free-solid-svg-icons"
 import device from "../screen_sizes/devices"
+import Tabs from "../components/TabComponent/Tabs"
 
 const ProfileScreen = () => {
   const navigate = useNavigate()
@@ -62,6 +63,7 @@ const ProfileScreen = () => {
           <Button>Edit Profile</Button>
         </Link>
       </InfoSection>
+      <Tabs />
       <PostContainer>
         {user.posts ? <></> : <p className="no-posts">No Posts</p>}
       </PostContainer>
