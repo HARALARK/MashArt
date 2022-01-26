@@ -25,6 +25,11 @@ const userSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
+    role: {
+      type: String,
+      default : "user",
+      enum : ["user", "moderator", "admin"] //user role must be 1 of these
+    },
     resetLink: {
       type: String,
       default: "",
