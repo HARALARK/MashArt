@@ -12,12 +12,12 @@ const EditProfileScreen = () => {
         <Container>
             <Form>
                 <p1 className="heading"><WatermarkImage src="/images/logo/watermark.png"alt="logo"/> Edit Profile </p1>
-                <p className="subheading"> Update your Username </p>
+                <p className="subheading"> Update Username </p>
                 <Input
                             type="text"
                             placeholder="New Username"
                         />  
-                <p className="subheading"> Update your Password</p>
+                <p className="subheading"> Update Password</p>
                 <Input
                             type="text"
                             placeholder="New Password"
@@ -37,9 +37,9 @@ const EditProfileScreen = () => {
                         />
     
                 <p className = "subheading"> Change Profile Photo</p>
-                <SubmitButton type = "button" value="Upload"  />
+                
                 <p className = "subheading"> Change Cover Photo</p>
-                <SubmitButton type = "button" value="Upload"  />
+                
             </Form>
         </Container>
     </Hero>
@@ -52,7 +52,6 @@ const Hero = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
-  
 `
 
 
@@ -86,7 +85,7 @@ const Container = styled.div`
 
 const Form = styled.form`
   background-color: var(--secondary-dark);
-  padding: 2rem 2rem 1rem;
+  padding: 1rem 2rem 1rem;
   border-radius: 5px;
 
   // TODO: adjust h and w for different sizes
@@ -94,7 +93,7 @@ const Form = styled.form`
   height: 98%;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 0.7rem;
 
 `
 
@@ -112,12 +111,7 @@ const SubmitButton = styled(Input)`
   }
 `
 
-const Watermark = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  text-decoration: none;
-`
+
 const WatermarkImage = styled.img`
   height: 37px;
   width: 37px;
@@ -126,12 +120,6 @@ const WatermarkImage = styled.img`
   margin-right: 3px;
 `
 
-const WatermarkTxt = styled.p`
-  letter-spacing: 3px;
-  font-size: 1.3rem;
-  font-weight: 500;
-  color: #ffefd7;
-`
 
 
 export default EditProfileScreen;
