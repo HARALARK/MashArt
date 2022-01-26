@@ -5,6 +5,9 @@ import {
   RESET_PASSWORD_FAIL,
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
+  SEARCH_USER_FAIL,
+  SEARCH_USER_REQUEST,
+  SEARCH_USER_SUCCESS,
   USER_DETAILS_FAIL,
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
@@ -97,6 +100,22 @@ export const resetPasswordReducer = (state = {}, action) => {
     case RESET_PASSWORD_SUCCESS:
       return { loading: false, success: action.payload }
     case RESET_PASSWORD_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const searchUserReducer = (
+  state = { usersInfo: { users: [] } },
+  action
+) => {
+  switch (action.type) {
+    case SEARCH_USER_REQUEST:
+      return { loading: true }
+    case SEARCH_USER_SUCCESS:
+      return { loading: false, usersInfo: action.payload }
+    case SEARCH_USER_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state

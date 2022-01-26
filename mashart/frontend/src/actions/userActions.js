@@ -6,6 +6,9 @@ import {
   RESET_PASSWORD_FAIL,
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
+  SEARCH_USER_FAIL,
+  SEARCH_USER_REQUEST,
+  SEARCH_USER_SUCCESS,
   USER_DETAILS_FAIL,
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
@@ -239,6 +242,43 @@ export const resetPassword = (password, resetLink) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: RESET_PASSWORD_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const searchUser = (username) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: SEARCH_USER_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(
+      `/api/user/search?username=${username}`,
+      config
+    )
+
+    dispatch({
+      type: SEARCH_USER_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: SEARCH_USER_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
