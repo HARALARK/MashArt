@@ -24,11 +24,6 @@ const EditProfileScreen = () => {
                             required
                         />
                 
-                <Input
-                            type="text"
-                            placeholder="New Password"
-                            required
-                        /> 
                 <p className="subheading"> Edit Bio </p>
                 <Input
                             type="text"
@@ -37,9 +32,9 @@ const EditProfileScreen = () => {
                         />
     
                 <p className = "subheading"> Change Profile Photo</p>
-                
+                <Button>Upload Profile Photo</Button>
                 <p className = "subheading"> Change Cover Photo</p>
-                
+                <Button>Upload Cover Photo</Button>
             </Form>
         </Container>
     </Hero>
@@ -87,7 +82,6 @@ const Form = styled.form`
   background-color: var(--secondary-dark);
   padding: 1rem 2rem 1rem;
   border-radius: 5px;
-
   // TODO: adjust h and w for different sizes
   width: 500px;
   height: 98%;
@@ -97,17 +91,26 @@ const Form = styled.form`
 
 `
 
-const SubmitButton = styled(Input)`
-  background-color: var(--primary);
-  color: var(--dark);
+const Button = styled.p`
+  
+  text-align: center;
+  padding: 0.2rem 1rem;
+  border: 3px solid var(--light);
+  color: var(--light);
+  border-radius: 5px;
+  font-size: 1rem;
   font-weight: 600;
-  margin: 0rem 0 0rem;
-  font-size: 0.8rem;
-  padding-bottom: 0.4rem;
   cursor: pointer;
+  transition: 100ms ease-in-out;
 
   &:hover {
-    background-color: var(--primary-dark);
+    background-color: var(--secondary);
+    color: var(--light);
+  }
+
+  @media ${device.tablet} {
+    margin: 0;
+    width: 150px;
   }
 `
 

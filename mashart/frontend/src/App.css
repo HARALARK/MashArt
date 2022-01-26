@@ -30,7 +30,6 @@ body {
   width: 80%;
   height: auto;
   min-height: 400px;
-  background: #ffffff;
   margin: 3.5rem auto 1.5rem;
   padding: 2rem 1rem;
   color: #021216;
@@ -70,10 +69,11 @@ ul.nav li:nth-child(2) {
   border-top-right-radius: 2rem;
 }
 ul.nav li:hover {
-  background: rgba(50, 224, 196, 0.15);
+  background: #007bbda2;
 }
 ul.nav li.active {
-  background: #39A2DB;
+  background: var(--secondary-light);
+  font-weight: bold;
 }
 
 /* First and Second Tab Styles */
