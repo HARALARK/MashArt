@@ -4,7 +4,7 @@ import styled from "styled-components"
 import Message from "../components/styled-components/Message"
 import device from "../screen_sizes/devices"
 import { Input } from "../components/styled-components/Input";
-
+import GameInfo from "../components/GameInfo";
 
 
 const CollabScreen = () => {
@@ -18,13 +18,15 @@ const CollabScreen = () => {
     return (
         <Hero>
             <Container>
-                
+                <div className ="explain-container">
+                  <GameInfo />
+                </div>
                 <div className="join-container">
                     <Form>
                         <p className="heading">Collaborate!</p>
                         {loading && <Message>Loading...</Message>}
                         {error && <Message variant="error">{error}</Message>}
-                          <SubmitButton type = "button" value="Start Room"  />
+                          <SubmitButton type = "button" value="Create Room"  />
                         
                         <Divider></Divider>
                         <Input
@@ -59,7 +61,7 @@ const Container = styled.div`
   justify-content: center;
 
   height: calc(100vh - 80px);
-  .design-container {
+  .explain-container {
     display: none;
   }
 
@@ -75,6 +77,11 @@ const Container = styled.div`
     justify-content: space-between;
     gap: 2rem;
     padding: 0 2rem;
+
+    .explain-container {
+      display: inline-block;
+    }
+  }
 `
 
 const Form = styled.form`
