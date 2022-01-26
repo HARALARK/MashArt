@@ -317,3 +317,30 @@ export const deleteUser = asyncHandler(async (req, res) => {
     res.status(200).json("You have successfully deleted your account")
   }
 })
+
+
+// @desc delete user account
+// @route DELETE /api/user/profile
+// @access Private
+export const deleteUser = asyncHandler(async (req, res) => {
+  
+  const user = await User.findById(req.user._id) //get current user
+  const following = user.following //get users following array
+
+  if (!user) {
+    res.status(404)
+    throw new Error("User not found")
+    
+  } else {
+    //delete user as a follower: 
+    for (let i=0; i < following.length; i++) {
+      const unfollUser = await User.findById(following[i])
+      await unfollUser.updateOne({
+        $pull:{ followers: user._id }
+      })
+    }
+
+    await User.findByIdAndDelete(user._id) //delete user from database
+    res.status(200).json("You have successfully deleted your account")
+  }
+})
