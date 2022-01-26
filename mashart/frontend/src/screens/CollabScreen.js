@@ -1,6 +1,5 @@
 import React, {useState} from "react"
-import { useDispatch, useSelector } from "react-redux";
-import Tabs from "../components/TabComponent/Tabs";
+import { useSelector } from "react-redux";
 import styled from "styled-components"
 import Message from "../components/styled-components/Message"
 import device from "../screen_sizes/devices"
@@ -26,6 +25,7 @@ const CollabScreen = () => {
                         {loading && <Message>Loading...</Message>}
                         {error && <Message variant="error">{error}</Message>}
                           <SubmitButton type = "button" value="Start Room"  />
+                        
                         <Divider></Divider>
                         <Input
                             type="text"
