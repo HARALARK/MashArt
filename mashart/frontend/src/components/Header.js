@@ -139,7 +139,7 @@ const LogoImage = styled.img`
   width: 40px;
   border-radius: 5px;
   padding: 5px;
-  margin-right: 3px;
+  margin-right: 16px;
 `
 
 const LogoTxt = styled.p`
