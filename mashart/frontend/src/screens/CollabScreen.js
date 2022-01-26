@@ -61,9 +61,7 @@ const Container = styled.div`
   justify-content: center;
 
   height: calc(100vh - 80px);
-  .explain-container {
-    display: none;
-  }
+  
 
   .heading {
     color: var(--light);
@@ -72,14 +70,13 @@ const Container = styled.div`
   }
 
   @media ${device.laptop} {
-    flex-direction: row;
     height: calc(100vh - 80px);
     justify-content: space-between;
     gap: 2rem;
     padding: 0 2rem;
 
     .explain-container {
-      display: inline-block;
+      display: flex;
     }
   }
 `
@@ -88,13 +85,14 @@ const Form = styled.form`
   background-color: var(--secondary-dark);
   padding: 2rem 2rem 1rem;
   border-radius: 5px;
-
-  width: 500px;
-  height: 400px;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-
+  
+  @media ${device.tablet} {
+    height: 400px;
+    width: 400px;
+  }
 `
 
 const SubmitButton = styled(Input)`
