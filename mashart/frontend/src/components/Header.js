@@ -107,7 +107,7 @@ const Container = styled.div`
   top: 0;
   left: 0;
   background-color: var(--secondary);
-  height: 40px;
+  height: 80px;
   display: ${(props) => props.userLoggedIn};
   justify-content: center;
   align-items: center;
