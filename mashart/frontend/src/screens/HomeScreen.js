@@ -8,7 +8,27 @@ const Homepage = () => {
   const { userInfo } = userLogin
 
   return userInfo ? (
-    <Container>Home Screen</Container>
+    <Hero> 
+      <Container>
+        <PostSection> 
+          <PostUserID> 
+          {/* img for profile picture */}
+            <userName>  Samantha.smith</userName>
+            <PostTime> 10 mins ago </PostTime>
+          </PostUserID>
+
+          <PostCollaborators> </PostCollaborators>
+          <PostPicture> </PostPicture>
+          <PostCaption> </PostCaption>
+
+        </PostSection>
+        
+
+
+
+      </Container>
+    </Hero>
+    
   ) : (
     <div className="welcome-container">
       <WelcomeScreen />
@@ -16,9 +36,44 @@ const Homepage = () => {
   )
 }
 
+const Hero = styled.section`
+  // width: 100%;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+`
 const Container = styled.section`
   padding: 1rem 2rem;
-  // test commit
+`
+const PostSection = styled.section`
+ // padding: 1rem 2rem;
+  
+`
+const PostUserID = styled.section`
+ // padding: 1rem 2rem;
+  
+`
+const userName = styled.section`
+ // padding: 1rem 2rem;
+  
+`
+const PostTime = styled.section`
+ // padding: 1rem 2rem;
+  
+`
+const PostCollaborators = styled.section`
+ // padding: 1rem 2rem;
+  
+`
+const PostPicture = styled.section`
+ // padding: 1rem 2rem;
+  
+`
+const PostCaption = styled.section`
+ // padding: 1rem 2rem;
+  
 `
 
 export default Homepage
+
+
