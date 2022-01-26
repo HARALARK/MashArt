@@ -7,14 +7,11 @@ const Homepage = () => {
     const userLogin = useSelector((state) => state.userLogin)
     const { userInfo } = userLogin
 
-    return userInfo ? ( <
-        Container > Home Screen < /Container>
-    ) : ( <
-        div className = "welcome-container" >
-        <
-        WelcomeScreen / >
-        <
-        /div>
+    return userInfo ? ( 
+        <Container> Home Screen </Container>) : ( 
+            <div className = "welcome-container" >
+        <WelcomeScreen/>
+        </div>
     )
 }
 
