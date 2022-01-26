@@ -17,6 +17,14 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    followers: {
+      type: Array,
+      default: [],
+    },
+    following: {
+      type: Array,
+      default: [],
+    },
     resetLink: {
       type: String,
       default: "",

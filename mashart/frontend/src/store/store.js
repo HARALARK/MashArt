@@ -4,6 +4,7 @@ import { composeWithDevTools } from "redux-devtools-extension"
 import {
   forgotPasswordReducer,
   resetPasswordReducer,
+  searchUserReducer,
   userDetailsReducer,
   userLoginReducer,
   userRegisterReducer,
@@ -17,6 +18,7 @@ let reducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer,
   forgotPassword: forgotPasswordReducer,
   resetPassword: resetPasswordReducer,
+  searchUser: searchUserReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
