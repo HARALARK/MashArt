@@ -20,11 +20,15 @@ const Homepage = () => {
           </PostUserID>
 
           <PostCollaborators> </PostCollaborators>
-          <PostPicture> </PostPicture>
+          <PostPicture> 
+          <img className= "picturePost" src="/images/samplepainting.PNG" alt="postpic" /> 
+          </PostPicture>
           <PostCaption> 
             <PostIcons> 
-              <div className = "likeButton"> </div>
-              <div className = "commentButton"> </div>
+              {/* <likeButton type = "button" value = "/images/logo/logo.png" />
+              <button className = "commentButton"> </button>
+              <button className = "commentButton"> </button>
+              <button className = "saveButton"> </button> */}
             </PostIcons>
           </PostCaption>
 
@@ -69,6 +73,7 @@ const PostUserID = styled.section`
     //justify-content: space-between;
     background-color: var(--primary-light);
     border-radius: 20px;
+    font-size: 15px;
     
 
     .profilePicture {
@@ -99,7 +104,20 @@ const PostCollaborators = styled.section`
   
 `
 const PostPicture = styled.section`
- // padding: 1rem 2rem;
+    // height: 105px;
+    // width: 35px;
+    border-radius: 45px;
+    padding: 5px; 
+    // margin-right: 800px;
+
+    .picturePost{
+        //background-color: #caf0f8;
+        margin-left: 25px;
+        height: 250px;
+        width: 350px;
+        border-radius: 45px;
+    }
+
   
 `
 const PostCaption = styled.section`
