@@ -3,6 +3,7 @@ import styled from "styled-components"
 import device from "../screen_sizes/devices"
 import { Input } from "../components/styled-components/Input";
 
+
 const EditProfileScreen = () => {
 
   return (
@@ -10,25 +11,19 @@ const EditProfileScreen = () => {
     <Hero>
         <Container>
             <Form>
-                <p1 className="heading">Edit Profile</p1>
-                
-                <p className="subheading"> Update your Username </p>
+                <p1 className="heading"><WatermarkImage src="/images/logo/watermark.png"alt="logo"/> Edit Profile </p1>
+                <p className="subheading"> Update Username </p>
                 <Input
                             type="text"
                             placeholder="New Username"
                         />  
-                <p className="subheading"> Update your Password</p>
+                <p className="subheading"> Update Password</p>
                 <Input
                             type="text"
                             placeholder="New Password"
                             required
                         />
                 
-                <Input
-                            type="text"
-                            placeholder="New Password"
-                            required
-                        /> 
                 <p className="subheading"> Edit Bio </p>
                 <Input
                             type="text"
@@ -36,9 +31,10 @@ const EditProfileScreen = () => {
                             required
                         />
     
-                <p className = "subheading"> Change your profile pic</p>
-                
-                <SubmitButton type = "button" value="Upload Picture"  />
+                <p className = "subheading"> Change Profile Photo</p>
+                <Button>Upload Profile Photo</Button>
+                <p className = "subheading"> Change Cover Photo</p>
+                <Button>Upload Cover Photo</Button>
             </Form>
         </Container>
     </Hero>
@@ -51,7 +47,6 @@ const Hero = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
-  
 `
 
 
@@ -85,30 +80,49 @@ const Container = styled.div`
 
 const Form = styled.form`
   background-color: var(--secondary-dark);
-  padding: 2rem 2rem 1rem;
+  padding: 1rem 2rem 1rem;
   border-radius: 5px;
-
   // TODO: adjust h and w for different sizes
   width: 500px;
-  height: 90%;
+  height: 98%;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 0.7rem;
 
 `
 
-const SubmitButton = styled(Input)`
-  background-color: var(--primary);
-  color: var(--dark);
-  font-weight: 600;
-  margin: 0rem 0 0rem;
+const Button = styled.p`
+  
+  text-align: center;
+  padding: 0.2rem 1rem;
+  border: 3px solid var(--light);
+  color: var(--light);
+  border-radius: 5px;
   font-size: 1rem;
-  padding-bottom: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: 100ms ease-in-out;
 
   &:hover {
-    background-color: var(--primary-dark);
+    background-color: var(--secondary);
+    color: var(--light);
+  }
+
+  @media ${device.tablet} {
+    margin: 0;
+    width: 150px;
   }
 `
+
+
+const WatermarkImage = styled.img`
+  height: 37px;
+  width: 37px;
+  border-radius: 0px;
+  padding: px;
+  margin-right: 3px;
+`
+
+
 
 export default EditProfileScreen;

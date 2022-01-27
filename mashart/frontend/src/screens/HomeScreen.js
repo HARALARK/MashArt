@@ -4,9 +4,8 @@ import styled from "styled-components"
 import WelcomeScreen from "./WelcomeScreen"
 
 const Homepage = () => {
-  const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
-
+    const userLogin = useSelector((state) => state.userLogin)
+    const { userInfo } = userLogin
 
   return userInfo ? (
     <Hero> 
@@ -63,6 +62,7 @@ const Hero = styled.section`
 const Container = styled.section`
     //margin-top: 40 px;
     padding: 1rem 2rem;
+
 `
 // const PostSection = styled.section`
 //     width : 100%;
@@ -138,6 +138,3 @@ const PostIcons = styled.section`
 // `
 
 export default Homepage
-
-
-
