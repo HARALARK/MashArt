@@ -48,6 +48,8 @@ const Hero = styled.section`
    box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.40);
    -webkit-box-shadow: -8px 6px 16px 0px rgba(0,0,0,0.40);
     margin: 40px 0;
+    background-color: var(--primary);
+    
    
 
 //    display: flex;
@@ -65,6 +67,9 @@ const PostUserID = styled.section`
     padding: 10px;
     display: flex;
     //justify-content: space-between;
+    background-color: var(--primary-light);
+    border-radius: 20px;
+    
 
     .profilePicture {
         height: 35px;
