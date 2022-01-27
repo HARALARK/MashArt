@@ -13,16 +13,16 @@ const Homepage = () => {
         <PostSection> 
           <PostUserID> 
           {/* img for profile picture */}
-            <userName>  Samantha.smith</userName>
-            <PostTime> 10 mins ago </PostTime>
+            <span className = "userName">  Samantha.smith</span>
+            <span className = "PostTime"> 10 mins ago </span>
           </PostUserID>
 
           <PostCollaborators> </PostCollaborators>
           <PostPicture> </PostPicture>
           <PostCaption> 
             <PostIcons> 
-              <likeButton> </likeButton>
-              <commentButton> </commentButton>
+              <div className = "likeButton"> </div>
+              <div className = "commentButton"> </div>
             </PostIcons>
           </PostCaption>
 
@@ -41,30 +41,40 @@ const Homepage = () => {
 }
 
 const Hero = styled.section`
-  // width: 100%;
+   width: 100%;
+   border-radius: 20px;
+   
+   -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68)
+   //margin: 40px 0;
+   
+
   // display: flex;
   // justify-content: center;
   // align-items: center;
 `
 const Container = styled.section`
-  padding: 1rem 2rem;
+    margin-top: 40 px;
+    padding: 1rem 2rem;
 `
 const PostSection = styled.section`
- // padding: 1rem 2rem;
+    width : 100%;
+
+
   
 `
 const PostUserID = styled.section`
- // padding: 1rem 2rem;
+    padding: 10px;
+
   
 `
-const userName = styled.section`
- // padding: 1rem 2rem;
+// const userName = styled.section`
+//  // padding: 1rem 2rem;
   
-`
-const PostTime = styled.section`
- // padding: 1rem 2rem;
+// `
+// const PostTime = styled.section`
+//  // padding: 1rem 2rem;
   
-`
+// `
 const PostCollaborators = styled.section`
  // padding: 1rem 2rem;
   
@@ -81,14 +91,14 @@ const PostIcons = styled.section`
  // padding: 1rem 2rem;
   
 `
-const likeButton = styled.section`
- // padding: 1rem 2rem;
+// const likeButton = styled.section`
+//  // padding: 1rem 2rem;
   
-`
-const commentButton = styled.section`
- // padding: 1rem 2rem;
+// `
+// const commentButton = styled.section`
+//  // padding: 1rem 2rem;
   
-`
+// `
 
 export default Homepage
 
