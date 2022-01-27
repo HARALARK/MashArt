@@ -7,7 +7,7 @@ const GameInfo = () => {
   <Offside>
     <div className='container'>
       <p className='heading'> How Do Collabs Work?</p>
-        <div className='container'>
+        <div className='text-container'>
           <div className='text-design'>
             <p className='leftH'> 1</p>
             <p className='body'> Create your own room and invite others
@@ -15,15 +15,15 @@ const GameInfo = () => {
           </div>
         </div>
 
-        <div className='container'>
+        <div className='text-container'>
           <div className='text-design'>
-            <p className='rightH'> 2</p>
+            <p className='leftH'> 2</p>
             <p className='body'> The host comes up with a 
             starting sentence - what to choose? Hmm.. </p>
           </div>
         </div>
 
-        <div className='container'>
+        <div className='text-container'>
           <div className='text-design'>
             <p className='leftH'> 3</p>
             <p className='body'> Room members collaborate on a
@@ -43,10 +43,17 @@ const Offside = styled.div`
     display: inline-block;
     position: relative;
     background-color: var(--primary-dark);
-    padding: 1rem 1rem;
+    padding: 1rem 1rem 1rem 1rem;
     border-radius: 5px;
     box-shadow: 20px 20px 50px  var(--primary) inset;
+  }
 
+  .text-container{
+    display: inline-block;
+    position: relative;
+    background-color: var(--primary-dark);
+    padding: 1rem 1rem 1rem 1rem;
+    border-radius: 5px;
   }
 
   .heading {
@@ -70,10 +77,7 @@ const Offside = styled.div`
     font-size: 2rem;
   }
 
-  .text-design .rightH{
-    font-size: 2rem;
-    text-align: right;
-  }
+  
   @media ${device.tablet} {
     height: 500px;
     width: 600px;

@@ -28,7 +28,7 @@ const CollabScreen = () => {
                         {error && <Message variant="error">{error}</Message>}
                           <SubmitButton type = "button" value="Create Room"  />
                         
-                        <Divider></Divider>
+                        <div className="room-container">
                         <Input
                             type="text"
                             placeholder="Room Code"
@@ -37,6 +37,7 @@ const CollabScreen = () => {
                         />
 
                         <SubmitButton type = "button" value="Join Room"  />
+                        </div>
                     </Form>
                 </div>
             </Container>
@@ -52,9 +53,7 @@ const Hero = styled.section`
   justify-content: center;
   align-items: center;
 `
-const Divider = styled.section`
-  outline: 1px dashed white;
-`
+
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -73,12 +72,14 @@ const Container = styled.div`
     height: calc(100vh - 80px);
     justify-content: space-between;
     gap: 2rem;
-    padding: 0 2rem;
-
+    padding: 0 2rem 3rem;
     .explain-container {
       display: flex;
+      
     }
   }
+
+  
 `
 
 const Form = styled.form`
@@ -92,6 +93,15 @@ const Form = styled.form`
   @media ${device.tablet} {
     height: 400px;
     width: 400px;
+  }
+
+  .room-container{
+    flex-direction: column;
+    background-color: var(--secondary-dark);
+    padding-top: 4rem;
+    border-radius: 5px;
+    display: flex;
+    gap: 1.2rem;
   }
 `
 
