@@ -115,7 +115,7 @@ const PostPicture = styled.section`
         margin-left: 25px;
         height: 250px;
         width: 350px;
-        border-radius: 45px;
+        border-radius: 15px;
     }
 
   
