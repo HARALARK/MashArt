@@ -30,12 +30,12 @@ const GameInfo = () => {
 }
 
 const Offside = styled.div`
-  max-width: 390px;
+  max-width: 100%; ;
 `
 
 const Heading = styled.p`
   color: var(--secondary);
-  font-size: 2rem;
+  font-size: 1.5rem;
   text-align: center;
   font-weight: bold;
   margin: 0 0 0.5rem 1rem;

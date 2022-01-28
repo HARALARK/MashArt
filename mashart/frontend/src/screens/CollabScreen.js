@@ -39,27 +39,25 @@ const CollabScreen = () => {
   return (
     <Container>
       <GameInfo />
-      <div>
-        <Form>
-          <p className="heading">Collaborate!</p>
-          {loading && <Message>Loading...</Message>}
-          {error && <Message variant="error">{error}</Message>}
+      <Form>
+        <p className="heading">Collaborate!</p>
+        {loading && <Message>Loading...</Message>}
+        {error && <Message variant="error">{error}</Message>}
 
-          <Button className="create-room" onClick={createRoomHandler}>
-            Create Room
-          </Button>
+        <Button className="create-room" onClick={createRoomHandler}>
+          Create Room
+        </Button>
 
-          <Input
-            type="text"
-            placeholder="Room Code"
-            onChange={(e) => setRoomCode(e.target.value)}
-          />
+        <Input
+          type="text"
+          placeholder="Room Code"
+          onChange={(e) => setRoomCode(e.target.value)}
+        />
 
-          <Button className="join-room" onClick={joinRoomHandler}>
-            Join Room
-          </Button>
-        </Form>
-      </div>
+        <Button className="join-room" onClick={joinRoomHandler}>
+          Join Room
+        </Button>
+      </Form>
     </Container>
   )
 }
@@ -68,10 +66,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  width: 100%;
+  padding: 1rem 2rem 100px;
 
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 160px);
 
   .heading {
     color: var(--light);
@@ -80,6 +79,7 @@ const Container = styled.div`
   }
 
   @media ${device.tablet} {
+    height: calc(100vh - 160px);
     flex-direction: row;
     justify-content: space-between;
     padding: 0 2rem;
@@ -92,7 +92,7 @@ const Form = styled.form`
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  width: 390px;
+  width: 100%;
 `
 
 const Button = styled.p`
