@@ -14,6 +14,22 @@ const CollabScreen = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { loading, userInfo, error } = userLogin
 
+  const createRoomHandler = () => {
+    /**
+     * TODO: Complete functionality of Create Room
+     * 1. dispatch request to create a Room
+     * 2. redirect the user to collab screen with room id
+     */
+  }
+
+  const joinRoomHandler = () => {
+    /**
+     * TODO: Complete functionality of Create Room
+     * 1. dispatch request to check if room exists using the roomCode
+     * 2. redirect the user to collab screen with room id
+     */
+  }
+
   useEffect(() => {
     if (!userInfo) {
       navigate("/")
@@ -29,7 +45,9 @@ const CollabScreen = () => {
           {loading && <Message>Loading...</Message>}
           {error && <Message variant="error">{error}</Message>}
 
-          <Button className="create-room">Create Room</Button>
+          <Button className="create-room" onClick={createRoomHandler}>
+            Create Room
+          </Button>
 
           <Input
             type="text"
@@ -37,7 +55,9 @@ const CollabScreen = () => {
             onChange={(e) => setRoomCode(e.target.value)}
           />
 
-          <Button className="join-room">Join Room</Button>
+          <Button className="join-room" onClick={joinRoomHandler}>
+            Join Room
+          </Button>
         </Form>
       </div>
     </Container>
