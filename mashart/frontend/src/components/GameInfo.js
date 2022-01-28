@@ -4,7 +4,7 @@ import styled from "styled-components"
 const GameInfo = () => {
   return (
     <Offside>
-      <Heading> How Do Collabs Work?</Heading>
+      <Heading>How Do Collabs Work?</Heading>
       <Container>
         <RuleContainer>
           <Number lighter>1</Number>
@@ -29,14 +29,16 @@ const GameInfo = () => {
   )
 }
 
-const Offside = styled.div``
+const Offside = styled.div`
+  max-width: 390px;
+`
 
 const Heading = styled.p`
   color: var(--secondary);
   font-size: 2rem;
   text-align: center;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 1rem;
 `
 
 const Container = styled.ul`
@@ -57,7 +59,8 @@ const Number = styled.h1`
     (props.lighter && "var(--secondary-light)") ||
     (props.light && "var(--secondary)") ||
     (props.dark && "var(--secondary-dark)")};
-  width: 50px;
+  width: 16px;
+  margin-right: 1rem;
   text-align: center;
 `
 
