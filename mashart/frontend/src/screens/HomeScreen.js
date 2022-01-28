@@ -166,7 +166,7 @@ const PostPicture = styled.section`
     // margin-right: 800px;
     .picturePost{
         //background-color: #caf0f8;
-        margin-left: 25px;
+        margin-left: 5px;
         height: 250px;
         width: 350px;
         border-radius: 15px;
