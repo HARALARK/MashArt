@@ -108,6 +108,9 @@ const PostCollaborators = styled.section`
     background-color: var(--primary-light);
     border-radius: 20px;
     float: left;
+    margin-left: -20px;
+    //margin-left: 20px;
+
 
     .collab1{
         height: 35px;
@@ -127,6 +130,8 @@ const PostCollaborators = styled.section`
         padding: 5px; 
         // margin-right: 10px;
        // float: left;
+       margin-top: 50px;
+       margin-left: -35px;
 
     }
     .collab3{
@@ -137,6 +142,8 @@ const PostCollaborators = styled.section`
         padding: 5px; 
         // margin-right: 10px;
        // float: left;
+       margin-top: 100px;
+       margin-left: -35px;
 
     }
   
