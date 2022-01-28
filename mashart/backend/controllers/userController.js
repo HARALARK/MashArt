@@ -91,7 +91,7 @@ export const checkEmail = asyncHandler(async (req, res) => {
 // @route GET /api/user/profile
 // @access Private
 export const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.body._id || req.user._id)
+  const user = await User.findById(req.query._id || req.user._id)
 
   if (user) {
     res.json({
@@ -236,7 +236,6 @@ export const searchUser = asyncHandler(async (req, res) => {
   })
 })
 
-
 // @desc follow a user
 // @route PUT /api/user/profile/follow
 // access Private
@@ -244,29 +243,26 @@ export const followUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id) //current user
   const follUser = await User.findById(req.body._id) //user to follow
 
-  if (user && follUser){
-    if (!follUser.followers.includes(user._id)) { 
+  if (user && follUser) {
+    if (!follUser.followers.includes(user._id)) {
       //update current user's following list
       await user.updateOne({
-        $push:{ following: req.body._id }
-      }) 
+        $push: { following: req.body._id },
+      })
       //update new user's follower list
       await follUser.updateOne({
-        $push:{ followers: user._id }
+        $push: { followers: user._id },
       })
       res.status(200).json("User Followed")
-    } 
-    else {
+    } else {
       res.status(400)
       throw new Error("User already followed")
-    }  
-  }
-  else{
+    }
+  } else {
     res.status(404)
     throw new Error("User not found")
   }
 })
-
 
 // @desc unfollow a user
 // @route PUT /api/user/profile/unfollow
@@ -275,22 +271,20 @@ export const unfollowUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id) //current user
   const unfollUser = await User.findById(req.body._id) //user to unfollow
 
-  if (user && unfollUser){
-    if (unfollUser.followers.includes(user._id)) { 
+  if (user && unfollUser) {
+    if (unfollUser.followers.includes(user._id)) {
       await user.updateOne({
-        $pull:{ following: req.body._id }
-      }) 
+        $pull: { following: req.body._id },
+      })
       await unfollUser.updateOne({
-        $pull:{ followers: user._id }
+        $pull: { followers: user._id },
       })
       res.status(200).json("User Unfollowed")
-    } 
-    else {
+    } else {
       res.status(400)
       throw new Error("Invalid Request")
-    }  
-  }
-  else{
+    }
+  } else {
     res.status(404)
     throw new Error("User not found")
   }
