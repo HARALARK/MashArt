@@ -1,83 +1,78 @@
-import React from 'react';
-import styled from 'styled-components';
-import device from "../screen_sizes/devices"
+import React from "react"
+import styled from "styled-components"
 
 const GameInfo = () => {
   return (
-  <Offside>
-    <div className='container'>
-      <p className='heading'> How Do Collabs Work?</p>
-        <div className='container'>
-          <div className='text-design'>
-            <p className='leftH'> 1</p>
-            <p className='body'> Create your own room and invite others
-            or join an existing room.</p>
-          </div>
-        </div>
-
-        <div className='container'>
-          <div className='text-design'>
-            <p className='rightH'> 2</p>
-            <p className='body'> The host comes up with a 
-            starting sentence - what to choose? Hmm.. </p>
-          </div>
-        </div>
-
-        <div className='container'>
-          <div className='text-design'>
-            <p className='leftH'> 3</p>
-            <p className='body'> Room members collaborate on a
-            drawing based off the host's sentence! </p>
-          </div>
-        </div>
-
-        
-    </div>
-  </Offside>
+    <Offside>
+      <Heading>How Do Collabs Work?</Heading>
+      <Container>
+        <RuleContainer>
+          <Number lighter>1</Number>
+          <Rule lighter>
+            Create your own room and invite others or join an existing room.
+          </Rule>
+        </RuleContainer>
+        <RuleContainer>
+          <Number light>2</Number>
+          <Rule light>
+            The host comes up with a starting sentence - what to choose? Hmm..
+          </Rule>
+        </RuleContainer>
+        <RuleContainer>
+          <Number dark>3</Number>
+          <Rule dark>
+            Room members collaborate on a drawing based off the host's sentence!
+          </Rule>
+        </RuleContainer>
+      </Container>
+    </Offside>
   )
-};
+}
 
 const Offside = styled.div`
-  
-  .container {
-    display: inline-block;
-    position: relative;
-    background-color: var(--primary-dark);
-    padding: 1rem 1rem;
-    border-radius: 5px;
-    box-shadow: 20px 20px 50px  var(--primary) inset;
-
-  }
-
-  .heading {
-    color: var(--light);
-    font-size: 2rem;
-    text-align: center;
-    font-weight: bold;
-  }
-
-  .text-design{
-    color: var(--light);
-    font-weight: bold;
-  }
-
-  .text-design .body {
-    color: var(--light);
-    font-size: 1.5rem;
-  }
-
-  .text-design .leftH{
-    font-size: 2rem;
-  }
-
-  .text-design .rightH{
-    font-size: 2rem;
-    text-align: right;
-  }
-  @media ${device.tablet} {
-    height: 500px;
-    width: 600px;
-  }
+  max-width: 390px;
 `
 
-export default GameInfo;
+const Heading = styled.p`
+  color: var(--secondary);
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
+  margin: 0 0 0.5rem 1rem;
+`
+
+const Container = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  list-style: none;
+`
+
+const RuleContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const Number = styled.h1`
+  font-size: 2rem;
+  color: ${(props) =>
+    (props.lighter && "var(--secondary-light)") ||
+    (props.light && "var(--secondary)") ||
+    (props.dark && "var(--secondary-dark)")};
+  width: 16px;
+  margin-right: 1rem;
+  text-align: center;
+`
+
+const Rule = styled.li`
+  flex: 1;
+  color: var(--light);
+  background: ${(props) =>
+    (props.lighter && "var(--secondary-light)") ||
+    (props.light && "var(--secondary)") ||
+    (props.dark && "var(--secondary-dark)")};
+  padding: 1rem;
+  border-radius: 5px;
+`
+
+export default GameInfo
