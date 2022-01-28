@@ -1,12 +1,17 @@
-import React from 'react';
+import React from "react"
+import styled from "styled-components"
 
 const CollabTab = () => {
   return (
-    <div className='CollabTab'>
-        <p> Place holder text </p>
-            {/* Previous collaboration posts display */}
+    <div className="CollabTab">
+      <PlaceHolder> Place holder text </PlaceHolder>
+      {/* Previous collaboration posts display */}
     </div>
-  );
-};
+  )
+}
 
-export default CollabTab;
+const PlaceHolder = styled.p`
+  font-size: 2rem;
+  text-align: center;
+`
+export default CollabTab
