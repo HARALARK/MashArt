@@ -79,7 +79,9 @@ const PostUserID = styled.section`
     border-radius: 20px;
     font-size: 15px;
     margin-left: 25px;
-    
+    height: 50px;
+    width: 870px;
+    margin-left: -15px;
     .profilePicture {
         height: 35px;
         width: 35px;
@@ -105,45 +107,53 @@ const PostUserID = styled.section`
 const PostCollaborators = styled.section`
     padding: 10px;
     display: flex;
+    //background-color: var(--primary-dark); //for caption
     background-color: var(--primary-light);
     border-radius: 20px;
     float: left;
     margin-left: -20px;
     //margin-left: 20px;
+    width: 30px;
+    height: 250px;
 
 
     .collab1{
-        height: 35px;
-        width: 35px;
-        background-color: #ffe6aa;
+        height: 25px;
+        width: 25px;
+        background-color: white;
+        //border-color: black;
         border-radius: 45px;
+        
         padding: 5px; 
         // margin-right: 10px;
         // float: left;
+        margin-left: -7px;
 
     }
     .collab2{
-        height: 35px;
-        width: 35px;
-        background-color: #ffe6aa;
+        height: 25px;
+        width: 25px;
+        //background-color: #ffe6aa;
         border-radius: 45px;
         padding: 5px; 
         // margin-right: 10px;
        // float: left;
        margin-top: 50px;
-       margin-left: -35px;
+       margin-left: -25px;
+       background-color: white;
 
     }
     .collab3{
-        height: 35px;
-        width: 35px;
-        background-color: #ffe6aa;
+        height: 25px;
+        width: 25px;
+        //background-color: #ffe6aa;
         border-radius: 45px;
         padding: 5px; 
         // margin-right: 10px;
        // float: left;
        margin-top: 100px;
-       margin-left: -35px;
+       margin-left: -25px;
+       background-color: white;
 
     }
   
