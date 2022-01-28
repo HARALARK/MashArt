@@ -78,7 +78,7 @@ const Header = () => {
         <Dropdown className={`${dropDownOpen ? "active" : ""}`}>
           {Object.entries(navLinks).map((obj) => {
             return (
-              <li key={obj[0]}>
+              <li key={obj[0]} onClick={() => setDropDownOpen(!dropDownOpen)}>
                 <Link to={obj[1]} style={{ textDecoration: "none" }}>
                   <LinkButton
                     className={
