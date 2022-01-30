@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import styled from "styled-components"
 import { getUserDetails } from "../actions/userActions"
@@ -10,8 +10,11 @@ import device from "../screen_sizes/devices"
 import Tabs from "../components/TabComponent/Tabs"
 
 const ProfileScreen = () => {
+  const { id } = useParams()
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
   const userDetails = useSelector((state) => state.userDetails)
   const { loading, user, error } = userDetails
 
@@ -22,18 +25,40 @@ const ProfileScreen = () => {
     if (!userInfo) {
       navigate("/")
     } else {
-      if (!user.username) {
+      if (id === userInfo._id) {
+        navigate("/profile")
+      } else if (id && (id !== user._id || !user.username)) {
+        dispatch(getUserDetails(`profile?_id=${id}`))
+      } else if (
+        id === undefined &&
+        (!user.username || user._id !== userInfo._id)
+      ) {
         dispatch(getUserDetails("profile"))
       }
     }
-  }, [userInfo, navigate, user, dispatch])
+  }, [userInfo, navigate, user, dispatch, id])
 
   return (
     <Container>
       {loading && <Message>Loading...</Message>}
       {error && <Message variant="error">{error}</Message>}
+      <CoverContainer>
+        {/* Cover photo here? */}
+      </CoverContainer>
       <InfoSection>
         <InfoContainer>
+          <MiscHolder>
+            {/* For Collaborations and Non-Collab posts */}
+            <MiscInfo>
+              <p className="title">Collaborations</p>
+              {/* Placeholder, should have something to identify collab posts of a user */}
+              <p>{user.posts || 0 } </p>
+            </MiscInfo>
+            <MiscInfo>
+              <p className="title">Posts</p>
+              <p>{user.posts || 0}</p>
+            </MiscInfo>
+          </MiscHolder>
           <ProfileHolder>
             <ProfileImageHolder>
               {user.profileImg ? (
@@ -49,19 +74,20 @@ const ProfileScreen = () => {
               <p className="title">Followers</p>
               <p>{user.followers || 0}</p>
             </MiscInfo>
-            <MiscInfo>
-              <p className="title">Posts</p>
-              <p>{user.posts || 0}</p>
-            </MiscInfo>
+            
             <MiscInfo>
               <p className="title">Following</p>
               <p>{user.following || 0}</p>
             </MiscInfo>
           </MiscHolder>
         </InfoContainer>
-        <Link className="link" to="/edit-profile">
-          <Button>Edit Profile</Button>
-        </Link>
+        {id ? (
+          <></>
+        ) : (
+          <Link className="link" to="/edit-profile">
+            <Button>Edit Profile</Button>
+          </Link>
+        )}
       </InfoSection>
       <Tabs />
       <PostContainer>
@@ -75,12 +101,12 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding-bottom: 100px;
+  padding: 1rem 2rem 100px;
   color: var(--secondary-dark);
 `
 
 const InfoSection = styled.section`
-  padding: 2rem 2rem 1rem;
+  padding: 1rem 0 1rem;
   width: 100%;
   border-bottom: 2px solid var(--background-dark);
 
@@ -91,7 +117,7 @@ const InfoSection = styled.section`
 
 const Button = styled.p`
   text-align: center;
-  padding: 0.2rem 1rem;
+  padding: 0.5rem 1rem;
   border: 3px solid var(--secondary);
   color: var(--secondary);
   border-radius: 5px;
@@ -155,7 +181,7 @@ const MiscHolder = styled.div`
   width: 100%;
   @media ${device.tablet} {
     padding: 0;
-    justify-content: flex-end;
+    justify-content: space-evenly;
   }
 `
 
@@ -189,5 +215,11 @@ const PostContainer = styled.div`
     color: var(--primary-dark);
     font-weight: 500;
   }
+`
+
+const CoverContainer = styled.div`
+  width: 100%;
+  height: 100px;
+  background-color: purple;
 `
 export default ProfileScreen

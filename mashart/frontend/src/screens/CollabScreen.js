@@ -1,67 +1,76 @@
-import React, {useState} from "react"
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
 import styled from "styled-components"
 import Message from "../components/styled-components/Message"
 import device from "../screen_sizes/devices"
-import { Input } from "../components/styled-components/Input";
-
-
+import { Input } from "../components/styled-components/Input"
+import GameInfo from "../components/GameInfo"
+import { useNavigate } from "react-router-dom"
 
 const CollabScreen = () => {
-  
+  const navigate = useNavigate()
+  const [roomCode, setRoomCode] = useState("")
 
-    const [roomCode] = useState("")
+  const userLogin = useSelector((state) => state.userLogin)
+  const { loading, userInfo, error } = userLogin
 
-    const userLogin = useSelector((state) => state.userLogin)
-    const { loading, error } = userLogin
+  const createRoomHandler = () => {
+    /**
+     * TODO: Complete functionality of Create Room
+     * 1. dispatch request to create a Room
+     * 2. redirect the user to collab screen with room id
+     */
+  }
 
-    return (
-        <Hero>
-            <Container>
-                
-                <div className="join-container">
-                    <Form>
-                        <p className="heading">Collaborate!</p>
-                        {loading && <Message>Loading...</Message>}
-                        {error && <Message variant="error">{error}</Message>}
-                          <SubmitButton type = "button" value="Start Room"  />
-                        
-                        <Divider></Divider>
-                        <Input
-                            type="text"
-                            placeholder="Room Code"
-                            // Need something here to search for valid room
-                            required
-                        />
+  const joinRoomHandler = () => {
+    /**
+     * TODO: Complete functionality of Create Room
+     * 1. dispatch request to check if room exists using the roomCode
+     * 2. redirect the user to collab screen with room id
+     */
+  }
 
-                        <SubmitButton type = "button" value="Join Room"  />
-                    </Form>
-                </div>
-            </Container>
-        </Hero>
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/")
+    }
+  }, [userInfo, navigate])
 
-        
-    ) 
+  return (
+    <Container>
+      <GameInfo />
+      <Form>
+        <p className="heading">Collaborate!</p>
+        {loading && <Message>Loading...</Message>}
+        {error && <Message variant="error">{error}</Message>}
+
+        <Button className="create-room" onClick={createRoomHandler}>
+          Create Room
+        </Button>
+
+        <Input
+          type="text"
+          placeholder="Room Code"
+          onChange={(e) => setRoomCode(e.target.value)}
+        />
+
+        <Button className="join-room" onClick={joinRoomHandler}>
+          Join Room
+        </Button>
+      </Form>
+    </Container>
+  )
 }
 
-const Hero = styled.section`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-const Divider = styled.section`
-  outline: 1px dashed white;
-`
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  padding: 1rem 2rem 100px;
+
   align-items: center;
   justify-content: center;
-
-  height: calc(100vh - 80px);
-  .design-container {
-    display: none;
-  }
 
   .heading {
     color: var(--light);
@@ -69,38 +78,56 @@ const Container = styled.div`
     text-align: center;
   }
 
-  @media ${device.laptop} {
+  @media ${device.tablet} {
+    height: calc(100vh - 160px);
     flex-direction: row;
-    height: calc(100vh - 80px);
     justify-content: space-between;
-    gap: 2rem;
     padding: 0 2rem;
+  }
+
+  
 `
 
 const Form = styled.form`
-  background-color: var(--secondary-dark);
-  padding: 2rem 2rem 1rem;
+  background-color: var(--secondary);
+  padding: 1rem 2rem 2rem;
   border-radius: 5px;
-
-  width: 500px;
-  height: 400px;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
-
+  width: 100%;
 `
 
-const SubmitButton = styled(Input)`
-  background-color: var(--primary);
-  color: var(--dark);
-  font-weight: 600;
-  margin: 0rem 0 0rem;
+const Button = styled.p`
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
   font-size: 1rem;
-  padding-bottom: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: 100ms ease-in-out;
 
-  &:hover {
+  &.create-room {
+    margin: 1rem 0 4rem;
     background-color: var(--primary-dark);
+    color: var(--secondary);
+    border: 2px solid var(--primary-dark);
+  }
+
+  &.create-room:hover {
+    color: var(--light);
+  }
+
+  &.join-room {
+    margin-top: 0.5rem;
+    background-color: transparent;
+    color: var(--primary-dark);
+    border: 2px solid var(--primary-dark);
+  }
+
+  &.join-room:hover {
+    background-color: var(--primary-dark);
+    border: 2px solid var(--primary-dark);
+    color: var(--secondary);
   }
 `
-export default CollabScreen;
+export default CollabScreen

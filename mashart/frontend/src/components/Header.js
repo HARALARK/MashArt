@@ -39,7 +39,7 @@ const Header = () => {
           <Link to="/" style={{ textDecoration: "none" }}>
             <Logo>
               <LogoImage src="/images/logo/watermark.png" alt="logo" />
-              <LogoTxt>MashArt</LogoTxt>
+              <LogoTxt>ashArt</LogoTxt>
             </Logo>
           </Link>
           {userInfo && (
@@ -78,7 +78,7 @@ const Header = () => {
         <Dropdown className={`${dropDownOpen ? "active" : ""}`}>
           {Object.entries(navLinks).map((obj) => {
             return (
-              <li key={obj[0]}>
+              <li key={obj[0]} onClick={() => setDropDownOpen(!dropDownOpen)}>
                 <Link to={obj[1]} style={{ textDecoration: "none" }}>
                   <LinkButton
                     className={
@@ -139,14 +139,13 @@ const LogoImage = styled.img`
   width: 40px;
   border-radius: 5px;
   padding: 5px;
-  margin-right: 16px;
 `
 
 const LogoTxt = styled.p`
   letter-spacing: 3px;
   font-size: 1.3rem;
   font-weight: 500;
-  color: #ffefd7;
+  color: var(--light);
 `
 
 const NavMenuContainer = styled.div`
