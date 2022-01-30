@@ -42,8 +42,23 @@ const ProfileScreen = () => {
     <Container>
       {loading && <Message>Loading...</Message>}
       {error && <Message variant="error">{error}</Message>}
+      <CoverContainer>
+        {/* Cover photo here? */}
+      </CoverContainer>
       <InfoSection>
         <InfoContainer>
+          <MiscHolder>
+            {/* For Collaborations and Non-Collab posts */}
+            <MiscInfo>
+              <p className="title">Collaborations</p>
+              {/* Placeholder, should have something to identify collab posts of a user */}
+              <p>{user.posts || 0 } </p>
+            </MiscInfo>
+            <MiscInfo>
+              <p className="title">Posts</p>
+              <p>{user.posts || 0}</p>
+            </MiscInfo>
+          </MiscHolder>
           <ProfileHolder>
             <ProfileImageHolder>
               {user.profileImg ? (
@@ -59,10 +74,7 @@ const ProfileScreen = () => {
               <p className="title">Followers</p>
               <p>{user.followers || 0}</p>
             </MiscInfo>
-            <MiscInfo>
-              <p className="title">Posts</p>
-              <p>{user.posts || 0}</p>
-            </MiscInfo>
+            
             <MiscInfo>
               <p className="title">Following</p>
               <p>{user.following || 0}</p>
@@ -169,7 +181,7 @@ const MiscHolder = styled.div`
   width: 100%;
   @media ${device.tablet} {
     padding: 0;
-    justify-content: flex-end;
+    justify-content: space-evenly;
   }
 `
 
@@ -203,5 +215,11 @@ const PostContainer = styled.div`
     color: var(--primary-dark);
     font-weight: 500;
   }
+`
+
+const CoverContainer = styled.div`
+  width: 100%;
+  height: 100px;
+  background-color: purple;
 `
 export default ProfileScreen

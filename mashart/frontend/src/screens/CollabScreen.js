@@ -84,6 +84,8 @@ const Container = styled.div`
     justify-content: space-between;
     padding: 0 2rem;
   }
+
+  
 `
 
 const Form = styled.form`
