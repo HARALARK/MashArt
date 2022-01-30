@@ -66,3 +66,34 @@ export const createPost = asyncHandler(async (req, res) => {
     throw new Error("User not found")
   }
 })
+
+// @desc update a post
+// @route PUT /api/post/update
+// @access Private
+export const updatePost = asyncHandler(async (req, res) => {
+  const { id, users, title, subtitle, description, tags } = req.body
+
+  const post = await Post.findById(id)
+
+  if (post) {
+    post.users = users || post.users
+    post.title = title || post.title
+    post.subtitle = subtitle || post.subtitle
+    post.description = description || post.description
+    post.tags = tags || post.tags
+
+    const updatedPost = await post.save()
+
+    res.json({
+      _id: updatedPost._id,
+      users: updatedPost.users,
+      title: updatedPost.title,
+      subtitle: updatedPost.subtitle,
+      description: updatedPost.description,
+      tags: updatedPost.tags,
+    })
+  } else {
+    res.status(404)
+    throw new Error("Post not found")
+  }
+})
