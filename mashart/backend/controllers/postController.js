@@ -26,13 +26,28 @@ import Post from "../models/postModel.js"
 // @access Private
 export const createPost = asyncHandler(async (req, res) => {
   const { path } = req.file
-  const { title, subtitle, description, tags } = req.body
+  const { collaborators, title, subtitle, description, tags } = req.body
+
+  const collaboratorsArray = collaborators.split(",")
 
   const user = await User.findById(req.user._id)
 
+  // validating all the collaborators
+  if (
+    collaboratorsArray.length > 0 &&
+    collaboratorsArray[0].trim().length > 0
+  ) {
+    collaboratorsArray.split(",").forEach(async (collaborator) => {
+      await User.findById(collaborator)
+    })
+  }
+
   if (user) {
+    const users = [user._id, ...collaboratorsArray]
+
     const post = await Post.create({
       path,
+      users,
       title,
       subtitle,
       description,
@@ -47,6 +62,7 @@ export const createPost = asyncHandler(async (req, res) => {
       success: "Post created successfully",
     })
   } else {
+    res.status(404)
     throw new Error("User not found")
   }
 })
