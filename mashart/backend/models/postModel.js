@@ -9,7 +9,7 @@ const postSchema = mongoose.Schema(
     },
     users: {
       type: Array,
-      required,
+      required: true,
     },
     title: {
       type: String,
