@@ -25,6 +25,14 @@ const userSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
+    blockedUsers:[{   //current users saved playlists
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    }],
+    playlist: [{   //current users saved playlists
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Playlist',
+    }],
     role: {
       type: String,
       default : "user",
