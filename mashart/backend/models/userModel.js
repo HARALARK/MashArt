@@ -20,9 +20,16 @@ const userSchema = mongoose.Schema(
     //TODO: remove posts from model once playlist functionality has been completed
     posts: [
       {
-        //current users saved posts
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Post",
+        id: {
+          //current users saved posts
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Post",
+          required: true,
+        },
+        path: {
+          type: String,
+          required: true,
+        },
       },
     ],
     followers: {
