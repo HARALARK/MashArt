@@ -88,7 +88,7 @@ export const checkEmail = asyncHandler(async (req, res) => {
 })
 
 // @desc get user profile
-// @route GET /api/user/profile
+// @route GET /api/user/profile?_id=
 // @access Private
 export const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.query._id || req.user._id)
@@ -247,8 +247,8 @@ export const followUser = asyncHandler(async (req, res) => {
     if (!follUser.followers.includes(user._id)) {
       //update current user's following list
       await user.updateOne({
-        $push:{ following: follUser._id }
-      }) 
+        $push: { following: follUser._id },
+      })
       //update new user's follower list
       await follUser.updateOne({
         $push: { followers: user._id },
@@ -257,9 +257,8 @@ export const followUser = asyncHandler(async (req, res) => {
     } else {
       res.status(400)
       throw new Error("Invalid Request")
-    }  
-  }
-  else{
+    }
+  } else {
     res.status(404)
     throw new Error("User not found")
   }
@@ -275,8 +274,8 @@ export const unfollowUser = asyncHandler(async (req, res) => {
   if (user && unfollUser) {
     if (unfollUser.followers.includes(user._id)) {
       await user.updateOne({
-        $pull:{ following: unfollUser._id }
-      }) 
+        $pull: { following: unfollUser._id },
+      })
       await unfollUser.updateOne({
         $pull: { followers: user._id },
       })
@@ -291,14 +290,10 @@ export const unfollowUser = asyncHandler(async (req, res) => {
   }
 })
 
-
-
-
 // @desc delete user account
 // @route DELETE /api/user/profile
 // @access Private
 export const deleteUser = asyncHandler(async (req, res) => {
-  
   const user = await User.findById(req.user._id) //get current user
   const uFollowing = user.following //user's following array
   const uFollowers = user.followers //user's followers array
@@ -306,23 +301,21 @@ export const deleteUser = asyncHandler(async (req, res) => {
   if (!user) {
     res.status(404)
     throw new Error("User not found")
-    
   } else {
-
-    //delete user as a follower: 
+    //delete user as a follower:
     var unfollUser
 
-    for (let j=0; j < uFollowers.length; j++) {
+    for (let j = 0; j < uFollowers.length; j++) {
       unfollUser = await User.findById(uFollowers[j]) //users that follow the current user
       await unfollUser.updateOne({
-        $pull:{ following: user._id }
+        $pull: { following: user._id },
       })
     }
-    
-    for (let i=0; i < uFollowing.length; i++) {
+
+    for (let i = 0; i < uFollowing.length; i++) {
       unfollUser = await User.findById(uFollowing[i]) //users that the current user follows
       await unfollUser.updateOne({
-        $pull:{ followers: user._id }
+        $pull: { followers: user._id },
       })
     }
 
