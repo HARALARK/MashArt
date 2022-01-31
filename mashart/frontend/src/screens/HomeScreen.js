@@ -155,6 +155,15 @@ const PostCaption = styled.section`
   
 `
 const PostIcons = styled.section`
+  background-color: var(--primary-light);
+  padding: 10px;
+  display: flex;
+  border-radius: 20px;
+  font-size: 15px;
+  height: 40px;
+  width: 470px;
+  margin-left: -3px;
+  margin-top: 60px;
   
 `
 
