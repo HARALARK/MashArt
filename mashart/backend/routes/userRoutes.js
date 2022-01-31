@@ -11,7 +11,8 @@ import {
   searchUser,
   followUser,
   unfollowUser,
-  deleteUser
+  deleteUser,
+  getUserPosts,
 } from "../controllers/userController.js"
 import { protect } from "../middleware/authMiddleware.js"
 
@@ -34,8 +35,9 @@ router.route("/reset-password").put(resetPassword)
 
 router.route("/search").get(protect, searchUser)
 
-router.route("/profile/follow").put(protect,followUser)
-router.route("/profile/unfollow").put(protect,unfollowUser)
+router.route("/profile/follow").put(protect, followUser)
+router.route("/profile/unfollow").put(protect, unfollowUser)
 
+router.route("/post/:id?").get(protect, getUserPosts)
 
 export default router
