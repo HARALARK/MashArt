@@ -6,7 +6,7 @@ import styled from "styled-components"
 
 const UserCard = ({ user }) => {
   return (
-    <Link to={`/profile/${user._id}`}>
+    <Link className="user-link" to={`/profile/${user._id}`}>
       <Container>
         <div>
           <ProfileImageHolder size={"60px"}>
