@@ -48,6 +48,7 @@ const Homepage = () => {
 
 const Hero = styled.section`
     width: 100%;
+    height: 360px;
     border-radius: 20px;
     box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.40);
    -webkit-box-shadow: -8px 6px 16px 0px rgba(0,0,0,0.40);
@@ -137,7 +138,12 @@ const PostPicture = styled.section`
   
 `
 const PostCaption = styled.section`
-    //background-color: var(--primary-dark); //for caption
+    background-color: var(--primary-dark); //for caption
+    height: 250px;
+    width: 460px;
+    margin-left: 385px;
+    margin-top: -260px;
+    border-radius: 20px;
   
 `
 const PostIcons = styled.section`
