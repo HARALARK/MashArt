@@ -17,10 +17,14 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    posts: {
-      type: Array,
-      default: [],
-    },
+    //TODO: remove posts from model once playlist functionality has been completed
+    posts: [
+      {
+        //current users saved posts
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ],
     followers: {
       type: Array,
       default: [],
@@ -29,18 +33,24 @@ const userSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
-    blockedUsers:[{   //current users saved playlists
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    }],
-    playlist: [{   //current users saved playlists
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Playlist',
-    }],
+    blockedUsers: [
+      {
+        //current users saved playlists
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    playlist: [
+      {
+        //current users saved playlists
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Playlist",
+      },
+    ],
     role: {
       type: String,
-      default : "user",
-      enum : ["user", "moderator", "admin"] //user role must be 1 of these
+      default: "user",
+      enum: ["user", "moderator", "admin"], //user role must be 1 of these
     },
     resetLink: {
       type: String,
