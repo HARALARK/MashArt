@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons"
+import { faBars, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 
@@ -44,13 +44,27 @@ const Header = () => {
           </Link>
           {userInfo && (
             <NavMenuContainer>
-              <FontAwesomeIcon
-                className="nav-icon"
-                icon={dropDownOpen ? faTimes : faBars}
-                size="2x"
-                onClick={() => setDropDownOpen(!dropDownOpen)}
-              />
+              <NavIconContainer>
+                <Link className="post-link" to="/post/create">
+                  <FontAwesomeIcon
+                    className="nav-icon"
+                    icon={faPlus}
+                    size="1x"
+                  />
+                </Link>
+                <FontAwesomeIcon
+                  className="nav-icon"
+                  icon={dropDownOpen ? faTimes : faBars}
+                  size="2x"
+                  onClick={() => setDropDownOpen(!dropDownOpen)}
+                />
+              </NavIconContainer>
               <NavMenu>
+                <li>
+                  <Link to="/post/create" style={{ textDecoration: "none" }}>
+                    <LinkButton>Post</LinkButton>
+                  </Link>
+                </li>
                 {Object.entries(navLinks).map((obj) => {
                   return (
                     <li key={obj[0]}>
@@ -157,12 +171,6 @@ const NavMenuContainer = styled.div`
     transition: 200ms ease-in-out;
     cursor: pointer;
   }
-
-  @media ${device.tablet} {
-    .nav-icon {
-      display: none;
-    }
-  }
 `
 
 const NavMenu = styled.ul`
@@ -215,6 +223,28 @@ const Dropdown = styled(NavMenu)`
 
   & li:hover {
     background-color: var(--secondary);
+  }
+
+  @media ${device.tablet} {
+    display: none;
+  }
+`
+
+const NavIconContainer = styled.div`
+  display: flex;
+  gap: 2rem;
+
+  .post-link {
+    text-decoration: none;
+    color: var(--light);
+    padding: 0.1rem 0.4rem;
+    border: 2px solid var(--light);
+    border-radius: 10px;
+  }
+
+  .post-link:hover {
+    color: var(--primary);
+    border: 2px solid var(--primary);
   }
 
   @media ${device.tablet} {
