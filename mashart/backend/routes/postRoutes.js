@@ -13,7 +13,7 @@ const upload = multer({ dest: "backend/uploads/" })
 const router = express.Router()
 
 router.route("/create").post([protect, upload.single("image")], createPost)
-router.route("/post/:id").get(protect, getPostDetails)
+router.route("/:id").get(protect, getPostDetails)
 router.route("/update").put(protect, updatePost)
 
 export default router
