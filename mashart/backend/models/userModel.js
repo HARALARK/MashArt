@@ -25,6 +25,19 @@ const userSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
+    blockedUsers:[{   //current users saved playlists
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    }],
+    playlist: [{   //current users saved playlists
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Playlist',
+    }],
+    role: {
+      type: String,
+      default : "user",
+      enum : ["user", "moderator", "admin"] //user role must be 1 of these
+    },
     resetLink: {
       type: String,
       default: "",
