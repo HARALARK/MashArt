@@ -59,7 +59,13 @@ export const createPost = asyncHandler(async (req, res) => {
     })
 
     res.json({
-      success: "Post created successfully",
+      _id: post._id,
+      path: post.path,
+      users: post.users,
+      title: post.title,
+      subtitle: post.subtitle,
+      description: post.description,
+      tags: post.tags,
     })
   } else {
     res.status(404)
