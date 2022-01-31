@@ -63,8 +63,31 @@ export const createPost = asyncHandler(async (req, res) => {
     })
   } else {
     res.status(404)
-    throw new Error("User not found")
+    throw new Error("Post not found")
   }
+})
+
+// @desc get a post
+// @route get /api/post/:id
+// @access Private
+export const getPostDetails = asyncHandler(async (req, res) => {
+  const postId = req.params.id
+  const post = await Post.findById(postId)
+
+  if (!post) {
+    res.status(404)
+    throw new Error("Post not found")
+  }
+
+  res.json({
+    _id: post._id,
+    path: post.path,
+    users: post.users,
+    title: post.title,
+    subtitle: post.subtitle,
+    description: post.description,
+    tags: post.tags,
+  })
 })
 
 // @desc update a post
