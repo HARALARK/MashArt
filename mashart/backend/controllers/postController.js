@@ -74,6 +74,28 @@ export const createPost = asyncHandler(async (req, res) => {
 })
 
 // @desc get a post
+// @route get /api/post/
+// @access Private
+export const getPosts = asyncHandler(async (req, res) => {
+  const latestPosts = await Post.find().sort({ updatedAt: -1 }).limit(10)
+
+  const posts = latestPosts.map((post) => ({
+    _id: post._id,
+    path: post.path,
+    users: post.users,
+    title: post.title,
+    subtitle: post.subtitle,
+    description: post.description,
+    tags: post.tags,
+    time: post.updatedAt,
+  }))
+
+  res.json({
+    posts,
+  })
+})
+
+// @desc get a post
 // @route get /api/post/:id
 // @access Private
 export const getPostDetails = asyncHandler(async (req, res) => {
