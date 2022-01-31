@@ -55,7 +55,7 @@ export const createPost = asyncHandler(async (req, res) => {
     })
 
     await user.updateOne({
-      $push: { posts: post._id },
+      $push: { posts: { id: post._id, path } },
     })
 
     res.json({
@@ -63,7 +63,7 @@ export const createPost = asyncHandler(async (req, res) => {
     })
   } else {
     res.status(404)
-    throw new Error("Post not found")
+    throw new Error("User not found")
   }
 })
 
