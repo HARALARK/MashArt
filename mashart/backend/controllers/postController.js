@@ -26,7 +26,7 @@ import Post from "../models/postModel.js"
 // @access Private
 export const createPost = asyncHandler(async (req, res) => {
   const { path } = req.file
-  const { collaborators, title, subtitle, description, tags } = req.body
+  const { collaborators = "", title, subtitle, description, tags } = req.body
 
   const collaboratorsArray = collaborators.split(",")
 
@@ -51,7 +51,7 @@ export const createPost = asyncHandler(async (req, res) => {
       title,
       subtitle,
       description,
-      tags: tags.split(","),
+      tags: tags.split(",").forEach((tag) => tag.trim()),
     })
 
     await user.updateOne({
