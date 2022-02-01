@@ -3,6 +3,7 @@ import {
   CREATE_POST_FAIL,
   CREATE_POST_REQUEST,
   CREATE_POST_SUCCESS,
+  POST_RESET,
 } from "../constants/postContants"
 
 export const createPost = (post) => async (dispatch, getState) => {
@@ -37,4 +38,10 @@ export const createPost = (post) => async (dispatch, getState) => {
           : error.message,
     })
   }
+}
+
+export const createPostReset = () => async (dispatch) => {
+  dispatch({
+    type: POST_RESET,
+  })
 }

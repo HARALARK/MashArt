@@ -2,6 +2,7 @@ import {
   CREATE_POST_FAIL,
   CREATE_POST_REQUEST,
   CREATE_POST_SUCCESS,
+  POST_RESET,
 } from "../constants/postContants"
 
 export const createPostReducer = (state = {}, action) => {
@@ -12,6 +13,8 @@ export const createPostReducer = (state = {}, action) => {
       return { loading: false, postInfo: action.payload }
     case CREATE_POST_FAIL:
       return { loading: false, error: action.payload }
+    case POST_RESET:
+      return {}
     default:
       return state
   }
