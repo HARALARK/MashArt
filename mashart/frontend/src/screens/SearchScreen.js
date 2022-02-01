@@ -93,6 +93,10 @@ const UserCardContainer = styled.div`
   margin-top: 1rem;
   padding-bottom: 3rem;
   gap: 0.5rem;
+
+  .user-link {
+    text-decoration: none;
+  }
 `
 
 const Button = styled.p`
