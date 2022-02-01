@@ -10,7 +10,7 @@ import {
   userRegisterReducer,
   userUpdateProfileReducer,
 } from "../reducers/userReducers"
-import { createPostReducer } from "../reducers/postReducers"
+import { createPostReducer, getPostsReducer } from "../reducers/postReducers"
 
 let reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -21,6 +21,7 @@ let reducer = combineReducers({
   resetPassword: resetPasswordReducer,
   searchUser: searchUserReducer,
   createPost: createPostReducer,
+  posts: getPostsReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
