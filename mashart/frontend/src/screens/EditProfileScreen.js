@@ -55,6 +55,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: calc(100vh - 80px);
+  width: 100vw;
   .design-container {
     display: none;
   }
@@ -70,12 +71,14 @@ const Container = styled.div`
   }
 
   // TODO: add for mobile
-  @media ${device.laptop} {
+  @media ${device.tablet} {
     flex-direction: row;
     height: calc(100vh - 80px);
     gap: 2rem;
     padding: 0 2rem;
+    width: 50vw;}
    
+    outline: 1px dashed red;
 `
 
 const Form = styled.form`
@@ -83,12 +86,12 @@ const Form = styled.form`
   padding: 1rem 2rem 1rem;
   border-radius: 5px;
   // TODO: adjust h and w for different sizes
-  width: 500px;
+  width: 100%;
   height: 98%;
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
-
+  outline: 1px dashed green;
 `
 
 const Button = styled.p`

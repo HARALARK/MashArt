@@ -179,9 +179,11 @@ const MiscHolder = styled.div`
   justify-content: space-between;
   padding: 0 1rem;
   width: 100%;
+  flex-direction: column;
   @media ${device.tablet} {
     padding: 0;
     justify-content: space-evenly;
+    flex-direction: row;
   }
 `
 
