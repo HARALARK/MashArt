@@ -51,7 +51,7 @@ export const createPost = asyncHandler(async (req, res) => {
       title,
       subtitle,
       description,
-      tags: tags.split(",").forEach((tag) => tag.trim()),
+      tags: tags.split(",").map((tag) => tag.trim()),
     })
 
     await user.updateOne({
