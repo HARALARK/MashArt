@@ -1,5 +1,7 @@
 import express from "express"
 import multer from "multer"
+import path from "path"
+
 import {
   createPost,
   getPostDetails,
@@ -9,7 +11,26 @@ import {
 
 import { protect } from "../middleware/authMiddleware.js"
 
-const upload = multer({ dest: "backend/uploads/" })
+const imageStorage = multer.diskStorage({
+  destination: "backend/uploads",
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+    )
+  },
+})
+
+const upload = multer({
+  storage: imageStorage,
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(png|jpg)$/)) {
+      // upload only png and jpg format
+      return cb(new Error("Please upload a Image"))
+    }
+    cb(undefined, true)
+  },
+})
 
 const router = express.Router()
 
