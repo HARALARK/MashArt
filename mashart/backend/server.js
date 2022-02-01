@@ -1,6 +1,8 @@
 import express from "express"
 import dotenv from "dotenv"
 import colors from "colors"
+import path from "path"
+import { fileURLToPath } from "url"
 
 import connectDB from "./config/db.js"
 import userRoutes from "./routes/userRoutes.js"
@@ -14,6 +16,11 @@ connectDB()
 const app = express()
 
 app.use(express.json())
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+app.use("/backend/uploads/", express.static(path.join(__dirname, "uploads")))
 
 app.get("/", (req, res) => {
   res.send("API is running")
