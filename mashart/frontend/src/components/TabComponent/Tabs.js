@@ -45,14 +45,13 @@ const Tabs = () => {
 }
 
 const TabsContainer = styled.div`
-  width: 80%;
+  width: 90%;
   height: auto;
   min-height: 400px;
   margin: 0.25rem auto 1.5rem;
   padding: 2rem 1rem;
   color: #021216;
   border-radius: 2rem;
-
   @media (max-width: 769px) {
     padding: 2rem 0;
   }
