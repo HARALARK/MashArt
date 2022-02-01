@@ -5,15 +5,20 @@ import {
   CREATE_POST_SUCCESS,
 } from "../constants/postContants"
 
-export const createPost = (post) => async (dispatch) => {
+export const createPost = (post) => async (dispatch, getState) => {
   try {
     dispatch({
       type: CREATE_POST_REQUEST,
     })
 
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${userInfo.token}`,
       },
     }
 
