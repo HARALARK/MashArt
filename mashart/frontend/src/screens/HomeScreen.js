@@ -29,6 +29,7 @@ const Homepage = () => {
           </PostPicture>
 
           <PostCaption> 
+            <span className= "postCaption"> Inspiration is for amateurs. The rest of us just show up and get the work done. If you wait around for the clouds to part and a bolt of lightening to strike you in the brain, you're not going to make an awful lot of work.  </span> 
             <PostIcons> 
               {/* <likeButton type = "button" value = "/images/logo/logo.png" />
               <button className = "commentButton"> </button>
@@ -48,6 +49,7 @@ const Homepage = () => {
 
 const Hero = styled.section`
     width: 100%;
+    height: 360px;
     border-radius: 20px;
     box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.40);
    -webkit-box-shadow: -8px 6px 16px 0px rgba(0,0,0,0.40);
@@ -137,10 +139,31 @@ const PostPicture = styled.section`
   
 `
 const PostCaption = styled.section`
-    //background-color: var(--primary-dark); //for caption
+    background-color: var(--primary-dark); //for caption
+    height: 155px;
+    width: 470px;
+    margin-left: 385px;
+    margin-top: -260px;
+    border-radius: 20px;
+    .postCaption{
+      display: flex;
+      justify-content: center;
+      margin-left: 10px;
+      font-weight: 550;
+    
+    }
   
 `
 const PostIcons = styled.section`
+  background-color: var(--primary-light);
+  padding: 10px;
+  display: flex;
+  border-radius: 20px;
+  font-size: 15px;
+  height: 40px;
+  width: 470px;
+  margin-left: -3px;
+  margin-top: 60px;
   
 `
 
