@@ -4,6 +4,8 @@ export const Input = styled.input`
   padding: 0.7rem 1rem;
   border: none;
   border-radius: 5px;
+  font-family: "Poppins";
+  font-size: 0.8rem;
   &:focus {
     outline: none;
   }
