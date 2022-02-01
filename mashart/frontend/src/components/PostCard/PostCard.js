@@ -1,156 +1,144 @@
 import React from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import styled from "styled-components"
+import {
+  faBookmark,
+  faComment,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons"
+import device from "../../screen_sizes/devices"
 
-const PostCard = () => {
+const PostCard = ({ post }) => {
+  const { users, path, title, subtitle, description } = post
+
   return (
     <Container>
-      <PostUserID>
-        {/* placeholder image for profile picture */}
-        <img
-          className="profilePicture"
-          src="/images/logo/logo.png"
-          alt="profilepic"
-        />
-        <span className="userName"> samantha.smith</span>
-        <span className="PostTime"> 10 mins ago </span>
-      </PostUserID>
-
-      {/* placeholder images for collaborator profile pictures */}
       <PostCollaborators>
-        <img className="collab1" src="/images/logo/logo.png" alt="collab1" />
-        <img className="collab2" src="/images/logo/logo.png" alt="collab2" />
-        <img className="collab3" src="/images/logo/logo.png" alt="collab3" />
+        <CollabUser
+          className="collab1"
+          src="/images/logo/logo.png"
+          alt="collab1"
+        />
+        <CollabUser
+          className="collab2"
+          src="/images/logo/logo.png"
+          alt="collab2"
+        />
+        <CollabUser
+          className="collab3"
+          src="/images/logo/logo.png"
+          alt="collab3"
+        />
       </PostCollaborators>
 
-      <PostPicture>
-        <img
-          className="picturePost"
-          src="/images/samplepainting.PNG"
-          alt="postpic"
-        />
-      </PostPicture>
+      <PostPictureContainer>
+        <PostPicture className="picturePost" src={path} alt="postpic" />
+      </PostPictureContainer>
 
-      <PostCaption>
-        <span className="postCaption">
-          {" "}
-          Inspiration is for amateurs. The rest of us just show up and get the
-          work done. If you wait around for the clouds to part and a bolt of
-          lightening to strike you in the brain, you're not going to make an
-          awful lot of work.{" "}
-        </span>
+      <PostInfo>
+        <Title>{title}</Title>
+        <Subtitle>{subtitle}</Subtitle>
+        <Description>{description}</Description>
         <PostIcons>
-          {/* <likeButton type = "button" value = "/images/logo/logo.png" />
-              <button className = "commentButton"> </button>
-              <button className = "commentButton"> </button>
-              <button className = "saveButton"> </button> */}
+          <FontAwesomeIcon icon={faHeart} size="lg" />
+          <FontAwesomeIcon icon={faComment} size="lg" />
+          <FontAwesomeIcon icon={faBookmark} size="lg" />
         </PostIcons>
-      </PostCaption>
+      </PostInfo>
     </Container>
   )
 }
 
-const Container = styled.section`
-  padding: 1rem 2rem;
-`
-
-const PostUserID = styled.div`
-  background-color: var(--primary-light);
-  padding: 10px;
+const Container = styled.div`
+  background-color: #eef2ff;
+  color: var(--dark);
+  border-radius: 10px;
+  padding: 0 1rem;
   display: flex;
-  border-radius: 20px;
-  font-size: 15px;
-  margin-left: 25px;
-  height: 50px;
-  width: 870px;
-  margin-left: -15px;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  width: 100%;
 
-  .profilePicture {
-    height: 35px;
-    width: 35px;
-    background-color: #ffe6aa;
-    border-radius: 45px;
-    padding: 5px;
-    margin-right: 10px;
-  }
-
-  .PostTime {
-    margin-left: 530px;
+  @media ${device.tablet} {
+    flex-direction: row;
+    gap: 1rem;
   }
 `
 
 const PostCollaborators = styled.div`
-  padding: 10px;
   display: flex;
-  background-color: var(--primary-light);
-  border-radius: 20px;
-  float: left;
-  margin-left: -20px;
-  width: 30px;
-  height: 250px;
+  flex-direction: row;
+  padding: 0.5rem 0;
+  gap: 0.5rem;
 
-  .collab1 {
-    height: 25px;
-    width: 25px;
-    background-color: white;
-    border-radius: 45px;
-    padding: 5px;
-    margin-left: -7px;
-  }
-
-  .collab2 {
-    height: 25px;
-    width: 25px;
-    border-radius: 45px;
-    padding: 5px;
-    margin-top: 50px;
-    margin-left: -25px;
-    background-color: white;
-  }
-  .collab3 {
-    height: 25px;
-    width: 25px;
-    border-radius: 45px;
-    padding: 5px;
-    margin-top: 100px;
-    margin-left: -25px;
-    background-color: white;
+  @media ${device.tablet} {
+    flex-direction: column;
+    gap: 0.2rem;
   }
 `
-const PostPicture = styled.div`
-  border-radius: 45px;
+
+const CollabUser = styled.img`
+  height: 25px;
+  width: 25px;
+  background-color: var(--primary-light);
+  border-radius: 50%;
   padding: 5px;
+`
 
-  .picturePost {
-    margin-left: 5px;
-    height: 250px;
-    width: 350px;
-    border-radius: 15px;
-  }
-`
-const PostCaption = styled.div`
-  background-color: var(--primary-dark); //for caption
-  height: 155px;
-  width: 470px;
-  margin-left: 385px;
-  margin-top: -260px;
-  border-radius: 20px;
-  .postCaption {
-    display: flex;
-    justify-content: center;
-    margin-left: 10px;
-    font-weight: 550;
-  }
-`
-const PostIcons = styled.div`
-  background-color: var(--primary-light);
-  padding: 10px;
+const PostPictureContainer = styled.div`
+  background: var(--grey-light);
+  width: 100%;
+  height: 300px;
   display: flex;
-  border-radius: 20px;
-  font-size: 15px;
-  height: 40px;
-  width: 470px;
-  margin-left: -3px;
-  margin-top: 60px;
+  justify-content: center;
+`
+
+const PostPicture = styled.img`
+  width: 300px;
+  background-size: contain;
+`
+
+const PostInfo = styled.div`
+  padding: 0.5rem 0.5rem 1rem;
+
+  @media ${device.tablet} {
+    padding: 1.5rem 1rem;
+  }
+`
+
+const Title = styled.h1`
+  font-weight: 700;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+`
+
+const Subtitle = styled.h2`
+  font-weight: 500;
+  font-size: 1.3rem;
+  line-height: 60%;
+  margin-bottom: 1rem;
+
+  @media ${device.tablet} {
+    margin-bottom: 2rem;
+  }
+`
+
+const Description = styled.p`
+  font-weight: 400;
+  font-size: 0.9rem;
+  line-height: 95%;
+  text-align: justify;
+`
+
+const PostIcons = styled.div`
+  display: flex;
+  margin-top: 1rem;
+  gap: 2rem;
+  color: var(--secondary-dark);
+
+  @media ${device.tablet} {
+    margin-top: 2.5rem;
+  }
 `
 
 export default PostCard
