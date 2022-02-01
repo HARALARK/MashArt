@@ -1,20 +1,42 @@
-import React from "react"
-import { useSelector } from "react-redux"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
+
+import Message from "../components/styled-components/Message"
+import { getPosts } from "../actions/postActions"
 import PostCard from "../components/PostCard/PostCard"
 import WelcomeScreen from "./WelcomeScreen"
 
 const Homepage = () => {
+  const dispatch = useDispatch()
+
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
+  const postsInfo = useSelector((state) => state.posts)
+  const { loading, posts, error } = postsInfo
+
+  useEffect(() => {
+    if (!posts) {
+      dispatch(getPosts())
+    }
+  }, [userInfo, posts, dispatch])
+
+  console.log(posts)
+
   return userInfo ? (
-    <Hero>
-      <Container>
-        <PostCard />
-        <PostCard />
-      </Container>
-    </Hero>
+    <Container>
+      {loading && <Message>Loading...</Message>}
+      {error && <Message variant="error">{error}</Message>}
+
+      <PostsContainer>
+        {posts ? (
+          posts.posts.map((post) => <PostCard key={post._id} post={post} />)
+        ) : (
+          <></>
+        )}
+      </PostsContainer>
+    </Container>
   ) : (
     <div className="welcome-container">
       <WelcomeScreen />
@@ -22,17 +44,12 @@ const Homepage = () => {
   )
 }
 
-const Hero = styled.section`
-  width: 100%;
-  height: 360px;
-  border-radius: 20px;
-  box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.4);
-  -webkit-box-shadow: -8px 6px 16px 0px rgba(0, 0, 0, 0.4);
-  margin: 40px 0;
-  background-color: var(--primary);
-`
 const Container = styled.section`
-  padding: 1rem 2rem;
+  padding: 1rem 2rem 100px;
+`
+
+const PostsContainer = styled.div`
+  padding: 1rem 0;
 `
 
 export default Homepage
