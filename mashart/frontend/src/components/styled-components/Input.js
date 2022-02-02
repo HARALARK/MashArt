@@ -5,7 +5,11 @@ export const Input = styled.input`
   width: ${(prop) => (prop.width ? prop.width : "")};
   border: none;
   border-radius: 5px;
+<<<<<<< HEAD
   &:focus {
+=======
+  a &:focus {
+>>>>>>> aac0dc4 (removed the font-family and font-size due to bugs in PasswordInput)
     outline: none;
   }
 `
