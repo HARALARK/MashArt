@@ -50,8 +50,8 @@ const PostCard = ({ post }) => {
 }
 
 const Container = styled.div`
-  background-color: #eef2ff;
-  color: var(--dark);
+  background-color: var(--primary-dark);
+  color: var(--secondary-dark);
   border-radius: 10px;
   padding: 0 1rem;
   display: flex;
@@ -80,14 +80,15 @@ const PostCollaborators = styled.div`
 const CollabUser = styled.img`
   height: 25px;
   width: 25px;
-  background-color: var(--primary-light);
+  background-color: var(--light);
   border-radius: 50%;
   padding: 5px;
 `
 
 const PostPictureContainer = styled.div`
+  flex: 1;
   background: var(--grey-light);
-  width: 100%;
+  width: 400px;
   height: 300px;
   display: flex;
   justify-content: center;
@@ -99,6 +100,7 @@ const PostPicture = styled.img`
 `
 
 const PostInfo = styled.div`
+  flex: 1;
   padding: 0.5rem 0.5rem 1rem;
 
   @media ${device.tablet} {
@@ -110,12 +112,13 @@ const Title = styled.h1`
   font-weight: 700;
   font-size: 1.8rem;
   letter-spacing: 2px;
+  line-height: 90%;
 `
 
 const Subtitle = styled.h2`
   font-weight: 500;
   font-size: 1.3rem;
-  line-height: 60%;
+  line-height: 90%;
   margin-bottom: 1rem;
 
   @media ${device.tablet} {
