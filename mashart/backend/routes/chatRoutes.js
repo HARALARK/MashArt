@@ -1,7 +1,7 @@
 import express from "express"
 import{
     newChat,
-    getChats
+    getChats,
 }from "../controllers/chatController.js"
 import { protect } from "../middleware/authMiddleware.js"
 

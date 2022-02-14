@@ -23,10 +23,21 @@ export const newMessage = asyncHandler(async (req, res) => {
         })
     }
 
-    res.status(200).json(chat);
+    res.status(200).json(message);
   }catch(err){
     res.status(500).json(err);
   }
+})
+
+// @desc get chat's messages
+// @route GET /api/message/:id
+// @access Private
+export const getMessages = asyncHandler(async (req, res) => {
+
+    const chat = await Chat.findById(req.params.id)
+    const messageArray = chat.chatMessages
+    res.status(200).json(messageArray);
+
 })
 
 
