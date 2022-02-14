@@ -5,6 +5,8 @@ import colors from "colors"
 import connectDB from "./config/db.js"
 import userRoutes from "./routes/userRoutes.js"
 import postRoutes from "./routes/postRoutes.js"
+import chatRoutes from "./routes/chatRoutes.js"
+//import chatMessageRoutes from "./routes/chatMessageRoutes.js"
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js"
 
 dotenv.config()
@@ -21,6 +23,8 @@ app.get("/", (req, res) => {
 
 app.use("/api/user", userRoutes)
 app.use("/api/post", postRoutes)
+app.use("/api/chat", chatRoutes)
+//app.use("api/chatMessage", chatMessageRoutes)
 
 app.use(notFound)
 
