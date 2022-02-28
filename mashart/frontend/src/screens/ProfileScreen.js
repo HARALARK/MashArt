@@ -42,9 +42,7 @@ const ProfileScreen = () => {
     <Container>
       {loading && <Message>Loading...</Message>}
       {error && <Message variant="error">{error}</Message>}
-      <CoverContainer>
-        {/* Cover photo here? */}
-      </CoverContainer>
+      <CoverContainer>{/* Cover photo here? */}</CoverContainer>
       <InfoSection>
         <InfoContainer>
           <MiscHolder>
@@ -52,7 +50,7 @@ const ProfileScreen = () => {
             <MiscInfo>
               <p className="title">Collaborations</p>
               {/* Placeholder, should have something to identify collab posts of a user */}
-              <p>{user.posts || 0 } </p>
+              <p>{user.posts || 0} </p>
             </MiscInfo>
             <MiscInfo>
               <p className="title">Posts</p>
@@ -74,7 +72,7 @@ const ProfileScreen = () => {
               <p className="title">Followers</p>
               <p>{user.followers || 0}</p>
             </MiscInfo>
-            
+
             <MiscInfo>
               <p className="title">Following</p>
               <p>{user.following || 0}</p>
@@ -84,9 +82,11 @@ const ProfileScreen = () => {
         {id ? (
           <></>
         ) : (
-          <Link className="link" to="/edit-profile">
-            <Button>Edit Profile</Button>
-          </Link>
+          <EditButton>
+            <Link className="link" to="/edit-profile">
+              <Button>Edit Profile</Button>
+            </Link>
+          </EditButton>
         )}
       </InfoSection>
       <Tabs />
@@ -109,9 +109,16 @@ const InfoSection = styled.section`
   padding: 1rem 0 1rem;
   width: 100%;
   border-bottom: 2px solid var(--background-dark);
-
   .link {
     text-decoration: none;
+  }
+`
+
+const EditButton = styled.div`
+  @media ${device.tablet} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `
 
@@ -147,9 +154,6 @@ const InfoContainer = styled.div`
 
 const ProfileHolder = styled.div`
   margin-bottom: 0.5rem;
-  @media ${device.tablet} {
-    margin: 0 0 0.5rem 35px;
-  }
 `
 
 const ProfileImage = styled.img`
@@ -200,7 +204,7 @@ const MiscInfo = styled.div`
   }
 
   @media ${device.tablet} {
-    padding-left: 1rem;
+    width: 150px;
   }
 `
 
