@@ -34,8 +34,12 @@ export const newMessage = asyncHandler(async (req, res) => {
 // @access Private
 export const getMessages = asyncHandler(async (req, res) => {
 
-    const chat = await Chat.findById(req.params.id)
+  const chat = await Chat.findById(req.params.id)
+  try{
     const messageArray = chat.chatMessages
     res.status(200).json(messageArray);
-
+  }
+  catch(err){
+    res.status(500).json(err);
+  }
 })

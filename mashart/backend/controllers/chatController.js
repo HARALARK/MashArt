@@ -90,6 +90,7 @@ export const addUser = asyncHandler(async (req, res) => {
       res.status(400)
       throw new Error("Invalid Request")
     }
+
     try{
       await chat.updateOne({
         $push: { userId: req.body._id }
@@ -98,5 +99,4 @@ export const addUser = asyncHandler(async (req, res) => {
     }catch(err){
       res.status(500).json(err);
     }
-  
 })
