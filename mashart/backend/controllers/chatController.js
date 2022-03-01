@@ -71,3 +71,32 @@ export const leaveChat = asyncHandler(async (req, res) => {
     res.status(500).json(err);
   }
 })
+
+
+// @desc add a user to a group chat
+// @route PUT /api/chat/:id/add
+// @access Private
+export const addUser = asyncHandler(async (req, res) => {
+
+  const chat = await Chat.findById(req.params.id) 
+  const user = await User.findById(req.body._id)
+
+    if(chat.userId.includes(req.body._id)){
+      res.status(400)
+      throw new Error("Invalid Request: User already exists in chat")
+    }
+
+    if (user.equals(chat.adminId)){
+      res.status(400)
+      throw new Error("Invalid Request")
+    }
+    try{
+      await chat.updateOne({
+        $push: { userId: req.body._id }
+      })
+      res.status(200).json(chat.userId)
+    }catch(err){
+      res.status(500).json(err);
+    }
+  
+})
