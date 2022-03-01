@@ -52,3 +52,22 @@ export const getChats = asyncHandler(async (req, res) => {
     throw new Error("User not found")
   }
 })
+
+// @desc leave a group chat
+// @route PUT /api/chat/:id/leave
+// @access Private
+export const leaveChat = asyncHandler(async (req, res) => {
+
+  const chat = await Chat.findById(req.params.id) 
+  const newAdmin =  await User.findById(chat.userId[1])
+  try{
+    await chat.updateOne({
+      $pull: { userId: req.user._id },
+      $set: { adminId: newAdmin }
+    })
+    res.status(200).json("left group chat")
+  }catch(err){
+    //user not found
+    res.status(500).json(err);
+  }
+})
