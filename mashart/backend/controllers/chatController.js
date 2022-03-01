@@ -11,15 +11,23 @@ export const newChat = asyncHandler(async (req, res) => {
   const usersTxt = req.body.users
   const userId = [adminId, ...(usersTxt.split(","))]
 
-  try{
-    const chat = await Chat.create({
-      adminId,
-      userId
-    })
-    res.status(200).json(chat);
-  }catch(err){
-    res.status(500).json(err);
+  if(adminId){
+    try{
+      const chat = await Chat.create({
+        adminId,
+        userId
+      })
+      res.status(200)
+      res.json(chat);
+    }catch(err){
+      res.status(500).json(err);
+    }
   }
+  else{
+    res.status(404)
+    throw new Error("User not found")
+  }
+
 })
 
 // @desc get user's chats
@@ -29,42 +37,18 @@ export const newChat = asyncHandler(async (req, res) => {
 export const getChats = asyncHandler(async (req, res) => {
 
   const user = await User.findById(req.user._id) 
-  try {
-    const chat = await Chat.find({
-      userId: { $in: [user] },
-    });
-    res.status(200).json(chat);
-  } catch (err) {
-    res.status(500).json(err);
+  if(user){
+    try {
+      const chat = await Chat.find({
+        userId: { $in: [user] },
+      });
+      res.status(200).json(chat);
+    } catch (err) {
+      res.status(500).json("User has no chats");
+    }
+  }
+  else{
+    res.status(404)
+    throw new Error("User not found")
   }
 })
-
-
-
-// @desc leave a group chat
-// @route PUT /api/chat/:id/leave
-// @access Private
-export const leaveChat = asyncHandler(async (req, res) => {
-
-  const user = await User.findById(req.user._id) 
-  const chat = await Chat.findById(req.params.id) 
-  try{
-    await chat.updateOne({
-      $pull: { userId: req.user._id }
-    })
-    res.status(200).json(chat.userId)
-  }catch(err){
-    //user not found
-    res.status(500).json(err);
-  }
-
-})
-
-
-
-
-
-  
-
-
-  
