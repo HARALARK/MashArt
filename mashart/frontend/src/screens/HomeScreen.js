@@ -22,8 +22,6 @@ const Homepage = () => {
     }
   }, [userInfo, posts, dispatch])
 
-  console.log(posts)
-
   return userInfo ? (
     <Container>
       {loading && <Message>Loading...</Message>}
