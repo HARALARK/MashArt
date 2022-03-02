@@ -42,7 +42,6 @@ const ProfileScreen = () => {
     <Container>
       {loading && <Message>Loading...</Message>}
       {error && <Message variant="error">{error}</Message>}
-      <CoverContainer>{/* Cover photo here? */}</CoverContainer>
       <InfoSection>
         <InfoContainer>
           <MiscHolder>
@@ -59,8 +58,8 @@ const ProfileScreen = () => {
           </MiscHolder>
           <ProfileHolder>
             <ProfileImageHolder>
-              {user.profileImg ? (
-                <ProfileImage src={user.profileImg} alt="profile" />
+              {user.profileImage ? (
+                <ProfileImage src={user.profileImage} alt="profile" />
               ) : (
                 <FontAwesomeIcon icon={faUser} size="3x" />
               )}
@@ -223,9 +222,4 @@ const PostContainer = styled.div`
   }
 `
 
-const CoverContainer = styled.div`
-  width: 100%;
-  height: 100px;
-  background-color: purple;
-`
 export default ProfileScreen
