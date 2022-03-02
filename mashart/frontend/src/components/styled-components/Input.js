@@ -1,7 +1,8 @@
 import styled from "styled-components"
 
 export const Input = styled.input`
-  padding: 0.7rem 1rem;
+  padding: ${(prop) => (prop.padding ? prop.padding : "0.7rem 1rem")};
+  width: ${(prop) => (prop.width ? prop.width : "")};
   border: none;
   border-radius: 5px;
   &:focus {
