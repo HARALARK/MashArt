@@ -1,22 +1,36 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 import device from "../screen_sizes/devices"
 import { DescInput } from "../components/styled-components/Input";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faDoorOpen} from "@fortawesome/free-solid-svg-icons"
 const EditArtScreen = () => {
   const [image, setImage] = useState(null)
+  const userDetails = useSelector((state) => state.userDetails)
+  const { loading, user, error } = userDetails
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
     return (
     <div>
           <Container>
               <Form>
                     <Header> 
-                        <img className= "profilePicture" src="/images/logo/logo.png" alt="profilepic" /> 
-                        <p1 className = "username">  Sarah's Room </p1>
-                        <p1 className = "roomno"> - 2nsX3 </p1>
-                        <img className= "c1" src="/images/logo/logo.png" alt="collaborator1" />
-                        <img className= "c2" src="/images/logo/logo.png" alt="collaborator2" />
-                        <img className= "c3" src="/images/logo/logo.png" alt="collaborator3" />
+                        <RoomContainer>
+                          <img className= "profilePicture" src="/images/logo/logo.png" alt="profilepic" /> 
+                          <p1 className = "username">  {user.username}'s Room </p1>
+                          
+                          <p1 className = "roomno"> - 2nsX3 </p1>
+                        </RoomContainer>
+                        
+                        <CollaboratorContainer>
+                        <img className= "collaborator" src="/images/logo/logo.png" alt="collaborator1" />
+                        <img className= "collaborator" src="/images/logo/logo.png" alt="collaborator2" />
+                        <img className= "collaborator" src="/images/logo/logo.png" alt="collaborator3" />
+                        </CollaboratorContainer>
+                        
                     </Header>
 
                     <p className = "upload"> Upload Artwork </p>
@@ -53,7 +67,10 @@ const EditArtScreen = () => {
                         <img className= "filter" src="/images/logo/logo.png" alt="filter5" />
                     </Filters>
 
-                    <Button className="leaveroom" > Leave Room </Button>
+                    <Button className="leaveroom" >
+                    Leave Room   
+                    <FontAwesomeIcon icon={faDoorOpen} size ='m' style={{ color: 'black' }}/> 
+                    </Button>
               </Form>
           </Container>
       
@@ -67,9 +84,8 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 80px);
+  height: 100vh;
   width: 100%;
-  
 
   .heading {
     color: var(--light);
@@ -132,7 +148,7 @@ const Form = styled.form`
 `
 
 const Button = styled.p`
-  
+  flex-direction: row;
   text-align: center;
   padding: 0.4rem 1rem;
   color: var(--light);
@@ -143,13 +159,18 @@ const Button = styled.p`
   transition: 100ms ease-in-out;
  
   &.leaveroom {
-    margin-left: 620px;
-    background-color: #8b0000;
-   }
+    align-self: flex-end;
+    background-color: var(--secondary);
+
+    &:hover {
+      background-color: #8b0000;
+      color: var(--light);
+    }
+  }
 
    &.uploadart {
     background-color: #023e8a;
-}
+  }
 
   &:hover {
     background-color: var(--secondary);
@@ -158,7 +179,7 @@ const Button = styled.p`
 
   @media ${device.tablet} {
     margin: 0;
-    width: 150px;
+    width: 20%;
   }
 `
 
@@ -172,64 +193,55 @@ const WatermarkImage = styled.img`
 `
 
 const Header = styled.section`
-    outline: 1px dashed red;
     background-color: var(--secondary);
     display: flex;
     padding: 10px;
     
     border-radius: 20px;
     font-size: 30px;
-    height: 10%;
-    width: 100%;
     color: var(--light);
-    
+  
+    @media ${device.tablet} {
+      gap: 5rem;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+   
+`
 
+const RoomContainer = styled.section`
+    display: flex;
+    align-content: center;
+    gap: 1rem;
     .profilePicture {
-        height: 50px;
-        width: 50px;
-        background-color: #ffe6aa;
-        border-radius: 10px;
-        margin-right: 10px;
+      height: 50px;
+      width: 50px;
+      background-color: #ffe6aa;
+      border-radius: 10px;
     }
     .username {
-        font-size: 30px;
-        margin-left: 5px;
-      }
+      font-size: 30px;
+      
+    }
     .roomno {
-        font-size: 20px;
-        margin-top: 11px;
-        margin-left: 10px;
-      }
-
-    .PostTime{
-        margin-left: 530px;
+      font-size: 20px;
+    }
+`
+const CollaboratorContainer = styled.section`
+    display: flex;
+    gap: 1rem;
+    .collaborator{
+      height: 50px;
+      width: 50px;
+      background-color: white;
+      border-radius: 10px;
     }
 
-    .c1{
-        height: 50px;
-        width: 50px;
-        background-color: white;
-        border-radius: 10px;
-        margin-left: 210px;
+    @media ${device.tablet} {
+      justify-content: space-between;
+      flex-direction: row;
     }
-
-    .c2{
-        height: 50px;
-        width: 50px;
-        border-radius: 10px; 
-        margin-left: 5px;
-        background-color: white;
-
-    }
-    .c3{
-        height: 50px;
-        width: 50px;
-        border-radius: 10px;
-        margin-left: 5px;
-        background-color: white;
-    }
-`   
-
+`
 const DescContainer = styled.section`
     height: 80%;
     width: 50%;
