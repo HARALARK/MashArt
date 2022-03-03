@@ -15,3 +15,21 @@ export const PasswordInput = styled(Input)`
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 `
+
+export const DescInput = styled.input.attrs({
+
+  placeholder: "Description..."
+}) `
+  border: none;
+  
+  padding: ${(prop) => (prop.padding ? prop.padding : "0.7rem 1rem")};
+  
+  border: none;
+  border-radius: 5px;
+  height: 100%;
+  width: 100%;
+  align-items: flex-start;
+  &:focus {
+    outline: none;
+  }
+`
