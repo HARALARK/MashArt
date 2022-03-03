@@ -1,6 +1,6 @@
 import express from "express"
-import multer from "multer"
-import path from "path"
+import { upload } from "../config/multerSetup.js"
+
 import {
   authUser,
   registerUser,
@@ -17,27 +17,6 @@ import {
   getUserPosts,
 } from "../controllers/userController.js"
 import { protect } from "../middleware/authMiddleware.js"
-
-const imageStorage = multer.diskStorage({
-  destination: "backend/uploads",
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
-    )
-  },
-})
-
-const upload = multer({
-  storage: imageStorage,
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(png|jpg|jpeg|webp)$/)) {
-      // upload only png and jpg format
-      return cb(new Error("Please upload a Image"))
-    }
-    cb(undefined, true)
-  },
-})
 
 const router = express.Router()
 
