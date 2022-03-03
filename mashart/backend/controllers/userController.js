@@ -17,6 +17,7 @@ export const authUser = asyncHandler(async (req, res) => {
       _id: user._id,
       username: user.username,
       email: user.email,
+      profileImage: user.profileImage || null,
       token: generateToken(user._id),
     })
   } else {
@@ -98,6 +99,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       username: user.username,
       email: user.email,
+      profileImage: user.profileImage || null,
     })
   } else {
     res.status(404)
@@ -106,16 +108,17 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 })
 
 // @desc update user profile
-// @route POST /api/user/profile
+// @route PUT /api/user/profile
 // @access Private
 export const updateUserProfile = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body
+  const path = req.file ? req.file.path : null
+  const { username, password } = req.body
 
   const user = await User.findById(req.user._id)
 
   if (user) {
     user.username = username || user.username
-    user.email = email || user.email
+    user.profileImage = path || user.profileImage
 
     if (password) {
       user.password = password
@@ -125,8 +128,9 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 
     res.json({
       _id: updatedUser._id,
-      usename: updatedUser.username,
-      email: updatedUser.email,
+      username: updatedUser.username,
+      email: user.email,
+      profileImage: updatedUser.profileImage,
       token: generateToken(updatedUser._id),
     })
   } else {

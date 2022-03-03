@@ -17,6 +17,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    profileImage: {
+      type: String,
+      default: "",
+    },
     //TODO: remove posts from model once playlist functionality has been completed
     posts: [
       {

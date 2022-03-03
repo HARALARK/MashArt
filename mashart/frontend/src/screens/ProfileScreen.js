@@ -29,11 +29,16 @@ const ProfileScreen = () => {
         navigate("/profile")
       } else if (id && (id !== user._id || !user.username)) {
         dispatch(getUserDetails(`profile?_id=${id}`))
-      } else if (
-        id === undefined &&
-        (!user.username || user._id !== userInfo._id)
-      ) {
-        dispatch(getUserDetails("profile"))
+      } else if (id === undefined) {
+        const localUserInfo = JSON.parse(localStorage.getItem("userInfo"))
+        if (
+          !user.username ||
+          user._id !== userInfo._id ||
+          localUserInfo.profileImage !== user.profileImage ||
+          localUserInfo.username !== user.username
+        ) {
+          dispatch(getUserDetails("profile"))
+        }
       }
     }
   }, [userInfo, navigate, user, dispatch, id])
@@ -42,9 +47,6 @@ const ProfileScreen = () => {
     <Container>
       {loading && <Message>Loading...</Message>}
       {error && <Message variant="error">{error}</Message>}
-      <CoverContainer>
-        {/* Cover photo here? */}
-      </CoverContainer>
       <InfoSection>
         <InfoContainer>
           <MiscHolder>
@@ -52,7 +54,7 @@ const ProfileScreen = () => {
             <MiscInfo>
               <p className="title">Collaborations</p>
               {/* Placeholder, should have something to identify collab posts of a user */}
-              <p>{user.posts || 0 } </p>
+              <p>{user.posts || 0} </p>
             </MiscInfo>
             <MiscInfo>
               <p className="title">Posts</p>
@@ -61,8 +63,8 @@ const ProfileScreen = () => {
           </MiscHolder>
           <ProfileHolder>
             <ProfileImageHolder>
-              {user.profileImg ? (
-                <ProfileImage src={user.profileImg} alt="profile" />
+              {user.profileImage ? (
+                <ProfileImage src={user.profileImage} alt="profile" />
               ) : (
                 <FontAwesomeIcon icon={faUser} size="3x" />
               )}
@@ -74,7 +76,7 @@ const ProfileScreen = () => {
               <p className="title">Followers</p>
               <p>{user.followers || 0}</p>
             </MiscInfo>
-            
+
             <MiscInfo>
               <p className="title">Following</p>
               <p>{user.following || 0}</p>
@@ -84,9 +86,11 @@ const ProfileScreen = () => {
         {id ? (
           <></>
         ) : (
-          <Link className="link" to="/edit-profile">
-            <Button>Edit Profile</Button>
-          </Link>
+          <EditButton>
+            <Link className="link" to="/edit-profile">
+              <Button>Edit Profile</Button>
+            </Link>
+          </EditButton>
         )}
       </InfoSection>
       <Tabs />
@@ -109,9 +113,16 @@ const InfoSection = styled.section`
   padding: 1rem 0 1rem;
   width: 100%;
   border-bottom: 2px solid var(--background-dark);
-
   .link {
     text-decoration: none;
+  }
+`
+
+const EditButton = styled.div`
+  @media ${device.tablet} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `
 
@@ -147,9 +158,6 @@ const InfoContainer = styled.div`
 
 const ProfileHolder = styled.div`
   margin-bottom: 0.5rem;
-  @media ${device.tablet} {
-    margin: 0 0 0.5rem 35px;
-  }
 `
 
 const ProfileImage = styled.img`
@@ -200,7 +208,7 @@ const MiscInfo = styled.div`
   }
 
   @media ${device.tablet} {
-    padding-left: 1rem;
+    width: 150px;
   }
 `
 
@@ -219,9 +227,4 @@ const PostContainer = styled.div`
   }
 `
 
-const CoverContainer = styled.div`
-  width: 100%;
-  height: 100px;
-  background-color: purple;
-`
 export default ProfileScreen

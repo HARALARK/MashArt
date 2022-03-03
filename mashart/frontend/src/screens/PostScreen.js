@@ -127,7 +127,7 @@ const PostScreen = () => {
 }
 
 const Container = styled.section`
-  padding: 1rem 2rem 80px;
+  padding: 1rem 2rem;
   height: 100%;
 
   .center-container {
