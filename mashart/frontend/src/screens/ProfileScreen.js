@@ -29,11 +29,16 @@ const ProfileScreen = () => {
         navigate("/profile")
       } else if (id && (id !== user._id || !user.username)) {
         dispatch(getUserDetails(`profile?_id=${id}`))
-      } else if (
-        id === undefined &&
-        (!user.username || user._id !== userInfo._id)
-      ) {
-        dispatch(getUserDetails("profile"))
+      } else if (id === undefined) {
+        const localUserInfo = JSON.parse(localStorage.getItem("userInfo"))
+        if (
+          !user.username ||
+          user._id !== userInfo._id ||
+          localUserInfo.profileImage !== user.profileImage ||
+          localUserInfo.username !== user.username
+        ) {
+          dispatch(getUserDetails("profile"))
+        }
       }
     }
   }, [userInfo, navigate, user, dispatch, id])
