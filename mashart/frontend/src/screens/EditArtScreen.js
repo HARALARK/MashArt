@@ -69,7 +69,7 @@ const EditArtScreen = () => {
 
                     <Button className="leaveroom" >
                     Leave Room   
-                    <FontAwesomeIcon icon={faDoorOpen} size ='m' style={{ color: 'black' }}/> 
+                    <FontAwesomeIcon icon={faDoorOpen} size ='m' style={{ color: 'white' }}/> 
                     </Button>
               </Form>
           </Container>
