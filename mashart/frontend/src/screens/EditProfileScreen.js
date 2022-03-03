@@ -1,131 +1,225 @@
-import React from 'react';
+import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import device from "../screen_sizes/devices"
-import { Input } from "../components/styled-components/Input";
-
+import { Input, PasswordInput } from "../components/styled-components/Input"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import { updateUserProfile } from "../actions/userActions"
+import Message from "../components/styled-components/Message"
 
 const EditProfileScreen = () => {
+  const [profileImage, setProfileImage] = useState(null)
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [message, setMessage] = useState("")
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const user = useSelector((state) => state.userLogin)
+  const { userInfo } = user
+
+  const updateUser = useSelector((state) => state.userUpdateProfile)
+  const { loading, userLogin, error } = updateUser
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/")
+    }
+  }, [userInfo, navigate])
+
+  const onImageChange = (e, type) => {
+    if (e.target.files && e.target.files[0]) {
+      if (type === "profile") {
+        setProfileImage(e.target.files[0])
+      }
+    }
+  }
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+
+    const data = new FormData()
+    data.append("profileImage", profileImage)
+    data.append("username", username)
+    data.append("password", password)
+
+    dispatch(updateUserProfile(data))
+
+    setProfileImage(null)
+    setUsername("")
+    setPassword("")
+  }
 
   return (
-  <div>
-    <Hero>
-        <Container>
-            <Form>
-                <p1 className="heading"><WatermarkImage src="/images/logo/watermark.png"alt="logo"/> Edit Profile </p1>
-                <p className="subheading"> Update Username </p>
-                <Input
-                            type="text"
-                            placeholder="New Username"
-                        />  
-                <p className="subheading"> Update Password</p>
-                <Input
-                            type="text"
-                            placeholder="New Password"
-                            required
-                        />
-                
-                <p className="subheading"> Edit Bio </p>
-                <Input
-                            type="text"
-                            placeholder="Enter text"
-                            required
-                        />
-    
-                <p className = "subheading"> Change Profile Photo</p>
-                <Button>Upload Profile Photo</Button>
-                <p className = "subheading"> Change Cover Photo</p>
-                <Button>Upload Cover Photo</Button>
-            </Form>
-        </Container>
-    </Hero>
-  </div>
-)};
+    <Container>
+      {loading && <Message>Loading...</Message>}
+      {error && <Message variant="error">{error}</Message>}
+      {message && <Message variant="error">{message}</Message>}
+      {userLogin && (
+        <Message variant="success">Profile Updated Successfully</Message>
+      )}
+      <Form>
+        <p className="heading">Edit Profile </p>
+        <InputContainer>
+          <p> Change Profile Photo</p>
+          <ImageContainer size="80px">
+            {profileImage ? (
+              <img
+                className="post"
+                src={URL.createObjectURL(profileImage)}
+                alt="post"
+              />
+            ) : (
+              <ImagePlaceHolder size="80px">
+                <p className="no-post">No Image</p>
+              </ImagePlaceHolder>
+            )}
+          </ImageContainer>
+          <ImageInputContainer>
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => onImageChange(e, "profile")}
+              padding="0.7rem 0"
+            />
+          </ImageInputContainer>
+        </InputContainer>
 
+        <InputContainer>
+          <p>Change Username</p>
+          <div>
+            <Input
+              width="100%"
+              type="text"
+              placeholder="Change Username*"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+        </InputContainer>
 
-const Hero = styled.section`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
+        <InputContainer>
+          <p>Change Password</p>
+          <PasswordInputContainer>
+            <PasswordInput
+              type={showPassword ? "text" : "password"}
+              placeholder="Change Password*"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <div
+              className="icon-container"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              <FontAwesomeIcon
+                icon={showPassword ? faEyeSlash : faEye}
+              ></FontAwesomeIcon>
+            </div>
+          </PasswordInputContainer>
+        </InputContainer>
 
+        <SubmitButton type="button" value="Save" onClick={submitHandler} />
+      </Form>
+    </Container>
+  )
+}
 
 const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: calc(100vh - 80px);
-  width: 100vw;
+  width: 100%;
   .design-container {
     display: none;
   }
 
   .heading {
-    color: var(--light);
     font-size: 2rem;
-    text-align: center;
   }
 
-  .subheading{
-      color: var(--light);
-  }
-
-  // TODO: add for mobile
   @media ${device.tablet} {
-    flex-direction: row;
-    height: calc(100vh - 80px);
     gap: 2rem;
-    padding: 0 2rem;
-    width: 50vw;}
-   
-    outline: 1px dashed red;
+  }
+
+  padding: 1rem 0 80px;
 `
 
 const Form = styled.form`
-  background-color: var(--secondary-dark);
+  width: 100%;
   padding: 1rem 2rem 1rem;
   border-radius: 5px;
-  // TODO: adjust h and w for different sizes
-  width: 100%;
-  height: 98%;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
-  outline: 1px dashed green;
+  gap: 1rem;
 `
 
-const Button = styled.p`
-  
-  text-align: center;
-  padding: 0.2rem 1rem;
-  border: 3px solid var(--light);
-  color: var(--light);
+const InputContainer = styled.div``
+
+const ImageContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  .post {
+    height: ${(prop) =>
+      prop.size ? prop.size : prop.height ? prop.height : "300px"};
+    width: ${(prop) =>
+      prop.size ? prop.size : prop.width ? prop.width : "300px"};
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+`
+
+const ImagePlaceHolder = styled.div`
+  background: var(--secondary-light);
+  opacity: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: ${(prop) =>
+    prop.size ? prop.size : prop.height ? prop.height : "300px"};
+  width: ${(prop) =>
+    prop.size ? prop.size : prop.width ? prop.width : "300px"};
   border-radius: 5px;
-  font-size: 1rem;
+
+  .no-post {
+    color: var(--light);
+    font-size: 1rem;
+  }
+`
+
+const SubmitButton = styled(Input)`
+  background-color: var(--secondary);
+  color: var(--light);
   font-weight: 600;
+
   cursor: pointer;
-  transition: 100ms ease-in-out;
 
   &:hover {
-    background-color: var(--secondary);
-    color: var(--light);
-  }
-
-  @media ${device.tablet} {
-    margin: 0;
-    width: 150px;
+    background-color: var(--secondary-dark);
   }
 `
 
+const PasswordInputContainer = styled.div`
+  display: flex;
+  background-color: #fff;
+  border-radius: 5px;
 
-const WatermarkImage = styled.img`
-  height: 37px;
-  width: 37px;
-  border-radius: 0px;
-  padding: px;
-  margin-right: 3px;
+  .icon-container {
+    padding: 0.4rem;
+    cursor: pointer;
+
+    color: var(--grey-dark);
+
+    &:hover {
+      color: var(--dark);
+    }
+  }
 `
 
-
-
-export default EditProfileScreen;
+const ImageInputContainer = styled.div`
+  p {
+    font-size: 0.8rem;
+  }
+`
+export default EditProfileScreen
