@@ -6,6 +6,8 @@ import device from "../screen_sizes/devices"
 import { Input } from "../components/styled-components/Input"
 import GameInfo from "../components/GameInfo"
 import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { Link, useParams } from "react-router-dom"
 
 const CollabScreen = () => {
   const navigate = useNavigate()
@@ -57,6 +59,11 @@ const CollabScreen = () => {
         <Button className="join-room" onClick={joinRoomHandler}>
           Join Room
         </Button>
+
+        <Link className="link" to="/edit-art">
+            <Button>Edit Art Profile</Button>
+          </Link>
+          
       </Form>
     </Container>
   )
@@ -128,6 +135,17 @@ const Button = styled.p`
     background-color: var(--primary-dark);
     border: 2px solid var(--primary-dark);
     color: var(--secondary);
+  }
+
+  &.edit-art {
+    margin-top: 0.5rem;
+    background-color: transparent;
+    color: var(--primary-dark);
+    border: 2px solid var(--primary-dark);
+  }
+
+  &.edit-art:hover {
+    color: var(--light);
   }
 `
 export default CollabScreen
