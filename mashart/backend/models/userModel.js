@@ -21,7 +21,6 @@ const userSchema = mongoose.Schema(
     posts: [
       {
         id: {
-          //current users saved posts
           type: mongoose.Schema.Types.ObjectId,
           ref: "Post",
           required: true,

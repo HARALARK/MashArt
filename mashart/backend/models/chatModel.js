@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const conversationSchema = mongoose.Schema({
+const chatSchema = mongoose.Schema({
     adminId: {
         type: mongoose.Types.ObjectId, 
         ref: 'User',
@@ -12,10 +12,10 @@ const conversationSchema = mongoose.Schema({
     }],  //users in chat
     chatMessages: [{ 
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Chat' 
+        ref: 'Chats' 
     }],
 })
 
-const Conversation = mongoose.model('Conversation', conversationSchema)
+const Chat = mongoose.model('Chat', chatSchema)
 
-export default Conversation
+export default Chat
