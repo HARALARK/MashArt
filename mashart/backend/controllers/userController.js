@@ -1,8 +1,12 @@
 import asyncHandler from "express-async-handler"
 import jwt from "jsonwebtoken"
+import fs from "fs"
+import { promisify } from "util"
 import generateToken from "../utils/generateToken.js"
 import User from "../models/userModel.js"
 import { getTransporter } from "../utils/emailSetup.js"
+
+const unlinkAsync = promisify(fs.unlink)
 
 // @desc user auth & get token
 // @route POST /api/user/login
@@ -118,7 +122,16 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 
   if (user) {
     user.username = username || user.username
-    user.profileImage = path || user.profileImage
+
+    if (path) {
+      console.log(path)
+
+      if (user.profileImage) {
+        console.log(user.profileImage)
+        await unlinkAsync(user.profileImage)
+      }
+      user.profileImage = path
+    }
 
     if (password) {
       user.password = password
