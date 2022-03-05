@@ -127,7 +127,6 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
       console.log(path)
 
       if (user.profileImage) {
-        console.log(user.profileImage)
         await unlinkAsync(user.profileImage)
       }
       user.profileImage = path
