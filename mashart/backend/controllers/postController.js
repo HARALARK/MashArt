@@ -1,7 +1,12 @@
 import asyncHandler from "express-async-handler"
-
+import fs from "fs"
+import { promisify } from "util"
 import User from "../models/userModel.js"
 import Post from "../models/postModel.js"
+import { storage } from "../config/firebase.js"
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
+
+const unlinkAsync = promisify(fs.unlink)
 
 /**
  * Post
@@ -24,7 +29,10 @@ import Post from "../models/postModel.js"
 // @route POST /api/post/create
 // @access Private
 export const createPost = asyncHandler(async (req, res) => {
-  const { path } = req.file
+  const { buffer } = req.file
+
+  const extension = req.file.originalname.split(".").pop()
+
   const { collaborators = "", title, subtitle, description, tags } = req.body
 
   const collaboratorsArray = collaborators.split(",")
@@ -45,7 +53,6 @@ export const createPost = asyncHandler(async (req, res) => {
     const users = [user._id, ...collaboratorsArray]
 
     const post = await Post.create({
-      path,
       users,
       title,
       subtitle,
@@ -53,19 +60,38 @@ export const createPost = asyncHandler(async (req, res) => {
       tags: tags.split(",").map((tag) => tag.trim()),
     })
 
-    await user.updateOne({
-      $push: { posts: { id: post._id, path } },
-    })
+    const storageRef = ref(storage, `posts/${post._id}.${extension}`)
+    const uploadTask = uploadBytesResumable(storageRef, buffer)
 
-    res.json({
-      _id: post._id,
-      path: post.path,
-      users: post.users,
-      title: post.title,
-      subtitle: post.subtitle,
-      description: post.description,
-      tags: post.tags,
-    })
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {},
+      (error) => {
+        throw new Error(error)
+      },
+      async () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+          post.path = downloadURL
+
+          await post.save()
+
+          await user.updateOne({
+            $push: { posts: { id: post._id, path: downloadURL } },
+          })
+
+          res.json({
+            _id: post._id,
+            path: post.path,
+            users: post.users,
+            title: post.title,
+            subtitle: post.subtitle,
+            description: post.description,
+            tags: post.tags,
+          })
+        })
+      }
+    )
   } else {
     res.status(404)
     throw new Error("User not found")
