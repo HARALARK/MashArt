@@ -4,7 +4,6 @@ const postSchema = mongoose.Schema(
   {
     path: {
       type: String,
-      required: true,
       unique: true,
     },
     users: {
