@@ -5,6 +5,8 @@ import { promisify } from "util"
 import generateToken from "../utils/generateToken.js"
 import User from "../models/userModel.js"
 import { getTransporter } from "../utils/emailSetup.js"
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
+import { storage } from "../config/firebase.js"
 
 const unlinkAsync = promisify(fs.unlink)
 
@@ -115,7 +117,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 // @route PUT /api/user/profile
 // @access Private
 export const updateUserProfile = asyncHandler(async (req, res) => {
-  const path = req.file ? req.file.path : null
+  const buffer = req.file ? req.file.buffer : null
   const { username, password } = req.body
 
   const user = await User.findById(req.user._id)
@@ -123,28 +125,53 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
   if (user) {
     user.username = username || user.username
 
-    if (path) {
-      console.log(path)
+    if (buffer) {
+      const extension = req.file.originalname.split(".").pop()
 
-      if (user.profileImage) {
-        await unlinkAsync(user.profileImage)
+      const storageRef = ref(storage, `profile/${user._id}.${extension}`)
+      const uploadTask = uploadBytesResumable(storageRef, buffer)
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          throw new Error(error)
+        },
+        async () => {
+          // Upload completed successfully, now we can get the download URL
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
+          user.profileImage = downloadURL
+
+          if (password) {
+            user.password = password
+          }
+
+          const updatedUser = await user.save()
+
+          res.json({
+            _id: updatedUser._id,
+            username: updatedUser.username,
+            email: user.email,
+            profileImage: updatedUser.profileImage,
+            token: generateToken(updatedUser._id),
+          })
+        }
+      )
+    } else {
+      if (password) {
+        user.password = password
       }
-      user.profileImage = path
+
+      const updatedUser = await user.save()
+
+      res.json({
+        _id: updatedUser._id,
+        username: updatedUser.username,
+        email: user.email,
+        profileImage: updatedUser.profileImage,
+        token: generateToken(updatedUser._id),
+      })
     }
-
-    if (password) {
-      user.password = password
-    }
-
-    const updatedUser = await user.save()
-
-    res.json({
-      _id: updatedUser._id,
-      username: updatedUser.username,
-      email: user.email,
-      profileImage: updatedUser.profileImage,
-      token: generateToken(updatedUser._id),
-    })
   } else {
     res.status(404)
     throw new Error("User not found")
