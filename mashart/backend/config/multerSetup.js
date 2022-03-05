@@ -1,7 +1,7 @@
 import multer from "multer"
 import path from "path"
 
-const imageStorage = multer.diskStorage({
+const imageStorage = multer.memoryStorage({
   destination: "backend/uploads",
   filename: (req, file, cb) => {
     cb(
