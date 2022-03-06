@@ -9,10 +9,7 @@ const commentSchema = mongoose.Schema({
         required: true,
         maxLength: 500
     },
-    likes: {
-        types: Number,
-        default: 0
-    },
+    likes: [{type: mongoose.Types.ObjectId, ref: 'User'}],
     reportCount: {
         type: Number,
         default: 0
