@@ -1,12 +1,8 @@
 import asyncHandler from "express-async-handler"
-import fs from "fs"
-import { promisify } from "util"
 import User from "../models/userModel.js"
 import Post from "../models/postModel.js"
 import { storage } from "../config/firebase.js"
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
-
-const unlinkAsync = promisify(fs.unlink)
 
 /**
  * Post

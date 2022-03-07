@@ -30,13 +30,7 @@ const ProfileScreen = () => {
       } else if (id && (id !== user._id || !user.username)) {
         dispatch(getUserDetails(`profile?_id=${id}`))
       } else if (id === undefined) {
-        const localUserInfo = JSON.parse(localStorage.getItem("userInfo"))
-        if (
-          !user.username ||
-          user._id !== userInfo._id ||
-          localUserInfo.profileImage !== user.profileImage ||
-          localUserInfo.username !== user.username
-        ) {
+        if (!user.username || user._id !== userInfo._id) {
           dispatch(getUserDetails("profile"))
         }
       }
@@ -63,8 +57,8 @@ const ProfileScreen = () => {
           </MiscHolder>
           <ProfileHolder>
             <ProfileImageHolder>
-              {user.profileImage ? (
-                <ProfileImage src={user.profileImage} alt="profile" />
+              {user.profileImage && user.profileImage.imageSrc ? (
+                <ProfileImage src={user.profileImage.imageSrc} alt="profile" />
               ) : (
                 <FontAwesomeIcon icon={faUser} size="3x" />
               )}
