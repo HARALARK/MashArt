@@ -1,14 +1,15 @@
 import asyncHandler from "express-async-handler"
 import jwt from "jsonwebtoken"
-import fs from "fs"
-import { promisify } from "util"
 import generateToken from "../utils/generateToken.js"
 import User from "../models/userModel.js"
 import { getTransporter } from "../utils/emailSetup.js"
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
+import {
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+  deleteObject,
+} from "firebase/storage"
 import { storage } from "../config/firebase.js"
-
-const unlinkAsync = promisify(fs.unlink)
 
 // @desc user auth & get token
 // @route POST /api/user/login
@@ -140,7 +141,25 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
         async () => {
           // Upload completed successfully, now we can get the download URL
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
-          user.profileImage = downloadURL
+
+          if (
+            user.profileImage &&
+            user.profileImage.ref &&
+            user.profileImage.imageSrc
+          ) {
+            // Create a reference to the file to delete
+            const oldProfileRef = ref(storage, user.profileImage.ref)
+
+            // Delete the file
+            deleteObject(oldProfileRef).catch((error) => {
+              throw new Error(error)
+            })
+          }
+
+          user.profileImage = {
+            ref: storageRef.fullPath,
+            imageSrc: downloadURL,
+          }
 
           if (password) {
             user.password = password
