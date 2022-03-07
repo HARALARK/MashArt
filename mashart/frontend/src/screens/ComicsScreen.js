@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { Link, useParams } from "react-router-dom"
 
-const CollabScreen = () => {
+const ComicsScreen = () => {
   const navigate = useNavigate()
   const [roomCode, setRoomCode] = useState("")
 
@@ -61,9 +61,8 @@ const CollabScreen = () => {
         </Button>
 
         <Link className="link" to="/edit-art">
-            <Button>Edit Art Profile</Button>
-          </Link>
-          
+          <Button>Edit Art Profile</Button>
+        </Link>
       </Form>
     </Container>
   )
@@ -91,8 +90,6 @@ const Container = styled.div`
     justify-content: space-between;
     padding: 0 2rem;
   }
-
-  
 `
 
 const Form = styled.form`
@@ -148,4 +145,4 @@ const Button = styled.p`
     color: var(--light);
   }
 `
-export default CollabScreen
+export default ComicsScreen

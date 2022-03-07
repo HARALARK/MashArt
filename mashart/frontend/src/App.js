@@ -17,6 +17,7 @@ import PageNotFoundScreen from "./screens/PageNotFoundScreen"
 import SearchScreen from "./screens/SearchScreen"
 import PostScreen from "./screens/PostScreen"
 import EditArtScreen from "./screens/EditArtScreen"
+import ComicsScreen from "./screens/ComicsScreen"
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
               <Route path="/edit-art" element={<EditArtScreen />} />
               <Route path="/post/create" element={<PostScreen />} />
               <Route path="/search" element={<SearchScreen />} />
+              <Route path="/comics" element={<ComicsScreen />} />
               <Route path="*" element={<PageNotFoundScreen />} />
             </Routes>
           </ScreensContainer>
