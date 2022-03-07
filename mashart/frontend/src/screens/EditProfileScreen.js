@@ -6,7 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { updateUserProfile } from "../actions/userActions"
+import {
+  resetUserDetails,
+  resetUserProfile,
+  updateUserProfile,
+} from "../actions/userActions"
 import Message from "../components/styled-components/Message"
 
 const EditProfileScreen = () => {
@@ -29,7 +33,11 @@ const EditProfileScreen = () => {
     if (!userInfo) {
       navigate("/")
     }
-  }, [userInfo, navigate])
+    if (userLogin) {
+      dispatch(resetUserDetails())
+      dispatch(resetUserProfile())
+    }
+  }, [userInfo, navigate, userLogin, dispatch])
 
   const onImageChange = (e, type) => {
     if (e.target.files && e.target.files[0]) {

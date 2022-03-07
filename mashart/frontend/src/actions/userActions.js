@@ -20,6 +20,7 @@ import {
   USER_REGISTER_FAIL,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
+  USER_RESET_PROFILE,
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
@@ -150,6 +151,12 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
   }
 }
 
+export const resetUserDetails = () => (dispatch) => {
+  dispatch({
+    type: USER_DETAILS_RESET,
+  })
+}
+
 export const updateUserProfile = (user) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -184,6 +191,12 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
           : error.message,
     })
   }
+}
+
+export const resetUserProfile = () => (dispatch) => {
+  dispatch({
+    type: USER_RESET_PROFILE,
+  })
 }
 
 export const forgotPassword = (email) => async (dispatch) => {
