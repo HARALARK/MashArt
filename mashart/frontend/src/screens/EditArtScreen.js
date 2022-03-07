@@ -31,12 +31,16 @@ const EditArtScreen = () => {
                         <img className= "collaborator" src="/images/logo/logo.png" alt="collaborator3" />
                         </CollaboratorContainer>
                         
+                        
                     </Header>
-
-                    <p className = "upload"> Upload Artwork </p>
-                    <Button className="uploadart"> Upload </Button>
-                    <Container2>
-                      <ImageContainer>
+                    
+                    <UploadContainer>
+                      <p className = "upload"> Upload Artwork </p>
+                      <Button className="uploadart"> Upload </Button>
+                    </UploadContainer>
+                    
+                    <ImgDescContainer>
+                      <ImgContainer>
                         {image ? (
                           <img className="post" src={image} alt="post" />
                         ) : (
@@ -44,33 +48,34 @@ const EditArtScreen = () => {
                             <p className="no-post">No Image</p>
                           </ImagePlaceHolder>
                         )}
-                      </ImageContainer>
+                      </ImgContainer>
 
                       <DescContainer>
-                        {/* Was thinking about putting this as a textarea for multi-line input
-                        but I think its just a placeholder for now? */}
-                        <DescInput
-                                    type="text"
-                                    placeholder="Enter text"
-                                    required
-                        />
+                      <TextArea
+                        rows="3"
+                        name="text"
+                        placeholder="Description"
+                      ></TextArea>
                       </DescContainer>
 
-                    </Container2>
+                    </ImgDescContainer>
                     
-                    
-                    <Filters> 
-                        <img className= "filter" src="/images/logo/logo.png" alt="filter1" />
-                        <img className= "filter" src="/images/logo/logo.png" alt="filter2" />
-                        <img className= "filter" src="/images/logo/logo.png" alt="filter3" />
-                        <img className= "filter" src="/images/logo/logo.png" alt="filter4" />
-                        <img className= "filter" src="/images/logo/logo.png" alt="filter5" />
-                    </Filters>
+                    <FilterContainer>
+                      <Filters> 
+                          <img className= "filter" src="/images/logo/logo.png" alt="filter1" />
+                          <img className= "filter" src="/images/logo/logo.png" alt="filter2" />
+                          <img className= "filter" src="/images/logo/logo.png" alt="filter3" />
+                          <img className= "filter" src="/images/logo/logo.png" alt="filter4" />
+                          <img className= "filter" src="/images/logo/logo.png" alt="filter5" />
+                      </Filters>
 
+                      
+                    </FilterContainer>
+                    
                     <Button className="leaveroom" >
-                    Leave Room   
-                    <FontAwesomeIcon icon={faDoorOpen} size ='m' style={{ color: 'white' }}/> 
-                    </Button>
+                      Leave Room   
+                      <FontAwesomeIcon icon={faDoorOpen} size ='m' style={{ color: 'white' }}/> 
+                      </Button>           
               </Form>
           </Container>
       
@@ -79,14 +84,31 @@ const EditArtScreen = () => {
 
 
 
+const CollaboratorContainer = styled.section`
+  display: flex;
+  gap: 1rem;
+  
+  .collaborator{
+    height: 50px;
+    width: 50px;
+    background-color: white;
+    border-radius: 10px;
+  }
+
+  @media ${device.tablet} {
+    justify-content: space-between;
+    flex-direction: row;
+    
+  }
+`
 
 const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  flex-wrap: wrap;
+  overflow: scroll;
   width: 100%;
-
   .heading {
     color: var(--light);
     font-size: 2rem;
@@ -102,49 +124,97 @@ const Container = styled.div`
     height: calc(100vh - 160px);
     flex-direction: row;
     justify-content: space-between;
+    overflow: visible;
     padding: 0 2rem;
    
 `
 
-const Container2 = styled.div`
+const DescContainer = styled.section`
+    height: 100%;
+    width: 100%;
+
+    @media ${device.tablet} {
+      height: 100%;
+      width: 50%;
+      padding: 0rem 1rem 0rem 1rem;
+    }
+`
+const FilterContainer = styled.section`
+    height: 30%;
+    width: 100%;
+    padding: 1rem 0rem 2rem 0rem;
+    gap: 1rem;
+    @media ${device.tablet} {
+      width: 100%;
+      padding: 1rem 1rem 0rem 1rem;
+    }
+`
+const ImgDescContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
   
+  flex-direction: column;
+  align-content: space-evenly;
+  align-items: center;
+  gap: 1rem; 
 
   @media ${device.tablet} {
     height: calc(100vh - 160px);
     flex-direction: row;
     justify-content: space-between;
-    
+    gap: 0rem;
+  }
    
 `
 
-
-const Form = styled.form`
-  background-color: #0077b6;
-  padding: 1rem 2rem 1rem;
-  border-radius: 5px;
-  width: 100%;
-  height: 95%;
+const ImgContainer = styled.div`
+ 
   display: flex;
-  flex-direction: column;
-  gap: 2 rem;
-  color: black;
-  
-  .upload {
-    font-size: 1rem;
-    font-weight: 600;
-     
-  }
-  .description {
-    color: black;
-    font-size: 1rem;
-    font-weight: 600;
-    
+  width: 100%;
+  height: 300px;
+
+  .post {
+    height: 300px;
+    width: 300px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
   }
 
+  @media ${device.tablet} {
+    height: 100%;
+    width: 50%;
+  }
+`
+const RoomContainer = styled.section`
+    display: flex;
+    align-content: center;
+    gap: 1rem;
+
+    .profilePicture {
+      height: 50px;
+      width: 50px;
+      background-color: #ffe6aa;
+      border-radius: 10px;
+    }
+    .username {
+      font-size: 30px;
+      
+    }
+    .roomno {
+      font-size: 20px;
+    }
+`
+
+const UploadContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1rem;
+
+  @media ${device.tablet} {
+    padding: 0.5rem;
+  }
 `
 
 const Button = styled.p`
@@ -159,7 +229,7 @@ const Button = styled.p`
   transition: 100ms ease-in-out;
  
   &.leaveroom {
-    align-self: flex-end;
+    align-self: start;
     background-color: var(--secondary);
 
     &:hover {
@@ -180,21 +250,76 @@ const Button = styled.p`
   @media ${device.tablet} {
     margin: 0;
     width: 20%;
+
+    &.leaveroom {
+      align-self: flex-end;
+      background-color: var(--secondary);
+  
+      &:hover {
+        background-color: #8b0000;
+        color: var(--light);
+      }
+    }
   }
 `
+const Form = styled.form`
+  
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
 
+  background-color: #0077b6;
+  padding: 1rem 2rem 1rem;
+  border-radius: 5px;
+  width: 100%;
+  height: 95%;
+  gap: 2 rem;
+  color: black;
+  
+  .upload {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+  }
+  .description {
+    color: black;
+    font-size: 1rem;
+    font-weight: 600;
+    
+  }
+  
+`
+const Filters = styled.section`
+    display: flex;
+    background-color: var(--secondary);
+    
+    align-items: center;
+    padding: 1rem 1rem 1rem 2rem;
 
-const WatermarkImage = styled.img`
-  height: 37px;
-  width: 37px;
-  border-radius: 0px;
-  padding: px;
-  margin-right: 3px;
+    border-radius: 20px;
+    font-size: 30px;
+    gap: 1rem;
+
+    .filter{
+        height: 50px;
+        width: 50px;
+        background-color: white;
+        border-radius: 10px;
+    }
+
+    @media ${device.tablet} {
+      flex-wrap: nowrap;
+      width: 50%;
+    }
+    
 `
 
 const Header = styled.section`
     background-color: var(--secondary);
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: space-around;
     padding: 10px;
     
     border-radius: 20px;
@@ -209,82 +334,8 @@ const Header = styled.section`
    
 `
 
-const RoomContainer = styled.section`
-    display: flex;
-    align-content: center;
-    gap: 1rem;
-    .profilePicture {
-      height: 50px;
-      width: 50px;
-      background-color: #ffe6aa;
-      border-radius: 10px;
-    }
-    .username {
-      font-size: 30px;
-      
-    }
-    .roomno {
-      font-size: 20px;
-    }
-`
-const CollaboratorContainer = styled.section`
-    display: flex;
-    gap: 1rem;
-    .collaborator{
-      height: 50px;
-      width: 50px;
-      background-color: white;
-      border-radius: 10px;
-    }
-
-    @media ${device.tablet} {
-      justify-content: space-between;
-      flex-direction: row;
-    }
-`
-const DescContainer = styled.section`
-    height: 80%;
-    width: 50%;
-    padding: 0rem 1rem 0rem 1rem;
-`
-
-const Filters = styled.section`
-    display: flex;
-    background-color: var(--secondary);
-    
-    align-items: center;
-    padding: 1rem 1rem 1rem 2rem;
-
-    width: 50%;
-    border-radius: 20px;
-    font-size: 30px;
-    gap: 1rem;
-
-    .filter{
-        height: 50px;
-        width: 50px;
-        background-color: white;
-        border-radius: 10px;
-    }
-    
-`   
-
-const ImageContainer = styled.div`
-  height: 80%;
-  width: 50%;
-  display: flex;
-  
-  outline: 1px dashed green;
-  .post {
-    height: 300px;
-    width: 300px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-`
-
 const ImagePlaceHolder = styled.div`
+  
   background-color: var(--grey-light);
   opacity: 50%;
   display: flex;
@@ -298,5 +349,21 @@ const ImagePlaceHolder = styled.div`
     color: var(--dark);
     font-size: 1.5rem;
   }
+
+  @media ${device.tablet} {
+    width: 100%;
+    height: 100%;
+  }
+`
+
+const TextArea = styled.textarea`
+  font-family: "Poppins";
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 5px;
+  padding: 1rem;
+  outline: none;
+  width: 100%;
+  height: 100%;
 `
 export default EditArtScreen;
