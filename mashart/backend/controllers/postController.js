@@ -31,7 +31,8 @@ export const createPost = asyncHandler(async (req, res) => {
 
   const { collaborators = "", title, subtitle, description, tags } = req.body
 
-  const collaboratorsArray = collaborators.split(",")
+  const collaboratorsArray =
+    collaborators.trim().length === 0 ? [] : collaborators.split(",")
 
   const user = await User.findById(req.user._id)
 
@@ -100,16 +101,30 @@ export const createPost = asyncHandler(async (req, res) => {
 export const getPosts = asyncHandler(async (req, res) => {
   const latestPosts = await Post.find().sort({ updatedAt: -1 })
 
-  const posts = latestPosts.map((post) => ({
-    _id: post._id,
-    path: post.path,
-    users: post.users,
-    title: post.title,
-    subtitle: post.subtitle,
-    description: post.description,
-    tags: post.tags,
-    time: post.updatedAt,
-  }))
+  const posts = await Promise.all(
+    latestPosts.map(async (post) => {
+      const users = await Promise.all(
+        post.users.map(async (id) => {
+          const user = await User.findById(id)
+          return {
+            id,
+            profileImage: user.profileImage.imageSrc,
+          }
+        })
+      )
+
+      return {
+        _id: post._id,
+        path: post.path,
+        users,
+        title: post.title,
+        subtitle: post.subtitle,
+        description: post.description,
+        tags: post.tags,
+        time: post.updatedAt,
+      }
+    })
+  )
 
   res.json({
     posts,

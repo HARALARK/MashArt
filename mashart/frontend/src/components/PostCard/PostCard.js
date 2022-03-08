@@ -14,21 +14,21 @@ const PostCard = ({ post }) => {
   return (
     <Container>
       <PostCollaborators>
-        <CollabUser
-          className="collab1"
-          src="/images/logo/logo.png"
-          alt="collab1"
-        />
-        <CollabUser
-          className="collab2"
-          src="/images/logo/logo.png"
-          alt="collab2"
-        />
-        <CollabUser
-          className="collab3"
-          src="/images/logo/logo.png"
-          alt="collab3"
-        />
+        {users ? (
+          users.map((user) =>
+            user.profileImage ? (
+              <CollabUser key={user.id} src={user.profileImage} alt="profile" />
+            ) : (
+              <CollabUser
+                key={user.id}
+                src="/images/logo/logo.png"
+                alt="profile"
+              />
+            )
+          )
+        ) : (
+          <CollabUser src="/images/logo/logo.png" alt="profile" />
+        )}
       </PostCollaborators>
 
       <PostPictureContainer>
@@ -78,11 +78,12 @@ const PostCollaborators = styled.div`
 `
 
 const CollabUser = styled.img`
-  height: 25px;
-  width: 25px;
+  height: 30px;
+  width: 30px;
   background-color: var(--light);
   border-radius: 50%;
-  padding: 5px;
+  font-size: 0.4rem;
+  text-align: center;
 `
 
 const PostPictureContainer = styled.div`
