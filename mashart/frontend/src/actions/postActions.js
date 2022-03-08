@@ -5,6 +5,7 @@ import {
   CREATE_POST_SUCCESS,
   GET_POSTS_FAIL,
   GET_POSTS_REQUEST,
+  GET_POSTS_RESET,
   GET_POSTS_SUCCESS,
   POST_RESET,
 } from "../constants/postContants"
@@ -46,6 +47,9 @@ export const createPost = (post) => async (dispatch, getState) => {
 export const createPostReset = () => async (dispatch) => {
   dispatch({
     type: POST_RESET,
+  })
+  dispatch({
+    type: GET_POSTS_RESET,
   })
 }
 

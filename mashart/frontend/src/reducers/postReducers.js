@@ -4,6 +4,7 @@ import {
   CREATE_POST_SUCCESS,
   GET_POSTS_FAIL,
   GET_POSTS_REQUEST,
+  GET_POSTS_RESET,
   GET_POSTS_SUCCESS,
   POST_RESET,
 } from "../constants/postContants"
@@ -31,6 +32,8 @@ export const getPostsReducer = (state = {}, action) => {
       return { loading: false, posts: action.payload }
     case GET_POSTS_FAIL:
       return { loading: false, error: action.payload }
+    case GET_POSTS_RESET:
+      return {}
     default:
       return state
   }
