@@ -2,12 +2,16 @@ import mongoose from 'mongoose'
 
 const commentSchema = mongoose.Schema({
     userId: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+        type: mongoose.Schema.Types.ObjectId, ref: 'User',
+        required: true
     },
     text: {
         type: String,
         required: true,
         maxLength: 500
+    },
+    postId:{
+        type: mongoose.Types.ObjectId, ref: 'Post'
     },
     likes: [{type: mongoose.Types.ObjectId, ref: 'User'}],
     reportCount: {

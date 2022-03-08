@@ -19,8 +19,9 @@ export const createComment = asyncHandler(async (req, res) => {
         if(!user) return res.status(400).json({msg: "User not found."})
 
         const comment = await Comment.create({
-            user,
-            text
+            userId: req.user._id,
+            text,
+            postId
         })
 
         await post.updateOne({
@@ -41,7 +42,7 @@ export const likeComment = asyncHandler(async (req, res) => {
     try {
         const comment = await Comment.findById(req.params.id)
 
-        if (comment.comments.includes(req.user._id)){
+        if (comment.likes.includes(req.user._id)){
             await comment.updateOne({ 
                 $pull: { likes: req.user._id } 
             });
@@ -64,10 +65,11 @@ export const likeComment = asyncHandler(async (req, res) => {
 // @access Private
 export const deleteComment = asyncHandler(async (req, res) => {
     try {
-        const postId = req.body
-        const post = await Post.findById(postId)
         const comment = await Comment.findById(req.params.id);
-        if (comment.userId === req.user._id) {
+        const postId = comment.postId
+        const post = await Post.findById(postId)
+
+        if ((comment.userId).equals(req.user._id)) {
             await post.updateOne({
                 $pull: {comments: comment._id}
             })

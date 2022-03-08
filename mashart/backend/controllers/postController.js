@@ -148,3 +148,64 @@ export const updatePost = asyncHandler(async (req, res) => {
     throw new Error("Post not found")
   }
 })
+
+// @desc like/unlike a post
+// @route PUT /api/post/:id
+// @access Private
+
+export const likePost = asyncHandler(async (req, res) => {
+
+  try {
+      const post = await Post.findById(req.params.id)
+
+      if (post.likes.includes(req.user._id)){
+          await post.updateOne({ 
+              $pull: { likes: req.user._id } 
+          });
+          res.status(200).json("Unliked Post"); 
+      }
+      else{
+          await post.updateOne({ 
+              $push: { likes: req.user._id } 
+          });
+          res.status(200).json("Liked Comment!");
+      }
+  } catch (err) {
+      return res.status(500).json(err)
+  }
+  
+})
+
+
+// @desc report a post
+// @route PUT /api/post/:id/report
+// @access Private
+
+export const reportPost = asyncHandler(async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id)
+    await post.updateOne({ 
+      $set: { reportCount: reportCount + 1 } 
+    });
+  } catch (err) {
+      return res.status(500).json(err)
+  }
+})
+
+// @desc flag a post
+// @route PUT /api/post/:id
+// @access Private
+export const flagPost = asyncHandler(async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id)
+    const user = await User.findById(req.user._id)
+    if (user.role === "moderator" || user.role === "admin"){
+      await post.updateOne({ 
+        $set: { isFlagged: true } 
+      });
+    }
+   
+  } catch (err) {
+      return res.status(500).json(err)
+  }
+})
