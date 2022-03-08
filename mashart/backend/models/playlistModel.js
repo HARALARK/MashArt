@@ -11,13 +11,7 @@ const playlistSchema = mongoose.Schema({
     },
     content: [{ 
         type: mongoose.Schema.Types.ObjectId, 
-        refPath: 'contentModelType' 
     }],
-    contentModelType: {
-        type: String,
-        required: true,
-        enum: ['Comic', 'Post']  //content can either be a comic or an art post
-    },
     tags: [String]
 })
 
