@@ -98,7 +98,7 @@ export const createPost = asyncHandler(async (req, res) => {
 // @route get /api/post/
 // @access Private
 export const getPosts = asyncHandler(async (req, res) => {
-  const latestPosts = await Post.find().sort({ updatedAt: -1 }).limit(10)
+  const latestPosts = await Post.find().sort({ updatedAt: -1 })
 
   const posts = latestPosts.map((post) => ({
     _id: post._id,
