@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import styled from "styled-components"
-import Message from "../components/styled-components/Message"
-import device from "../screen_sizes/devices"
+
 import { Input } from "../components/styled-components/Input"
-import GameInfo from "../components/GameInfo"
+
 import { useNavigate } from "react-router-dom"
-import { useDispatch } from "react-redux"
-import { Link, useParams } from "react-router-dom"
+
 
 const ComicsScreen = () => {
   const navigate = useNavigate()
