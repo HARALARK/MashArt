@@ -8,7 +8,7 @@ import {
   GET_POSTS_RESET,
   GET_POSTS_SUCCESS,
   POST_RESET,
-} from "../constants/postContants"
+} from "../constants/postConstants"
 
 export const createPost = (post) => async (dispatch, getState) => {
   try {
