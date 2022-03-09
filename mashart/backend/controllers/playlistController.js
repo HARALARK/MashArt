@@ -11,7 +11,6 @@ export const createPlaylist = asyncHandler(async (req, res) => {
   try{
     //const userId = req.user._id
     const { posts , visibility, tags} = req.body
-  
     const postsArray = posts.split(",").map((post) => post.trim())
     // validating all posts 
     if (postsArray.length > 0 /*&& collaboratorsArray[0].trim().length > 0*/) {
@@ -268,7 +267,7 @@ export const rmTags = asyncHandler(async (req, res) => {
 })
 
 
-// @desc Remove tags from playlist
+// @desc Delete a user's playlist
 // @route PUT /api/playlist/:id/tags/delete
 // @access Private
 export const deletePlaylist = asyncHandler(async (req, res) => {
@@ -297,6 +296,39 @@ export const deletePlaylist = asyncHandler(async (req, res) => {
   }
   catch(err){
     res.status(500).json(err);
+  }
+})
+
+
+
+// @desc get a playlist
+// @route get /api/playlist/:id
+// @access Private
+export const getPlaylist = asyncHandler(async (req, res) => {
+  try{
+    const playlist = await Post.findById(req.params.id)
+    
+    if (!playlist) {
+      res.status(404)
+      throw new Error("Playlist not found")
+    }
+
+    if(playlist.userId.equals(req.user._id)){
+      res.json({
+        playlist
+      })
+    }
+    else{
+      if(playlist.visibility.equals(true)){
+        res.json({playlist})
+      }
+      else{
+        res.status(403).json("Invalid Request")
+      }
+    }
+  }
+  catch(err){
+    res.status(500).json(err)
   }
 })
 
