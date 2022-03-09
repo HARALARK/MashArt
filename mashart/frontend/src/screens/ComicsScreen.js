@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import styled from "styled-components"
-import Message from "../components/styled-components/Message"
-import device from "../screen_sizes/devices"
+
 import { Input } from "../components/styled-components/Input"
-import GameInfo from "../components/GameInfo"
+
 import { useNavigate } from "react-router-dom"
-import { useDispatch } from "react-redux"
-import { Link, useParams } from "react-router-dom"
+
 
 const ComicsScreen = () => {
   const navigate = useNavigate()
@@ -38,32 +36,37 @@ const ComicsScreen = () => {
     }
   }, [userInfo, navigate])
 
+
   return (
     <Container>
-      <GameInfo />
-      <Form>
-        <p className="heading">Collaborate!</p>
-        {loading && <Message>Loading...</Message>}
-        {error && <Message variant="error">{error}</Message>}
+      <Heading>
+        <span className = "title"> Comic Collaborate</span>
+        <p className = "description"> Make your own, join or read comics you desire, anytime, anywhere.</p>
 
-        <Button className="create-room" onClick={createRoomHandler}>
-          Create Room
-        </Button>
-
+      </Heading>
+      <SearchBar>
         <Input
           type="text"
-          placeholder="Room Code"
-          onChange={(e) => setRoomCode(e.target.value)}
+          placeholder="Search Comics"
+          // value={searchText}
+          // onChange={searchHandler}
         />
-
-        <Button className="join-room" onClick={joinRoomHandler}>
-          Join Room
-        </Button>
-
-        <Link className="link" to="/edit-art">
-          <Button>Edit Art Profile</Button>
-        </Link>
-      </Form>
+        <OptionContainer>
+          <Button
+            // className={option === "people" && "active"}
+            // onClick={() => setOption("people")}
+          >
+            Trending
+          </Button>
+          <Button
+            // className={option === "tags" && "active"}
+            // onClick={() => setOption("tags")}
+          >
+            Your Comics
+          </Button>
+        </OptionContainer>
+      </SearchBar>
+      
     </Container>
   )
 }
@@ -72,7 +75,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  width: 100%;
+  width: 10%;
   padding: 1rem 2rem 100px;
 
   align-items: center;
@@ -83,14 +86,73 @@ const Container = styled.div`
     font-size: 2rem;
     text-align: center;
   }
-
-  @media ${device.tablet} {
-    height: calc(100vh - 160px);
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0 2rem;
-  }
 `
+const Heading = styled.section`
+  padding: 1rem 0 1rem;
+  height: 130px;
+  width: 2950%;
+  align-items: center;
+  margin-left: 820px;
+  //margin-right: 200px;
+  background-color: var(--secondary-dark);
+
+  .title{
+    color: var(--light);
+    font-size: 2rem;
+    text-align: center;
+    align-items: center;
+    margin-left: 230px;
+    font-weight: 700; 
+  }
+  .description{
+    color: var(--light);
+    margin-left: 100px;
+    margin-top: 10px;
+    
+
+  }
+  
+`
+const SearchBar = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 820px;
+  width: 2950%;
+  margin-top: -30px;
+  
+`
+
+const OptionContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  
+`
+const Button = styled.p`
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border: 3px solid var(--secondary);
+  color: white;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+  margin-top: -1px;
+  background-color: var(--secondary-dark);
+
+  &.active {
+    background-color: var(--secondary);
+    color: var(--light);
+  }
+
+  &:hover {
+    background-color: var(--secondary);
+    color: var(--light);
+  }
+
+  `
+
 
 const Form = styled.form`
   background-color: var(--secondary);
@@ -101,48 +163,5 @@ const Form = styled.form`
   width: 100%;
 `
 
-const Button = styled.p`
-  text-align: center;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 100ms ease-in-out;
 
-  &.create-room {
-    margin: 1rem 0 4rem;
-    background-color: var(--primary-dark);
-    color: var(--secondary);
-    border: 2px solid var(--primary-dark);
-  }
-
-  &.create-room:hover {
-    color: var(--light);
-  }
-
-  &.join-room {
-    margin-top: 0.5rem;
-    background-color: transparent;
-    color: var(--primary-dark);
-    border: 2px solid var(--primary-dark);
-  }
-
-  &.join-room:hover {
-    background-color: var(--primary-dark);
-    border: 2px solid var(--primary-dark);
-    color: var(--secondary);
-  }
-
-  &.edit-art {
-    margin-top: 0.5rem;
-    background-color: transparent;
-    color: var(--primary-dark);
-    border: 2px solid var(--primary-dark);
-  }
-
-  &.edit-art:hover {
-    color: var(--light);
-  }
-`
 export default ComicsScreen
