@@ -282,8 +282,6 @@ export const deletePlaylist = asyncHandler(async (req, res) => {
     if (!playlist){
       res.status(404).json("Playlist not found.");
     }
-
-   
     //check if playlist belongs to user then add each new post to the playlist
     if (req.user._id.equals(playlist.userId)){
         await user.updateOne({

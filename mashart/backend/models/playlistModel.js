@@ -12,7 +12,12 @@ const playlistSchema = mongoose.Schema({
     content: [{ 
         type: mongoose.Schema.Types.ObjectId, 
     }],
-    tags: [String]
+    tags: [String],
+    type: {
+        type: String,
+        default: "mixed",
+        enum: ["personal", "mixed"], 
+    },
 })
 
 const Playlist = mongoose.model('Playlist', playlistSchema)
