@@ -7,16 +7,18 @@ import { Input } from "../components/styled-components/Input"
 import GameInfo from "../components/GameInfo"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
-import { Link, useParams } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 const CollabScreen = () => {
   const navigate = useNavigate()
   const [roomCode, setRoomCode] = useState("")
+  const [message, setMessage] = useState("")
+  const [createRoomPopUp, setCreateRoomPopUp] = useState(false)
 
   const userLogin = useSelector((state) => state.userLogin)
   const { loading, userInfo, error } = userLogin
 
-  const createRoomHandler = () => {
+  const createRoomHandler = (type) => {
     /**
      * TODO: Complete functionality of Create Room
      * 1. dispatch request to create a Room
@@ -30,6 +32,10 @@ const CollabScreen = () => {
      * 1. dispatch request to check if room exists using the roomCode
      * 2. redirect the user to collab screen with room id
      */
+
+    if (roomCode.length !== 6 || roomCode.trim() === "") {
+      setMessage("Please enter a valid room code")
+    }
   }
 
   useEffect(() => {
@@ -40,13 +46,48 @@ const CollabScreen = () => {
 
   return (
     <Container>
+      <BackgroundBlock
+        hide={!createRoomPopUp}
+        onClick={() => {
+          setCreateRoomPopUp(false)
+        }}
+      >
+        <PopUpContainer>
+          <PopUp
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
+          >
+            <p className="heading">Select an option:</p>
+            <Button
+              className="primary"
+              width="100%"
+              onClick={createRoomHandler("blank")}
+            >
+              Blank Canvas
+            </Button>
+            <Button
+              className="variant"
+              width="100%"
+              onClick={createRoomHandler("post")}
+            >
+              Post
+            </Button>
+          </PopUp>
+        </PopUpContainer>
+      </BackgroundBlock>
       <GameInfo />
       <Form>
         <p className="heading">Collaborate!</p>
         {loading && <Message>Loading...</Message>}
         {error && <Message variant="error">{error}</Message>}
+        {message && <Message variant="warning">{message}</Message>}
 
-        <Button className="create-room" onClick={createRoomHandler}>
+        <Button
+          className="primary"
+          margin="1rem 0 4rem"
+          onClick={() => setCreateRoomPopUp(true)}
+        >
           Create Room
         </Button>
 
@@ -56,14 +97,13 @@ const CollabScreen = () => {
           onChange={(e) => setRoomCode(e.target.value)}
         />
 
-        <Button className="join-room" onClick={joinRoomHandler}>
+        <Button className="variant" onClick={joinRoomHandler}>
           Join Room
         </Button>
 
         <Link className="link" to="/edit-art">
-            <Button>Edit Art Profile</Button>
-          </Link>
-          
+          <Button>Edit Art Profile</Button>
+        </Link>
       </Form>
     </Container>
   )
@@ -91,8 +131,42 @@ const Container = styled.div`
     justify-content: space-between;
     padding: 0 2rem;
   }
+`
 
-  
+const BackgroundBlock = styled.div`
+  display: ${(props) => (props.hide ? "none" : "")};
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgb(77, 90, 135, 0.8);
+  width: 100%;
+  height: 100%;
+`
+
+const PopUpContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`
+
+const PopUp = styled.form`
+  background: var(--secondary-dark);
+  width: 300px;
+  height: 230px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 2rem 2rem;
+  flex-direction: column;
+  border-radius: 5px;
+
+  .heading {
+    text-align: left;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
 `
 
 const Form = styled.form`
@@ -113,25 +187,27 @@ const Button = styled.p`
   cursor: pointer;
   transition: 100ms ease-in-out;
 
-  &.create-room {
-    margin: 1rem 0 4rem;
+  width: ${(props) => (props.width ? props.width : "")};
+
+  &.primary {
+    margin: ${(props) => (props.margin ? props.margin : "")};
     background-color: var(--primary-dark);
     color: var(--secondary);
     border: 2px solid var(--primary-dark);
   }
 
-  &.create-room:hover {
+  &.primary:hover {
     color: var(--light);
   }
 
-  &.join-room {
+  &.variant {
     margin-top: 0.5rem;
     background-color: transparent;
     color: var(--primary-dark);
     border: 2px solid var(--primary-dark);
   }
 
-  &.join-room:hover {
+  &.variant:hover {
     background-color: var(--primary-dark);
     border: 2px solid var(--primary-dark);
     color: var(--secondary);
