@@ -18,6 +18,7 @@ import SearchScreen from "./screens/SearchScreen"
 import PostScreen from "./screens/PostScreen"
 import EditArtScreen from "./screens/EditArtScreen"
 import ComicsScreen from "./screens/ComicsScreen"
+import ActivityScreen from "./screens/ActivityScreen"
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
               <Route path="/post/create" element={<PostScreen />} />
               <Route path="/search" element={<SearchScreen />} />
               <Route path="/comics" element={<ComicsScreen />} />
+              <Route path="/activity" element={<ActivityScreen />} />
               <Route path="*" element={<PageNotFoundScreen />} />
             </Routes>
           </ScreensContainer>
