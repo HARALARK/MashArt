@@ -7,23 +7,34 @@ import { Input } from "../components/styled-components/Input"
 import GameInfo from "../components/GameInfo"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
-import { Link } from "react-router-dom"
+import { getUserPosts } from "../actions/userActions"
 
 const CollabScreen = () => {
   const navigate = useNavigate()
   const [roomCode, setRoomCode] = useState("")
   const [message, setMessage] = useState("")
   const [createRoomPopUp, setCreateRoomPopUp] = useState(false)
+  const [postsPopUp, setPostsPopUp] = useState(false)
+
+  const dispatch = useDispatch()
+
+  const userPosts = useSelector((state) => state.userPosts)
+  const { loading: postsLoading, posts, error: postsError } = userPosts
 
   const userLogin = useSelector((state) => state.userLogin)
   const { loading, userInfo, error } = userLogin
 
-  const createRoomHandler = (type) => {
+  const createRoomHandler = (type, path = null) => {
     /**
      * TODO: Complete functionality of Create Room
      * 1. dispatch request to create a Room
      * 2. redirect the user to collab screen with room id
      */
+    if (type === "blank") {
+      navigate("/collab/room")
+    } else if (type === "post") {
+      navigate("/collab/room", { state: { path } })
+    }
   }
 
   const joinRoomHandler = () => {
@@ -38,6 +49,11 @@ const CollabScreen = () => {
     }
   }
 
+  const postsHandler = () => {
+    setPostsPopUp(true)
+    dispatch(getUserPosts())
+  }
+
   useEffect(() => {
     if (!userInfo) {
       navigate("/")
@@ -50,10 +66,12 @@ const CollabScreen = () => {
         hide={!createRoomPopUp}
         onClick={() => {
           setCreateRoomPopUp(false)
+          setPostsPopUp(false)
         }}
       >
         <PopUpContainer>
           <PopUp
+            hide={postsPopUp}
             onClick={(e) => {
               e.stopPropagation()
             }}
@@ -62,20 +80,54 @@ const CollabScreen = () => {
             <Button
               className="primary"
               width="100%"
-              onClick={createRoomHandler("blank")}
+              onClick={() => createRoomHandler("blank")}
             >
               Blank Canvas
             </Button>
+            <Button className="variant" width="100%" onClick={postsHandler}>
+              Post
+            </Button>
+          </PopUp>
+
+          <PopUp
+            hide={!postsPopUp}
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
+          >
+            <p className="heading">Select a Post:</p>
+            {postsLoading && <Message>Loading...</Message>}
+            {postsError && <Message variant="error">{postsError}</Message>}
+
+            {posts && posts.posts.length > 0 ? (
+              <PostsContainer>
+                {posts.posts.map((post) => (
+                  <ImageContainer
+                    onClick={() => createRoomHandler("post", post.path)}
+                  >
+                    <img
+                      key={post.id}
+                      className="post"
+                      src={post.path}
+                      alt="post"
+                    />
+                  </ImageContainer>
+                ))}
+              </PostsContainer>
+            ) : (
+              <p className="no-posts">No Posts</p>
+            )}
             <Button
               className="variant"
               width="100%"
-              onClick={createRoomHandler("post")}
+              onClick={() => setPostsPopUp(false)}
             >
-              Post
+              Back
             </Button>
           </PopUp>
         </PopUpContainer>
       </BackgroundBlock>
+
       <GameInfo />
       <Form>
         <p className="heading">Collaborate!</p>
@@ -86,7 +138,9 @@ const CollabScreen = () => {
         <Button
           className="primary"
           margin="1rem 0 4rem"
-          onClick={() => setCreateRoomPopUp(true)}
+          onClick={() => {
+            setCreateRoomPopUp(true)
+          }}
         >
           Create Room
         </Button>
@@ -100,16 +154,13 @@ const CollabScreen = () => {
         <Button className="variant" onClick={joinRoomHandler}>
           Join Room
         </Button>
-
-        <Link className="link" to="/edit-art">
-          <Button>Edit Art Profile</Button>
-        </Link>
       </Form>
     </Container>
   )
 }
 
 const Container = styled.div`
+  overflow: none;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -135,7 +186,7 @@ const Container = styled.div`
 
 const BackgroundBlock = styled.div`
   display: ${(props) => (props.hide ? "none" : "")};
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   background: rgb(77, 90, 135, 0.8);
@@ -151,11 +202,36 @@ const PopUpContainer = styled.div`
   height: 100%;
 `
 
-const PopUp = styled.form`
-  background: var(--secondary-dark);
-  width: 300px;
-  height: 230px;
+const PostsContainer = styled.div`
+  overflow: auto;
+  width: 400px;
+`
+
+const ImageContainer = styled.div`
+  cursor: pointer;
+  width: 100%;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+  background: var(--grey-light);
+
+  .post {
+    height: 300px;
+    width: 300px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+`
+
+const PopUp = styled.div`
+  display: ${(props) => (props.hide ? "none" : "flex")};
+  background: var(--secondary-dark);
+  min-width: 300px;
+  min-height: 230px;
+  max-height: 400px;
+
   justify-content: center;
   align-items: center;
   padding: 1rem 2rem 2rem;
@@ -166,6 +242,11 @@ const PopUp = styled.form`
     text-align: left;
     font-size: 1.5rem;
     margin-bottom: 1rem;
+  }
+
+  .no-posts {
+    color: var(--light);
+    padding-bottom: 1rem;
   }
 `
 
