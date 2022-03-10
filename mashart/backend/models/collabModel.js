@@ -2,6 +2,11 @@ import mongoose from "mongoose"
 
 const collabSchema = mongoose.Schema(
   {
+    roomCode: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     hostId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
@@ -14,7 +19,7 @@ const collabSchema = mongoose.Schema(
     ],
     isActive: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     content: [
       {
