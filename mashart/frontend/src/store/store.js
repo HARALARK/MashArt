@@ -3,6 +3,7 @@ import thunk from "redux-thunk"
 import { composeWithDevTools } from "redux-devtools-extension"
 import {
   forgotPasswordReducer,
+  getUserPostReducer,
   resetPasswordReducer,
   searchUserReducer,
   userDetailsReducer,
@@ -22,6 +23,7 @@ let reducer = combineReducers({
   searchUser: searchUserReducer,
   createPost: createPostReducer,
   posts: getPostsReducer,
+  userPosts: getUserPostReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

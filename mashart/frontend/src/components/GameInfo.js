@@ -15,13 +15,14 @@ const GameInfo = () => {
         <RuleContainer>
           <Number light>2</Number>
           <Rule light>
-            The host comes up with a starting sentence - what to choose? Hmm..
+            Work on a Blank Canvas or a Previous Post - what to choose? Hmm..
           </Rule>
         </RuleContainer>
         <RuleContainer>
           <Number dark>3</Number>
           <Rule dark>
-            Room members collaborate on a drawing based off the host's sentence!
+            Room members collaborate on a drawing based off the host's sentence
+            given in the description!
           </Rule>
         </RuleContainer>
       </Container>

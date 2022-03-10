@@ -3,6 +3,9 @@ import {
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
+  GET_USER_POST_FAIL,
+  GET_USER_POST_REQUEST,
+  GET_USER_POST_SUCCESS,
   RESET_PASSWORD_FAIL,
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
@@ -294,6 +297,40 @@ export const searchUser = (username) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: SEARCH_USER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const getUserPosts = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_USER_POST_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/user/post`, config)
+
+    dispatch({
+      type: GET_USER_POST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_USER_POST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

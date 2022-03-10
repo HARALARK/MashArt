@@ -1,33 +1,37 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose"
 
-const collabSchema = mongoose.Schema({
+const collabSchema = mongoose.Schema(
+  {
+    roomCode: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     hostId: {
-        type: String, //user type?
-        required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
     },
-    users: [{
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User' 
-    }],
+    users: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     isActive: {
-        type: Boolean,
-        default: false,
+      type: Boolean,
+      default: true,
     },
-    content:[{ 
-        type: mongoose.Schema.Types.ObjectId, 
-        refPath: 'contentModelType' 
-    }],
-    contentModelType: {
+    content:{ 
         type: String,
-        required: true,
-        enum: ['Comic', 'Post']  //content can either be a comic or an art post
+        default: "", //for blank canvas
+        required: true
     },
-},
-    {
-        timestamps: true,
-    }
+  },
+  {
+    timestamps: true,
+  }
 )
 
-const Collab = mongoose.model('Collab', collabSchema)
+const Collab = mongoose.model("Collab", collabSchema)
 
 export default Collab
