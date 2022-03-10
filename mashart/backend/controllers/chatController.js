@@ -9,7 +9,7 @@ export const newChat = asyncHandler(async (req, res) => {
   
   const adminId = await User.findById(req.user._id) 
   const usersTxt = req.body.users
-  const userId = [adminId, ...(usersTxt.split(","))]
+  const userId = [adminId, ...(usersTxt.split(","))]  
 
   if(adminId){
     try{
@@ -39,7 +39,7 @@ export const getChats = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id) 
   if(user){
     try {
-      const chat = await Chat.find({
+      const chat = await Chat.find({ //find chats where user is present in userId array
         userId: { $in: [user] },
       });
       res.status(200).json(chat);
@@ -62,8 +62,8 @@ export const leaveChat = asyncHandler(async (req, res) => {
   const newAdmin =  await User.findById(chat.userId[1])
   try{
     await chat.updateOne({
-      $pull: { userId: req.user._id },
-      $set: { adminId: newAdmin }
+      $pull: { userId: req.user._id }, //remove current user from chat user list
+      $set: { adminId: newAdmin } //update admin to next user
     })
     res.status(200).json("left group chat")
   }catch(err){
