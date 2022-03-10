@@ -21,16 +21,10 @@ const collabSchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    content: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        refPath: "contentModelType",
-      },
-    ],
-    contentModelType: {
-      type: String,
-      required: true,
-      enum: ["Comic", "Post"], //content can either be a comic or an art post
+    content:{ 
+        type: String,
+        default: "", //for blank canvas
+        required: true
     },
   },
   {

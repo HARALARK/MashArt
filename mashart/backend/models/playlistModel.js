@@ -1,6 +1,10 @@
 import mongoose from 'mongoose'
 
 const playlistSchema = mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User',
         required: true,
@@ -11,14 +15,13 @@ const playlistSchema = mongoose.Schema({
     },
     content: [{ 
         type: mongoose.Schema.Types.ObjectId, 
-        refPath: 'contentModelType' 
     }],
-    contentModelType: {
+    tags: [String],
+    type: {
         type: String,
-        required: true,
-        enum: ['Comic', 'Post']  //content can either be a comic or an art post
+        default: "mixed",
+        enum: ["personal", "mixed"], 
     },
-    tags: [String]
 })
 
 const Playlist = mongoose.model('Playlist', playlistSchema)
