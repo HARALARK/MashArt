@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { useSelector } from "react-redux"
 import styled from "styled-components"
 import device from "../screen_sizes/devices"
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faComment, faGraduationCap, faHeart, faHeartbeat, faImage, faImages, faLayerGroup, faObjectGroup, faUserCircle} from "@fortawesome/free-solid-svg-icons"
+
+
 const ActivityScreen = () => {
   const [image, setImage] = useState(null)
   const userDetails = useSelector((state) => state.userDetails)
@@ -15,22 +20,67 @@ const ActivityScreen = () => {
           <Container>
               <Form>
                     <MegaPanel>
-                    
                         <ProfilePanel> 
                             <ProfileImage>
-                                <img className= "profilePicture" src="/images/logo/logo.png" alt="profilepic" /> 
-                                <p1 className = "username">  {user.username} @artist </p1>
-                            </ProfileImage>
+                                <img className= "profilePicture" src="/images/logo/logo.png" alt="profilepic" />
+                                <p1 className = "username">  @{user.username} </p1>
+                                <Summary>
+                                  <span className = "title"> Summary <br/></span>
+                                  
+                                  <FontAwesomeIcon icon={faHeart} size = 'm' style={{ color: '#03045E' }}/>
+                                  <p1 className = "count">  10 Likes <br/></p1>
 
-                            <Summary>
-                                <p1 className = "summaryheading">  Summary </p1>
-                            </Summary>    
+                                  <FontAwesomeIcon icon={faComment} size = 'm' style={{ color: '#03045E' }}/>
+                                  <p1 className = "count">  20 Comments <br/></p1>
+
+                                  <FontAwesomeIcon icon={faObjectGroup} size = 'm' style={{ color: '#03045E' }}/>
+                                  <p1 className = "count">  30 Collabs <br/></p1>
+
+                                  <FontAwesomeIcon icon={faImages} size = 'm' style={{ color: '#03045E' }}/>
+                                  <p1 className = "count">  40 Artworks <br/></p1>
+
+                                </Summary>
+                            </ProfileImage>
                         </ProfilePanel>
 
-
-
                         <ActivityPanel>
-                            <p1 className = "notifications">  Notifications </p1>
+                            <Notifications>
+                              <span className = "title"> Notifications </span>
+                              <FontAwesomeIcon icon={faHeartbeat} size = 'm' style={{ color: '#03045E' }}/>
+                              <p1 className = "notifications"><br/></p1>
+                
+                              <FontAwesomeIcon icon={faHeart} size = 'xs' style={{ color: '#03045E' }}/>
+                              <p1 className = "notifications">  Ethan Hunt liked your artwork "Blues" <br/></p1>
+
+                              <FontAwesomeIcon icon={faHeart} size = 'xs' style={{ color: '#03045E' }}/>
+                              <p1 className = "notifications">  Ethan Hunt liked your artwork "Blues" <br/></p1>
+
+                              <FontAwesomeIcon icon={faComment} size = 'xs' style={{ color: '#03045E' }}/>
+                              <p1 className = "notifications">  Minion commented on your artwork "Blues" <br/></p1>
+
+                              <FontAwesomeIcon icon={faObjectGroup} size = 'xs' style={{ color: '#03045E' }}/>
+                              <p1 className = "notifications">  Taylor Swift collaborated to your artwork "Blues" <br/></p1>
+                              
+                              <FontAwesomeIcon icon={faComment} size = 'xs' style={{ color: '#03045E' }}/>
+                              <p1 className = "notifications">  Minion commented on your artwork "Blues" <br/></p1>
+
+                              <FontAwesomeIcon icon={faObjectGroup} size = 'xs' style={{ color: '#03045E' }}/>
+                              <p1 className = "notifications">  Taylor Swift collaborated to your artwork "Blues" <br/></p1>
+
+                              <FontAwesomeIcon icon={faHeart} size = 'xs' style={{ color: '#03045E' }}/>
+                              <p1 className = "notifications">  Ethan Hunt liked your artwork "Blues" <br/></p1>
+
+                              <FontAwesomeIcon icon={faComment} size = 'xs' style={{ color: '#03045E' }}/>
+                              <p1 className = "notifications">  Minion commented on your artwork "Blues" <br/></p1>
+
+                              <FontAwesomeIcon icon={faObjectGroup} size = 'xs' style={{ color: '#03045E' }}/>
+                              <p1 className = "notifications">  Taylor Swift collaborated to your artwork "Blues" <br/></p1>
+
+                              <FontAwesomeIcon icon={faComment} size = 'xs' style={{ color: '#03045E' }}/>
+                              <p1 className = "notifications">  Minion commented on your artwork "Blues" <br/></p1>
+                            </Notifications>
+
+                            
                         </ActivityPanel>
                     
                     </MegaPanel>         
@@ -98,17 +148,20 @@ const Form = styled.form`
 `
 
 const ProfilePanel = styled.section`
-    background-color: #48cae4;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    height: 565px;
-    width: 310px;
-    align-content: space-evenly;
-    
     border-radius: 40px;
-    font-size: 30px;
+    background-color: #90e0ef;
+    display: flex;
+    padding: 5px;
+    height: 565px;
+    width: 240px;
+    border: 1px solid #03045E;
+
+    //align-items: center;
+    //flex-direction: column;
+    //justify-content: center;
+
+
+    font-size: 20px;
     color: black;
   
     @media ${device.tablet} {
@@ -117,43 +170,22 @@ const ProfilePanel = styled.section`
       justify-content: space-between;
     }
 `
-const Summary = styled.section`
-    background-color: white;
-    padding: 20px;
-    height: 400px;
-    width: 300px;
-    
-    border-radius: 40px;
-    font-size: 30px;
-    color: var(--light);
-
-    .summaryheading {
-        font-size: 30px; 
-        color: black; 
-      }
-    @media ${device.tablet} {
-      gap: 5rem;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-`
-
-
 const ProfileImage = styled.section`
     display: flex;
-    align-content: center;
-    gap: 2rem;
-    height: 500px;
-    width: 10px;
-        
+    //gap: 1rem;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 18px;
+    color: black;
+    padding: 10px;
+
     .profilePicture {
-      height: 120px;
-      width: 120px;
+      height: 150px;
+      width: 150px;
+      padding: 2px;
       background-color: WHITE;
       border-radius: 20px;
-    }
-    .username {
-      font-size: 20px;
     }
 `
 const ActivityPanel = styled.section`
@@ -162,7 +194,8 @@ const ActivityPanel = styled.section`
     flex-direction: column;
     padding: 20px;
     height: 565px;
-    width: 440px;
+    width: 510px;
+    border: 1px solid #03045E;
     
     border-radius: 40px;
     font-size: 30px;
@@ -196,4 +229,57 @@ const MegaPanel = styled.div`
   }
    
 `
+
+const Notifications = styled.section`
+  align-items: center;
+  
+  .title{
+    color: #03045e;
+    font-size: 2rem;
+    align-items: center;
+    font-weight: 600; 
+  }
+  .notifications{
+    font-size: 1rem;
+    color: black;
+    padding: 5px;
+  }
+  
+`
+const Summary = styled.section`
+    background-color: white;
+    height: 600px;
+    width:  210px;
+    align-items: center;
+    border-radius: 40px;
+    font-size: 25px;
+    color: black;
+    margin-top: 10px;
+    padding: 20px;
+    
+    
+    .title {
+      align-items: center;
+    }
+    .count {
+        font-size: 17px; 
+        color: black; 
+        padding: 10px;
+        font-weight: 400;
+      }
+    @media ${device.tablet} {
+      gap: 5rem;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+`
+
+
+
+
+
+
+
+
 export default ActivityScreen;
+
