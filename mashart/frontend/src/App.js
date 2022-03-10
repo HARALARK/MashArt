@@ -35,6 +35,7 @@ function App() {
                 <Route path="" element={<ProfileScreen />} />
               </Route>
               <Route path="/collab" element={<CollabScreen />} />
+              <Route path="/collab/room" element={<EditArtScreen />} />
               <Route
                 path="/forgot-password"
                 element={<ForgotPasswordScreen />}
@@ -45,7 +46,6 @@ function App() {
               />
               {/* <Route path="/room-start" element={<RoomStartScreen />} /> */}
               <Route path="/edit-profile" element={<EditProfileScreen />} />
-              <Route path="/edit-art" element={<EditArtScreen />} />
               <Route path="/post/create" element={<PostScreen />} />
               <Route path="/search" element={<SearchScreen />} />
               <Route path="/comics" element={<ComicsScreen />} />
