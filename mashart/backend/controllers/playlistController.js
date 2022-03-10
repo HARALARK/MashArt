@@ -13,7 +13,7 @@ export const createPlaylist = asyncHandler(async (req, res) => {
     const { posts , visibility, tags} = req.body
     const postsArray = posts.split(",").map((post) => post.trim())
     // validating all posts 
-    if (postsArray.length > 0 /*&& collaboratorsArray[0].trim().length > 0*/) {
+    if (postsArray.length > 0) {
       postsArray.forEach(async (postId) => {
         await Post.findById(postId)
       })
@@ -45,21 +45,17 @@ export const createPlaylist = asyncHandler(async (req, res) => {
 // @access Private
 export const publicVisibility = asyncHandler(async (req, res) => {
   try{
-    const user = await User.findById(req.user._id)
     const playlist = await Playlist.findById(req.params.id)
 
-    if (!user){
-      res.status(404).json("User not found.");
-    }
     if (!playlist){
       res.status(404).json("Playlist not found.");
     }
-
-    if(playlist.visibility.equals(true)){
-      res.status(400).json("Invalid Request: Playlist is already public.");
-    }
+    
     //check if playlist belongs to user
     if (req.user._id.equals(playlist.userId)){
+      if((playlist.visibility) == true){
+        res.status(400).json("Invalid Request: Playlist is already public.");
+      }
       await playlist.updateOne({
         $set: {visibility: true}
     })
@@ -79,21 +75,17 @@ export const publicVisibility = asyncHandler(async (req, res) => {
 // @access Private
 export const privateVisibility = asyncHandler(async (req, res) => {
   try{
-    const user = await User.findById(req.user._id)
     const playlist = await Playlist.findById(req.params.id)
-
-    if (!user){
-      res.status(404).json("User not found.");
-    }
+  
     if (!playlist){
       res.status(404).json("Playlist not found.");
     }
 
-    if(playlist.visibility.equals(false)){
-      res.status(400).json("Invalid Request: Playlist is already private.");
-    }
     //check if playlist belongs to user
     if (req.user._id.equals(playlist.userId)){
+      if(playlist.visibility == false){
+        res.status(400).json("Invalid Request: Playlist is already private.");
+      }
       await playlist.updateOne({
         $set: {visibility: false}
     })
@@ -109,16 +101,12 @@ export const privateVisibility = asyncHandler(async (req, res) => {
 })
 
 // @desc Add posts to playlist
-// @route PUT /api/playlist/:id/add
+// @route PUT /api/playlist/:id/posts/add
 // @access Private
 export const addPosts = asyncHandler(async (req, res) => {
   try{
-    const user = await User.findById(req.user._id)
     const playlist = await Playlist.findById(req.params.id)
 
-    if (!user){
-      res.status(404).json("User not found.");
-    }
     if (!playlist){
       res.status(404).json("Playlist not found.");
     }
@@ -126,7 +114,7 @@ export const addPosts = asyncHandler(async (req, res) => {
     const { posts } = req.body
     const postsArray = posts.split(",").map((post) => post.trim())
     // validating all posts 
-    if (postsArray.length > 0 /*&& collaboratorsArray[0].trim().length > 0*/) {
+    if (postsArray.length > 0) {
       postsArray.forEach(async (postId) => {
         await Post.findById(postId)
       })
@@ -135,10 +123,11 @@ export const addPosts = asyncHandler(async (req, res) => {
     if (req.user._id.equals(playlist.userId)){
       postsArray.forEach(async (postId) => {
         await playlist.updateOne({
+          //allow duplicates?
           $push: {content: postId}
         })
       })
-    res.status(200).json("Removed Posts.");
+    res.status(200).json("Added Posts.");
     }
     else{
       res.status(403).json("Invalid Request. You don't have access to this playlist");
@@ -150,33 +139,31 @@ export const addPosts = asyncHandler(async (req, res) => {
 })
 
 // @desc Remove posts from playlist
-// @route PUT /api/playlist/:id/delete
+// @route PUT /api/playlist/:id/posts/delete
 // @access Private
 export const rmPosts = asyncHandler(async (req, res) => {
   try{
-    const user = await User.findById(req.user._id)
     const playlist = await Playlist.findById(req.params.id)
 
-    if (!user){
-      res.status(404).json("User not found.");
-    }
     if (!playlist){
       res.status(404).json("Playlist not found.");
     }
 
     const { posts } = req.body
     const postsArray = posts.split(",").map((post) => post.trim())
+
     // validating all posts 
-    if (postsArray.length > 0 /*&& collaboratorsArray[0].trim().length > 0*/) {
+    if (postsArray.length > 0) {
       postsArray.forEach(async (postId) => {
-        await Post.findById(postId)
+       await Post.findById(postId)
       })
+
     }
     //check if playlist belongs to user then add each new post to the playlist
     if (req.user._id.equals(playlist.userId)){
       postsArray.forEach(async (postId) => {
-        //specific error handling if post doesn't exist?
         await playlist.updateOne({
+          //test for checking posts in playlist?
           $pull: {content: postId}
         })
       })
@@ -198,12 +185,9 @@ export const rmPosts = asyncHandler(async (req, res) => {
 // @access Private
 export const addTags = asyncHandler(async (req, res) => {
   try{
-    const user = await User.findById(req.user._id)
+
     const playlist = await Playlist.findById(req.params.id)
 
-    if (!user){
-      res.status(404).json("User not found.");
-    }
     if (!playlist){
       res.status(404).json("Playlist not found.");
     }
@@ -214,6 +198,7 @@ export const addTags = asyncHandler(async (req, res) => {
     //check if playlist belongs to user then add each new post to the playlist
     if (req.user._id.equals(playlist.userId)){
       tagsArray.forEach(async (tag) => {
+        //allow duplicate tags? yes
         await playlist.updateOne({
           $push: {tags: tag}
         })
@@ -235,12 +220,8 @@ export const addTags = asyncHandler(async (req, res) => {
 // @access Private
 export const rmTags = asyncHandler(async (req, res) => {
   try{
-    const user = await User.findById(req.user._id)
     const playlist = await Playlist.findById(req.params.id)
 
-    if (!user){
-      res.status(404).json("User not found.");
-    }
     if (!playlist){
       res.status(404).json("Playlist not found.");
     }
@@ -268,12 +249,12 @@ export const rmTags = asyncHandler(async (req, res) => {
 
 
 // @desc Delete a user's playlist
-// @route PUT /api/playlist/:id/tags/delete
+// @route DELETE /api/playlist/:id/delete
 // @access Private
 export const deletePlaylist = asyncHandler(async (req, res) => {
   try{
-    const user = await User.findById(req.user._id)
     const playlist = await Playlist.findById(req.params.id)
+    const user = await User.findById(req.user._id)
 
     if (!user){
       res.status(404).json("User not found.");
@@ -305,8 +286,8 @@ export const deletePlaylist = asyncHandler(async (req, res) => {
 // @route get /api/playlist/:id
 // @access Private
 export const getPlaylist = asyncHandler(async (req, res) => {
-  try{
-    const playlist = await Post.findById(req.params.id)
+  //try{
+    const playlist = await Playlist.findById(req.params.id)
     
     if (!playlist) {
       res.status(404)
@@ -319,17 +300,17 @@ export const getPlaylist = asyncHandler(async (req, res) => {
       })
     }
     else{
-      if(playlist.visibility.equals(true)){
+      if(playlist.visibility == true){
         res.json({playlist})
       }
       else{
         res.status(403).json("Invalid Request")
       }
     }
-  }
+  /*}
   catch(err){
     res.status(500).json(err)
-  }
+  }*/
 })
 
 
