@@ -9,7 +9,7 @@ import asyncHandler from "express-async-handler"
 export const createPlaylist = asyncHandler(async (req, res) => {
 
   try{
-    const { posts , visibility, tags} = req.body
+    const { name, posts , visibility, tags} = req.body
     const postsArray = posts.split(",").map((post) => post.trim())
     // validating all posts 
     if (postsArray.length > 0) {
@@ -18,18 +18,23 @@ export const createPlaylist = asyncHandler(async (req, res) => {
       })
     }
     const user = await User.findById(req.user._id)
-  
+
     //validate user
     if (user) {  
       //create playlist
-      const playlist = await Playlist.create({
-        userId: req.user._id,
-        visibility,
-        content: postsArray,
-        tags: tags.split(",").map((tag) => tag.trim()),
-      })
-      res.status(200).json("Playlist Created " + playlist);
-      } else {
+      if(!name.trim() == ""){  //don't allow only whitespaces as a name
+        const playlist = await Playlist.create({
+          name : name,
+          userId: req.user._id,
+          visibility,
+          content: postsArray,
+          tags: tags.split(",").map((tag) => tag.trim()),
+        })
+        res.status(200).json("Playlist Created " + playlist);
+      } else{
+        throw new Error("Invalid name for playlist")
+      }
+    }else {
       throw new Error("User not found")
     }
   }
@@ -255,7 +260,6 @@ export const deletePlaylist = asyncHandler(async (req, res) => {
   try{
     
     const playlist = await Playlist.findById(req.params.id)
-    //console.log(playlist)
     const user = await User.findById(req.user._id)
 
     if (!user){
@@ -265,7 +269,6 @@ export const deletePlaylist = asyncHandler(async (req, res) => {
       throw new Error("Playlist not found.")
     }
     //check if playlist belongs to user then add each new post to the playlist
-    //console.log(req.user._id.equals(playlist.userId))
 
     if (req.user._id.equals(playlist.userId)){
       await user.updateOne({
