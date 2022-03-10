@@ -2,6 +2,9 @@ import {
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
+  GET_USER_POST_FAIL,
+  GET_USER_POST_REQUEST,
+  GET_USER_POST_SUCCESS,
   RESET_PASSWORD_FAIL,
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
@@ -119,6 +122,19 @@ export const searchUserReducer = (
     case SEARCH_USER_SUCCESS:
       return { loading: false, usersInfo: action.payload }
     case SEARCH_USER_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const getUserPostReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_USER_POST_REQUEST:
+      return { loading: true }
+    case GET_USER_POST_SUCCESS:
+      return { loading: false, posts: action.payload }
+    case GET_USER_POST_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state
