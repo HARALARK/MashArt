@@ -9,7 +9,6 @@ import asyncHandler from "express-async-handler"
 export const createPlaylist = asyncHandler(async (req, res) => {
 
   try{
-    //const userId = req.user._id
     const { posts , visibility, tags} = req.body
     const postsArray = posts.split(",").map((post) => post.trim())
     // validating all posts 
@@ -31,14 +30,15 @@ export const createPlaylist = asyncHandler(async (req, res) => {
       })
       res.status(200).json("Playlist Created " + playlist);
       } else {
-      res.status(404)
       throw new Error("User not found")
     }
   }
   catch(err) {
-    res.status(500).json(err);
+    throw new Error(err)
   }
 })
+
+
 
 // @desc Update playlist visibility to public
 // @route PUT /api/playlist/:id/public
@@ -48,24 +48,24 @@ export const publicVisibility = asyncHandler(async (req, res) => {
     const playlist = await Playlist.findById(req.params.id)
 
     if (!playlist){
-      res.status(404).json("Playlist not found.");
+      throw new Error("Playlist not found.");
     }
     
     //check if playlist belongs to user
     if (req.user._id.equals(playlist.userId)){
       if((playlist.visibility) == true){
-        res.status(400).json("Invalid Request: Playlist is already public.");
+        throw new Error("Invalid Request: Playlist is already public.");
       }
       await playlist.updateOne({
         $set: {visibility: true}
     })
     }
     else{
-      res.status(403).json("Invalid Request. You don't have access to this playlist");
+      throw new Error("Invalid Request. You don't have access to this playlist");
     }
   }
   catch(err){
-    res.status(500).json(err);
+    throw new Error(err);
   }
 })
 
@@ -78,13 +78,13 @@ export const privateVisibility = asyncHandler(async (req, res) => {
     const playlist = await Playlist.findById(req.params.id)
   
     if (!playlist){
-      res.status(404).json("Playlist not found.");
+      throw new Error("Playlist not found.");
     }
 
     //check if playlist belongs to user
     if (req.user._id.equals(playlist.userId)){
       if(playlist.visibility == false){
-        res.status(400).json("Invalid Request: Playlist is already private.");
+        throw new Error("Invalid Request: Playlist is already private.");
       }
       await playlist.updateOne({
         $set: {visibility: false}
@@ -92,11 +92,11 @@ export const privateVisibility = asyncHandler(async (req, res) => {
     res.status(200).json("Updated visibility to private.");
     }
     else{
-      res.status(403).json("Invalid Request. You don't have access to this playlist");
+      throw new Error("Invalid Request. You don't have access to this playlist");
     }
   }
   catch(err){
-    res.status(500).json(err);
+    throw new Error(err);
   }
 })
 
@@ -108,7 +108,7 @@ export const addPosts = asyncHandler(async (req, res) => {
     const playlist = await Playlist.findById(req.params.id)
 
     if (!playlist){
-      res.status(404).json("Playlist not found.");
+      throw new Error("Playlist not found.");
     }
 
     const { posts } = req.body
@@ -130,11 +130,11 @@ export const addPosts = asyncHandler(async (req, res) => {
     res.status(200).json("Added Posts.");
     }
     else{
-      res.status(403).json("Invalid Request. You don't have access to this playlist");
+      throw new Error("Invalid Request. You don't have access to this playlist");
     }
   }
   catch(err){
-    res.status(500).json(err);
+    throw new Error(err);
   }
 })
 
@@ -146,7 +146,7 @@ export const rmPosts = asyncHandler(async (req, res) => {
     const playlist = await Playlist.findById(req.params.id)
 
     if (!playlist){
-      res.status(404).json("Playlist not found.");
+      throw new Error("Playlist not found.");
     }
 
     const { posts } = req.body
@@ -170,11 +170,11 @@ export const rmPosts = asyncHandler(async (req, res) => {
       res.status(200).json("Removed Posts.");
     }
     else{
-      res.status(403).json("Invalid Request. You don't have access to this playlist");
+      throw new Error("Invalid Request. You don't have access to this playlist");
     }
   }
   catch(err){
-    res.status(500).json(err);
+    throw new Error(err);
   }
 })
 
@@ -189,7 +189,7 @@ export const addTags = asyncHandler(async (req, res) => {
     const playlist = await Playlist.findById(req.params.id)
 
     if (!playlist){
-      res.status(404).json("Playlist not found.");
+      throw new Error("Playlist not found.");
     }
 
     const { tags } = req.body
@@ -206,11 +206,11 @@ export const addTags = asyncHandler(async (req, res) => {
     res.status(200).json("Added tags");
     }
     else{
-      res.status(403).json("Invalid Request. You don't have access to this playlist");
+      throw new Error("Invalid Request. You don't have access to this playlist");
     }
   }
   catch(err){
-    res.status(500).json(err);
+   throw new Error(err);
   }
 })
 
@@ -223,7 +223,7 @@ export const rmTags = asyncHandler(async (req, res) => {
     const playlist = await Playlist.findById(req.params.id)
 
     if (!playlist){
-      res.status(404).json("Playlist not found.");
+      throw new Error("Playlist not found.");
     }
 
     const { tags } = req.body
@@ -239,11 +239,11 @@ export const rmTags = asyncHandler(async (req, res) => {
     res.status(200).json("Removed tags");
     }
     else{
-      res.status(403).json("Invalid Request. You don't have access to this playlist");
+      throw new Error("Invalid Request. You don't have access to this playlist");
     }
   }
   catch(err){
-    res.status(500).json(err);
+    throw new Error(err);
   }
 })
 
@@ -253,30 +253,33 @@ export const rmTags = asyncHandler(async (req, res) => {
 // @access Private
 export const deletePlaylist = asyncHandler(async (req, res) => {
   try{
+    
     const playlist = await Playlist.findById(req.params.id)
+    //console.log(playlist)
     const user = await User.findById(req.user._id)
 
     if (!user){
-      res.status(404).json("User not found.");
+      throw new Error("User not found.");
     }
     if (!playlist){
-      res.status(404).json("Playlist not found.");
+      throw new Error("Playlist not found.")
     }
     //check if playlist belongs to user then add each new post to the playlist
-    if (req.user._id.equals(playlist.userId)){
-        await user.updateOne({
-          $pull: {playlist: playlist}        
-        })
-        await playlist.deleteOne();//delete playlist from database
+    //console.log(req.user._id.equals(playlist.userId))
 
-    res.status(200).json("Deleted Playlist");
+    if (req.user._id.equals(playlist.userId)){
+      await user.updateOne({
+        $pull: {playlist: playlist._id}        
+      })
+      await playlist.deleteOne();//delete playlist from database
+      res.status(200).json("Deleted Playlist");
     }
     else{
-      res.status(403).json("Invalid Request. You don't have access to this playlist");
+      throw new Error("Invalid Request. You don't have access to this playlist");
     }
   }
   catch(err){
-    res.status(500).json(err);
+    throw new Error(err)
   }
 })
 
@@ -286,7 +289,7 @@ export const deletePlaylist = asyncHandler(async (req, res) => {
 // @route get /api/playlist/:id
 // @access Private
 export const getPlaylist = asyncHandler(async (req, res) => {
-  //try{
+  try{
     const playlist = await Playlist.findById(req.params.id)
     
     if (!playlist) {
@@ -295,22 +298,23 @@ export const getPlaylist = asyncHandler(async (req, res) => {
     }
 
     if(playlist.userId.equals(req.user._id)){
-      res.json({
+      res.status(200).json({
         playlist
       })
     }
     else{
+      //only sent other user's playlist if its visibility is set to public
       if(playlist.visibility == true){
         res.json({playlist})
       }
       else{
-        res.status(403).json("Invalid Request")
+        throw new Error("Invalid Request")
       }
     }
-  /*}
+  }
   catch(err){
-    res.status(500).json(err)
-  }*/
+    throw new Error(err)
+  }
 })
 
 
