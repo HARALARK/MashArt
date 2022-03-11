@@ -8,6 +8,7 @@ import GameInfo from "../components/GameInfo"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { getUserPosts } from "../actions/userActions"
+import { createCollab } from "../actions/collabActions"
 
 const CollabScreen = () => {
   const navigate = useNavigate()
@@ -24,17 +25,9 @@ const CollabScreen = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { loading, userInfo, error } = userLogin
 
-  const createRoomHandler = (type, path = null) => {
-    /**
-     * TODO: Complete functionality of Create Room
-     * 1. dispatch request to create a Room
-     * 2. redirect the user to collab screen with room id
-     */
-    if (type === "blank") {
-      navigate("/collab/room")
-    } else if (type === "post") {
-      navigate("/collab/room", { state: { path } })
-    }
+  const createRoomHandler = (path = "") => {
+    dispatch(createCollab(path))
+    navigate("/collab/room", { state: { path } })
   }
 
   const joinRoomHandler = () => {
@@ -80,7 +73,7 @@ const CollabScreen = () => {
             <Button
               className="primary"
               width="100%"
-              onClick={() => createRoomHandler("blank")}
+              onClick={() => createRoomHandler("")}
             >
               Blank Canvas
             </Button>
@@ -103,7 +96,8 @@ const CollabScreen = () => {
               <PostsContainer>
                 {posts.posts.map((post) => (
                   <ImageContainer
-                    onClick={() => createRoomHandler("post", post.path)}
+                    key={post._id}
+                    onClick={() => createRoomHandler(post.path)}
                   >
                     <img
                       key={post.id}
