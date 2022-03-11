@@ -32,9 +32,52 @@ export const createCollab = asyncHandler(async (req, res) => {
     res.status(200)
     res.json({
       _id: collab._id,
+      roomCode: collab.roomCode,
       hostId: collab.hostId,
       users: collab.users,
       content: collab.content,
+    })
+  } else {
+    res.status(400)
+    throw new Error("Invalid collab data")
+  }
+})
+
+// @desc Join a collab room
+// @route POST /api/collab/join
+// @access Private
+export const joinCollab = asyncHandler(async (req, res) => {
+  const { roomCode } = req.body
+
+  const user = await User.findById(req.user._id)
+  if (!user) {
+    throw new Error("User doesn't exist")
+  }
+
+  const collab = await Collab.findOne({ roomCode })
+
+  if (!collab) {
+    throw new Error("Invalid room code")
+  }
+
+  if (collab.users.length >= 3) {
+    throw new Error("Room is full")
+  }
+
+  await collab.updateOne({
+    $push: { users: user._id },
+  })
+
+  const updatedCollab = await Collab.findOne({ roomCode })
+
+  if (updatedCollab) {
+    res.status(200)
+    res.json({
+      _id: updatedCollab._id,
+      roomCode: updatedCollab.roomCode,
+      hostId: updatedCollab.hostId,
+      users: updatedCollab.users,
+      content: updatedCollab.content,
     })
   } else {
     res.status(400)
