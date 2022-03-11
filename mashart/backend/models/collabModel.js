@@ -21,10 +21,9 @@ const collabSchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    content:{ 
-        type: String,
-        default: "", //for blank canvas
-        required: true
+    content: {
+      type: String,
+      default: "", //for blank canvas
     },
   },
   {

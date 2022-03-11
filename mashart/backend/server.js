@@ -11,6 +11,7 @@ import chatRoutes from "./routes/chatRoutes.js"
 import chatMessageRoutes from "./routes/chatMessageRoutes.js"
 import commentRoutes from "./routes/commentRoutes.js"
 import playlistRoutes from "./routes/playlistRoutes.js"
+import collabRoutes from "./routes/collabRoutes.js"
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js"
 
 dotenv.config()
@@ -36,6 +37,7 @@ app.use("/api/chat", chatRoutes)
 app.use("/api/message", chatMessageRoutes)
 app.use("/api/comment", commentRoutes)
 app.use("/api/playlist", playlistRoutes)
+app.use("/api/collab", collabRoutes)
 
 app.use(notFound)
 
