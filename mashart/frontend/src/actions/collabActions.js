@@ -16,12 +16,12 @@ export const createCollab = (content) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        "Content-Type": "json/application",
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
 
-    const { data } = await axios.post("/api/collab/create", config, content)
+    const { data } = await axios.post("/api/collab/create", { content }, config)
 
     dispatch({
       type: CREATE_COLLAB_SUCCESS,
