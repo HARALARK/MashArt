@@ -1,13 +1,14 @@
 import axios from "axios"
 import {
   CREATE_COLLAB_FAIL,
+  CREATE_COLLAB_REQUEST,
   CREATE_COLLAB_SUCCESS,
 } from "../constants/collabConstants"
 
 export const createCollab = (content) => async (dispatch, getState) => {
   try {
     dispatch({
-      type: CREATE_COLLAB_SUCCESS,
+      type: CREATE_COLLAB_REQUEST,
     })
 
     const {
