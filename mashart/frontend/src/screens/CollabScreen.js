@@ -8,7 +8,7 @@ import GameInfo from "../components/GameInfo"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { getUserPosts } from "../actions/userActions"
-import { createCollab } from "../actions/collabActions"
+import { createCollab, joinCollab } from "../actions/collabActions"
 
 const CollabScreen = () => {
   const navigate = useNavigate()
@@ -16,6 +16,7 @@ const CollabScreen = () => {
   const [message, setMessage] = useState("")
   const [createRoomPopUp, setCreateRoomPopUp] = useState(false)
   const [postsPopUp, setPostsPopUp] = useState(false)
+  const [content, setContent] = useState("")
 
   const dispatch = useDispatch()
 
@@ -25,20 +26,30 @@ const CollabScreen = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { loading, userInfo, error } = userLogin
 
+  const createCollabInfo = useSelector((state) => state.createCollab)
+  const {
+    loading: createCollabLoading,
+    collab: createcollab,
+    error: createCollabError,
+  } = createCollabInfo
+
+  const joinCollabInfo = useSelector((state) => state.joinCollab)
+  const {
+    loading: joinCollabLoading,
+    collab: joincollab,
+    error: joinCollabError,
+  } = joinCollabInfo
+
   const createRoomHandler = (path = "") => {
     dispatch(createCollab(path))
-    navigate("/collab/room", { state: { path } })
+    setContent(path)
   }
 
   const joinRoomHandler = () => {
-    /**
-     * TODO: Complete functionality of Create Room
-     * 1. dispatch request to check if room exists using the roomCode
-     * 2. redirect the user to collab screen with room id
-     */
-
     if (roomCode.length !== 6 || roomCode.trim() === "") {
       setMessage("Please enter a valid room code")
+    } else {
+      dispatch(joinCollab(roomCode))
     }
   }
 
@@ -51,7 +62,12 @@ const CollabScreen = () => {
     if (!userInfo) {
       navigate("/")
     }
-  }, [userInfo, navigate])
+    if (createcollab) {
+      navigate("/collab/room", { state: { content } })
+    } else if (joincollab) {
+      navigate("/collab/room")
+    }
+  }, [userInfo, navigate, createcollab, joincollab, content])
 
   return (
     <Container>
@@ -125,8 +141,16 @@ const CollabScreen = () => {
       <GameInfo />
       <Form>
         <p className="heading">Collaborate!</p>
-        {loading && <Message>Loading...</Message>}
+        {(loading || createCollabLoading || joinCollabLoading) && (
+          <Message>Loading...</Message>
+        )}
         {error && <Message variant="error">{error}</Message>}
+        {createCollabError && (
+          <Message variant="error">{createCollabError}</Message>
+        )}
+        {joinCollabError && (
+          <Message variant="error">{joinCollabError}</Message>
+        )}
         {message && <Message variant="warning">{message}</Message>}
 
         <Button
