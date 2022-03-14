@@ -9,32 +9,9 @@ import { useNavigate } from "react-router-dom"
 
 const ComicsScreen = () => {
   const navigate = useNavigate()
-  const [roomCode, setRoomCode] = useState("")
+  
 
   const userLogin = useSelector((state) => state.userLogin)
-  const { loading, userInfo, error } = userLogin
-
-  const createRoomHandler = () => {
-    /**
-     * TODO: Complete functionality of Create Room
-     * 1. dispatch request to create a Room
-     * 2. redirect the user to collab screen with room id
-     */
-  }
-
-  const joinRoomHandler = () => {
-    /**
-     * TODO: Complete functionality of Create Room
-     * 1. dispatch request to check if room exists using the roomCode
-     * 2. redirect the user to collab screen with room id
-     */
-  }
-
-  useEffect(() => {
-    if (!userInfo) {
-      navigate("/")
-    }
-  }, [userInfo, navigate])
 
 
   return (
@@ -42,7 +19,11 @@ const ComicsScreen = () => {
       <Heading>
         <span className = "title"> Comic Collaborate</span>
         <p className = "description"> Make your own, join or read comics you desire, anytime, anywhere.</p>
-
+        <img className= "comicPicture1" src="/images/comics/boom.png" alt="boomcomic" />
+        <img className= "comicPicture2" src="/images/comics/zap.png" alt="zapcomic" />
+        <img className= "comicPicture3" src="/images/comics/cloud.png" alt="cloudcomic" />
+        <img className= "comicPicture4" src="/images/comics/thunder.png" alt="thundercomic" />
+        
       </Heading>
       <SearchBar>
         <Input
@@ -88,6 +69,7 @@ const Container = styled.div`
   }
 `
 const Heading = styled.section`
+
   padding: 1rem 0 1rem;
   height: 130px;
   width: 2950%;
@@ -95,6 +77,7 @@ const Heading = styled.section`
   margin-left: 820px;
   //margin-right: 200px;
   background-color: var(--secondary-dark);
+  border-radius: 10px;
 
   .title{
     color: var(--light);
@@ -108,10 +91,48 @@ const Heading = styled.section`
     color: var(--light);
     margin-left: 100px;
     margin-top: 10px;
-    
-
   }
-  
+
+  .comicPicture1 {
+    position: relative;
+    height: 100px;
+    width: 100px;
+    padding: 2px;
+    background-color: var(--secondary-dark);
+    border-radius: 20px;
+    margin-top: -100px;
+  }
+
+  .comicPicture3 {
+    position: absolute;
+    height: 50px;
+    width: 70px;
+    padding: 2px;
+    //background-color: var(--secondary-dark);
+    border-radius: 20px;
+    margin-top: -30px;
+    margin-left: -730px;
+  }
+  .comicPicture2 {
+    position: relative;
+    height: 90px;
+    width: 90px;
+    padding: 2px;
+    background-color: var(--secondary-dark);
+    border-radius: 20px;
+    margin-top: -100px;
+    margin-left: 550px;
+  }
+  .comicPicture4 {
+    position: relative;
+    height: 90px;
+    width: 90px;
+    padding: 2px;
+    //background-color: var(--secondary-dark);
+    border-radius: 20px;
+    margin-top: -930px;
+    margin-left: 680px;
+  }
 `
 const SearchBar = styled.div`
   display: flex;
@@ -154,14 +175,7 @@ const Button = styled.p`
   `
 
 
-const Form = styled.form`
-  background-color: var(--secondary);
-  padding: 1rem 2rem 2rem;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`
+
 
 
 export default ComicsScreen
