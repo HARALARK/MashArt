@@ -9,32 +9,9 @@ import { useNavigate } from "react-router-dom"
 
 const ComicsScreen = () => {
   const navigate = useNavigate()
-  const [roomCode, setRoomCode] = useState("")
+  
 
   const userLogin = useSelector((state) => state.userLogin)
-  const { loading, userInfo, error } = userLogin
-
-  const createRoomHandler = () => {
-    /**
-     * TODO: Complete functionality of Create Room
-     * 1. dispatch request to create a Room
-     * 2. redirect the user to collab screen with room id
-     */
-  }
-
-  const joinRoomHandler = () => {
-    /**
-     * TODO: Complete functionality of Create Room
-     * 1. dispatch request to check if room exists using the roomCode
-     * 2. redirect the user to collab screen with room id
-     */
-  }
-
-  useEffect(() => {
-    if (!userInfo) {
-      navigate("/")
-    }
-  }, [userInfo, navigate])
 
 
   return (
@@ -42,7 +19,7 @@ const ComicsScreen = () => {
       <Heading>
         <span className = "title"> Comic Collaborate</span>
         <p className = "description"> Make your own, join or read comics you desire, anytime, anywhere.</p>
-
+        
       </Heading>
       <SearchBar>
         <Input
@@ -154,14 +131,7 @@ const Button = styled.p`
   `
 
 
-const Form = styled.form`
-  background-color: var(--secondary);
-  padding: 1rem 2rem 2rem;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`
+
 
 
 export default ComicsScreen
