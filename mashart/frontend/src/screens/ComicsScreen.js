@@ -20,6 +20,9 @@ const ComicsScreen = () => {
         <span className = "title"> Comic Collaborate</span>
         <p className = "description"> Make your own, join or read comics you desire, anytime, anywhere.</p>
         <img className= "comicPicture1" src="/images/comics/boom.png" alt="boomcomic" />
+        <img className= "comicPicture2" src="/images/comics/zap.png" alt="zapcomic" />
+        <img className= "comicPicture3" src="/images/comics/cloud.png" alt="cloudcomic" />
+        <img className= "comicPicture4" src="/images/comics/thunder.png" alt="thundercomic" />
         
       </Heading>
       <SearchBar>
@@ -89,6 +92,7 @@ const Heading = styled.section`
   }
 
   .comicPicture1 {
+    position: relative;
     height: 100px;
     width: 100px;
     padding: 2px;
@@ -96,7 +100,37 @@ const Heading = styled.section`
     border-radius: 20px;
     margin-top: -100px;
   }
-  
+
+  .comicPicture3 {
+    position: absolute;
+    height: 50px;
+    width: 70px;
+    padding: 2px;
+    //background-color: var(--secondary-dark);
+    border-radius: 20px;
+    margin-top: -30px;
+    margin-left: -730px;
+  }
+  .comicPicture2 {
+    position: relative;
+    height: 90px;
+    width: 90px;
+    padding: 2px;
+    background-color: var(--secondary-dark);
+    border-radius: 20px;
+    margin-top: -100px;
+    margin-left: 550px;
+  }
+  .comicPicture4 {
+    position: relative;
+    height: 90px;
+    width: 90px;
+    padding: 2px;
+    //background-color: var(--secondary-dark);
+    border-radius: 20px;
+    margin-top: -930px;
+    margin-left: 680px;
+  }
 `
 const SearchBar = styled.div`
   display: flex;
