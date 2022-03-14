@@ -19,6 +19,7 @@ const ComicsScreen = () => {
       <Heading>
         <span className = "title"> Comic Collaborate</span>
         <p className = "description"> Make your own, join or read comics you desire, anytime, anywhere.</p>
+        <img className= "comicPicture1" src="/images/comics/boom.png" alt="boomcomic" />
         
       </Heading>
       <SearchBar>
@@ -85,8 +86,15 @@ const Heading = styled.section`
     color: var(--light);
     margin-left: 100px;
     margin-top: 10px;
-    
+  }
 
+  .comicPicture1 {
+    height: 100px;
+    width: 100px;
+    padding: 2px;
+    background-color: var(--secondary-dark);
+    border-radius: 20px;
+    margin-top: -100px;
   }
   
 `
