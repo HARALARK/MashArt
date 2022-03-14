@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faDoorOpen, faSave } from "@fortawesome/free-solid-svg-icons"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Input } from "../components/styled-components/Input"
+import Board from "../components/Board/Board"
 
 const EditArtScreen = () => {
   const location = useLocation()
@@ -73,42 +74,7 @@ const EditArtScreen = () => {
 
           <ImgDescContainer>
             <CanvasContainer>
-              <ImgContainer>
-                {image ? (
-                  <img className="post" src={image} alt="post" />
-                ) : (
-                  <ImagePlaceHolder>
-                    <p className="no-post">No Image</p>
-                  </ImagePlaceHolder>
-                )}
-              </ImgContainer>
-              <FilterContainer>
-                <Filter
-                  className="filter"
-                  src="/images/logo/logo.png"
-                  alt="filter1"
-                />
-                <Filter
-                  className="filter"
-                  src="/images/logo/logo.png"
-                  alt="filter2"
-                />
-                <Filter
-                  className="filter"
-                  src="/images/logo/logo.png"
-                  alt="filter3"
-                />
-                <Filter
-                  className="filter"
-                  src="/images/logo/logo.png"
-                  alt="filter4"
-                />
-                <Filter
-                  className="filter"
-                  src="/images/logo/logo.png"
-                  alt="filter5"
-                />
-              </FilterContainer>
+              <Board />
             </CanvasContainer>
 
             <DescContainer>
@@ -248,62 +214,14 @@ const ImgDescContainer = styled.section`
 `
 
 const CanvasContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   @media ${device.tablet} {
     flex: 1.5;
   }
-`
-
-const ImgContainer = styled.div`
-  display: flex;
-  width: 100%;
-  height: 300px;
-  justify-content: center;
-  background: var(--light);
-  border-radius: 5px;
-
-  .post {
-    height: 300px;
-    width: 300px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-`
-
-const ImagePlaceHolder = styled.div`
-  background-color: var(--grey-light);
-  opacity: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  border-radius: 5px;
-
-  .no-post {
-    color: var(--dark);
-    font-size: 1.5rem;
-  }
-
-  @media ${device.tablet} {
-    width: 100%;
-    height: 100%;
-  }
-`
-
-const FilterContainer = styled.div`
-  display: flex;
-  background-color: var(--secondary);
-  padding: 1rem;
-  margin: 1rem 0 0;
-  border-radius: 5px;
-  justify-content: space-between;
-`
-const Filter = styled.img`
-  height: 60px;
-  width: 60px;
-  background-color: white;
-  border-radius: 5px;
 `
 
 const DescContainer = styled.div`
