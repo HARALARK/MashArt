@@ -69,6 +69,7 @@ const Container = styled.div`
   }
 `
 const Heading = styled.section`
+
   padding: 1rem 0 1rem;
   height: 130px;
   width: 2950%;
@@ -76,6 +77,7 @@ const Heading = styled.section`
   margin-left: 820px;
   //margin-right: 200px;
   background-color: var(--secondary-dark);
+  border-radius: 10px;
 
   .title{
     color: var(--light);
