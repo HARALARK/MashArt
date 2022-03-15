@@ -26,7 +26,10 @@ const server = http.createServer(app)
 const io = new Server(server)
 
 io.on("connection", (socket) => {
-  socket.on("drawing", (data) => socket.broadcast.emit("drawing", data))
+  socket.on("join-room", (roomCode) => {
+    socket.join(roomCode)
+  })
+  socket.on("drawing", (data) => socket.to(data.roomCode).emit("drawing", data))
 })
 
 app.use(express.json())
