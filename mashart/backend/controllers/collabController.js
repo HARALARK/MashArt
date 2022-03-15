@@ -84,3 +84,34 @@ export const joinCollab = asyncHandler(async (req, res) => {
     throw new Error("Invalid collab data")
   }
 })
+
+// @desc get a collab room's users
+// @route GET /api/collab/users/:roomCode
+// @access Private
+export const getCollabUsers = asyncHandler(async (req, res) => {
+  const roomCode = req.params.roomCode
+
+  const user = await User.findById(req.user._id)
+  if (!user) {
+    throw new Error("User doesn't exist")
+  }
+
+  const collab = await Collab.findOne({ roomCode }).populate(
+    "users",
+    "profileImage"
+  )
+
+  if (!collab) {
+    throw new Error("Invalid room code")
+  }
+
+  if (collab) {
+    res.status(200)
+    res.json({
+      users: collab.users,
+    })
+  } else {
+    res.status(400)
+    throw new Error("Invalid collab data")
+  }
+})
