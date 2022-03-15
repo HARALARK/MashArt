@@ -24,21 +24,10 @@ const CollabScreen = () => {
   const { loading: postsLoading, posts, error: postsError } = userPosts
 
   const userLogin = useSelector((state) => state.userLogin)
-  const { loading, userInfo, error } = userLogin
+  const { userInfo } = userLogin
 
-  const createCollabInfo = useSelector((state) => state.createCollab)
-  const {
-    loading: createCollabLoading,
-    collab: createcollab,
-    error: createCollabError,
-  } = createCollabInfo
-
-  const joinCollabInfo = useSelector((state) => state.joinCollab)
-  const {
-    loading: joinCollabLoading,
-    collab: joincollab,
-    error: joinCollabError,
-  } = joinCollabInfo
+  const collabInfo = useSelector((state) => state.collab)
+  const { loading, collab, error } = collabInfo
 
   const createRoomHandler = (path = "") => {
     dispatch(createCollab(path))
@@ -62,12 +51,10 @@ const CollabScreen = () => {
     if (!userInfo) {
       navigate("/")
     }
-    if (createcollab) {
+    if (collab) {
       navigate("/collab/room", { state: { content } })
-    } else if (joincollab) {
-      navigate("/collab/room")
     }
-  }, [userInfo, navigate, createcollab, joincollab, content])
+  }, [userInfo, navigate, collab, content])
 
   return (
     <Container>
@@ -141,16 +128,8 @@ const CollabScreen = () => {
       <GameInfo />
       <Form>
         <p className="heading">Collaborate!</p>
-        {(loading || createCollabLoading || joinCollabLoading) && (
-          <Message>Loading...</Message>
-        )}
+        {loading && <Message>Loading...</Message>}
         {error && <Message variant="error">{error}</Message>}
-        {createCollabError && (
-          <Message variant="error">{createCollabError}</Message>
-        )}
-        {joinCollabError && (
-          <Message variant="error">{joinCollabError}</Message>
-        )}
         {message && <Message variant="warning">{message}</Message>}
 
         <Button
@@ -166,7 +145,8 @@ const CollabScreen = () => {
         <Input
           type="text"
           placeholder="Room Code"
-          onChange={(e) => setRoomCode(e.target.value)}
+          value={roomCode}
+          onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
         />
 
         <Button className="variant" onClick={joinRoomHandler}>
