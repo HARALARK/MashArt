@@ -28,6 +28,7 @@ const io = new Server(server)
 io.on("connection", (socket) => {
   socket.on("join-room", (roomCode) => {
     socket.join(roomCode)
+    socket.to(roomCode).emit("get-users")
   })
   socket.on("drawing", (data) => socket.to(data.roomCode).emit("drawing", data))
 })
