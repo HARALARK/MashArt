@@ -12,10 +12,7 @@ import {
   userUpdateProfileReducer,
 } from "../reducers/userReducers"
 import { createPostReducer, getPostsReducer } from "../reducers/postReducers"
-import {
-  createCollabReducer,
-  joinCollabReducer,
-} from "../reducers/collabReducers"
+import { collabReducer } from "../reducers/collabReducers"
 
 let reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -28,8 +25,7 @@ let reducer = combineReducers({
   createPost: createPostReducer,
   posts: getPostsReducer,
   userPosts: getUserPostReducer,
-  createCollab: createCollabReducer,
-  joinCollab: joinCollabReducer,
+  collab: collabReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
