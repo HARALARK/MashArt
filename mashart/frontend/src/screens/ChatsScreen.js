@@ -26,7 +26,18 @@ const ChatsScreen = () => {
                         </Heading>
                         
                         <UnderHeader>
-                            <ChatPanel></ChatPanel>
+                            <ChatPanel>
+                              <Chat1>
+                                <img className= "profilePicture" src="/images/logo/logo.png" alt="profilepic" />
+                                <Username> <span className = "username">  Elizabeth{user.username} </span></Username>
+                                <TextMessage><span className = "message">  I loved the colors you used </span> </TextMessage>
+                              </Chat1>
+                              <Chat2>
+                                <img className= "profilePicture" src="/images/logo/logo.png" alt="profilepic" />
+                                <Username> <span className = "username">  Elizabeth{user.username} </span></Username>
+                                <TextMessage><span className = "message">  I loved the colors you used </span> </TextMessage>
+                              </Chat2>
+                            </ChatPanel>
                             <AllChats></AllChats>
                         </UnderHeader>
                         
@@ -116,9 +127,10 @@ const UnderHeader = styled.section`
     flex-direction: column;
     height: 80%;
     width: 100%;
-    border-radius: 40px;
+    //border-radius: 40px;
     font-size: 30px;
-    border: 1px solid black;
+    //border: 1px solid black;
+    //margin-top: -500px;
     @media ${device.tablet} {
       gap: 2rem;
       flex-direction: row;
@@ -127,13 +139,14 @@ const UnderHeader = styled.section`
 `
 
 const ChatPanel = styled.section`
-    background-color: #90e0ef;
+    //background-color: #90e0ef;
     display: flex;
     flex-direction: column;
-    height: 100%;   
-    width: 50%;
-    border-radius: 40px;
+    height: 107%;   
+    width: 60%;
+    border-radius: 10px;
     font-size: 30px;
+    margin-top: -490px;
   
     @media ${device.tablet} {
       gap: 5rem;
@@ -141,14 +154,97 @@ const ChatPanel = styled.section`
       justify-content: space-between;
     }
 `
+
+const Chat1 = styled.section`
+    background-color: #90e0ef;
+    display: flex;
+    flex-direction: column;
+    height: 11%;   
+    width: 140%;
+    border-radius: 10px;
+    font-size: 30px;
+    //margin-top: -2px;
+  
+    @media ${device.tablet} {
+      gap: 5rem;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    .profilePicture {
+      height: 40px;
+      width: 40px;
+      //padding: 2px;
+      background-color: WHITE;
+      border-radius: 10px;
+      margin-left:10px;
+      margin-top: 5px;
+    }
+
+    
+
+    
+`
+
+const Username = styled.section`
+  
+    .username{
+      display: flex;
+      flex-direction: column;
+      font-size: 15px;
+      margin-left: -150px;
+      font-weight: bold;
+    }
+`
+const TextMessage = styled.section`
+    .message{
+      display: flex;
+      flex-direction: column;
+      font-size: 15px;
+      //margin-right: 350px;
+      margin-left: -300px;
+      margin-top: 20px;
+      font-weight: light;
+    }
+`
+const Chat2 = styled.section`
+    background-color: #90e0ef;
+    display: flex;
+    flex-direction: column;
+    height: 11%;   
+    width: 140%;
+    border-radius: 10px;
+    font-size: 30px;
+    margin-top: 70px;
+    margin-left: -445px;
+  
+    @media ${device.tablet} {
+      gap: 5rem;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    .profilePicture {
+      height: 40px;
+      width: 40px;
+      //padding: 2px;
+      background-color: WHITE;
+      border-radius: 10px;
+      margin-left:10px;
+      margin-top: 5px;
+    }
+
+    
+
+    
+`
 const AllChats = styled.section`
     background-color: #90e0ef;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    width: 50%;
-    border-radius: 40px;
+    height: 107%;
+    width: 60%;
+    border-radius: 10px;
     font-size: 30px;
+    margin-top: -490px;
 
     @media ${device.tablet} {
     gap: 5rem;
