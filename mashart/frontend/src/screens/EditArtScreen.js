@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 import device from "../screen_sizes/devices"
@@ -6,7 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faDoorOpen, faSave } from "@fortawesome/free-solid-svg-icons"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Input } from "../components/styled-components/Input"
-import Board from "../components/Board/Board"
+import io from "socket.io-client"
+import Message from "../components/styled-components/Message"
+import { getCollabUsers } from "../actions/collabActions"
 
 const EditArtScreen = () => {
   const location = useLocation()
@@ -14,17 +16,172 @@ const EditArtScreen = () => {
     location.state && location.state.path ? location.state.path : null
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const [image, setImage] = useState(postPath)
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
+  const collabInfo = useSelector((state) => state.collab)
+  const { loading, collab, error } = collabInfo
+
+  const collabUsers = useSelector((state) => state.collabUsers)
+  const { loading: loadingUsers, users, error: errorUsers } = collabUsers
+
   useEffect(() => {
     if (!userInfo) {
       navigate("/")
     }
   }, [userInfo, navigate])
+
+  const canvasRef = useRef(null)
+  const socket = useRef()
+  const roomCode = useRef()
+
+  useEffect(() => {
+    if (collab) {
+      roomCode.current = collab.roomCode
+    }
+  }, [collab])
+
+  useEffect(() => {
+    if (!users) {
+      dispatch(getCollabUsers(roomCode.current))
+    }
+    if (socket.current) {
+      socket.current.on("get-users", () =>
+        dispatch(getCollabUsers(roomCode.current))
+      )
+    }
+  }, [users, dispatch])
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const context = canvas.getContext("2d")
+    canvas.height = 300
+    canvas.width = 300
+
+    const color = document.getElementById("color")
+    // set the current color
+    const current = {
+      color: "#000000",
+    }
+
+    const onColorChange = (e) => {
+      current.color = e.target.value
+    }
+
+    color.addEventListener("change", onColorChange, false)
+    let drawing = false
+
+    const drawLine = (x0, y0, x1, y1, color, emit) => {
+      context.beginPath()
+      context.moveTo(x0, y0)
+      context.lineTo(x1, y1)
+      context.strokeStyle = color
+      context.lineWidth = 2
+      context.stroke()
+      context.closePath()
+
+      if (!emit) {
+        return
+      }
+      const w = canvas.width
+      const h = canvas.height
+
+      socket.current.emit("drawing", {
+        x0: x0 / w,
+        y0: y0 / h,
+        x1: x1 / w,
+        y1: y1 / h,
+        color,
+        roomCode: roomCode.current,
+      })
+    }
+
+    const onPointerDown = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      drawing = true
+
+      current.x = (e.pageX || e.touches[0].pageX) - canvas.offsetLeft
+      current.y = (e.pageY || e.touches[0].pageY) - canvas.offsetTop
+    }
+
+    const onPointerMove = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      if (!drawing) {
+        return
+      }
+      drawLine(
+        current.x,
+        current.y,
+        (e.pageX || e.touches[0].pageX) - canvas.offsetLeft,
+        (e.pageY || e.touches[0].pageY) - canvas.offsetTop,
+        current.color,
+        true
+      )
+      current.x = (e.pageX || e.touches[0].pageX) - canvas.offsetLeft
+      current.y = (e.pageY || e.touches[0].pageY) - canvas.offsetTop
+    }
+
+    const onPointerUp = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      if (!drawing) {
+        return
+      }
+      drawing = false
+      drawLine(
+        current.x,
+        current.y,
+        (e.pageX || e.changedTouches[e.changedTouches.length - 1].pageX) -
+          canvas.offsetLeft,
+        (e.pageY || e.changedTouches[e.changedTouches.length - 1].pageY) -
+          canvas.offsetTop,
+        current.color,
+        true
+      )
+    }
+
+    const throttle = (callback, delay) => {
+      let previousCall = new Date().getTime()
+      return function () {
+        const time = new Date().getTime()
+
+        if (time - previousCall >= delay) {
+          previousCall = time
+          callback.apply(null, arguments)
+        }
+      }
+    }
+
+    canvas.addEventListener("mousedown", onPointerDown, false)
+    canvas.addEventListener("mouseup", onPointerUp, false)
+    canvas.addEventListener("mouseout", onPointerUp, false)
+    canvas.addEventListener("mousemove", throttle(onPointerMove, 10), false)
+
+    // Touch support for mobile devices
+    canvas.addEventListener("touchstart", onPointerDown, false)
+    canvas.addEventListener("touchend", onPointerUp, false)
+    canvas.addEventListener("touchcancel", onPointerUp, false)
+    canvas.addEventListener("touchmove", throttle(onPointerMove, 10), false)
+
+    const onDrawingEvent = (data) => {
+      const w = canvas.width
+      const h = canvas.height
+      drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color)
+    }
+
+    socket.current = io.connect("/")
+    socket.current.emit("join-room", roomCode.current)
+    socket.current.on("drawing", onDrawingEvent)
+  }, [])
 
   const onImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -33,32 +190,41 @@ const EditArtScreen = () => {
   }
 
   return (
-    <div>
-      <Container>
+    <Container>
+      {loading && <Message>Loading...</Message>}
+      {error && <Message variant="error">{error}</Message>}
+      {collab && (
         <CollabContainer>
-          <p className="owner">{userInfo.username}'s Room</p>
+          <p className="owner">
+            {collab.hostId && collab.hostId.username
+              ? collab.hostId.username
+              : userInfo.username}
+            's Room
+          </p>
           <Header>
             <RoomContainer>
               <p className="room-code-txt">Room Code:</p>
-              <p className="room-code">ABC123</p>
+              <p className="room-code">{collab.roomCode}</p>
             </RoomContainer>
 
             <CollaboratorContainer>
-              <img
-                className="collaborator"
-                src="/images/logo/logo.png"
-                alt="collaborator1"
-              />
-              <img
-                className="collaborator"
-                src="/images/logo/logo.png"
-                alt="collaborator2"
-              />
-              <img
-                className="collaborator"
-                src="/images/logo/logo.png"
-                alt="collaborator3"
-              />
+              {loadingUsers && <Message>Loading...</Message>}
+              {errorUsers && <Message variant="error">{errorUsers}</Message>}
+              {users ? (
+                users.users.map((user) => (
+                  <img
+                    className="collaborator"
+                    src={
+                      user.profileImage.imageSrc
+                        ? user.profileImage.imageSrc
+                        : "/images/logo/logo.png"
+                    }
+                    alt="collaborator1"
+                  />
+                ))
+              ) : (
+                <></>
+              )}
             </CollaboratorContainer>
           </Header>
 
@@ -74,7 +240,11 @@ const EditArtScreen = () => {
 
           <ImgDescContainer>
             <CanvasContainer>
-              <Board />
+              <Whiteboard ref={canvasRef} className="whiteboard" />
+              <ColorsContainer>
+                <p>Pick a color:</p>
+                <input type="color" id="color" />
+              </ColorsContainer>
             </CanvasContainer>
 
             <DescContainer>
@@ -106,8 +276,8 @@ const EditArtScreen = () => {
             </DescContainer>
           </ImgDescContainer>
         </CollabContainer>
-      </Container>
-    </div>
+      )}
+    </Container>
   )
 }
 
@@ -222,6 +392,25 @@ const CanvasContainer = styled.div`
   @media ${device.tablet} {
     flex: 1.5;
   }
+`
+
+const Whiteboard = styled.canvas`
+  border-radius: 5px;
+  background: var(--light);
+  width: 300px;
+  height: 300px;
+`
+
+const ColorsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  background-color: var(--secondary);
+  padding: 1rem;
+  margin: 1rem 0 0;
+  border-radius: 5px;
+  align-items: center;
+  gap: 1rem;
+  color: var(--light);
 `
 
 const DescContainer = styled.div`
