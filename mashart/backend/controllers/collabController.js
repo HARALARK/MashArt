@@ -68,7 +68,10 @@ export const joinCollab = asyncHandler(async (req, res) => {
     $push: { users: user._id },
   })
 
-  const updatedCollab = await Collab.findOne({ roomCode })
+  const updatedCollab = await Collab.findOne({ roomCode }).populate(
+    "hostId",
+    "username"
+  )
 
   if (updatedCollab) {
     res.status(200)

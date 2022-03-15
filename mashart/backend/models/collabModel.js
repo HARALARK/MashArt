@@ -10,6 +10,7 @@ const collabSchema = mongoose.Schema(
     hostId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "User",
     },
     users: [
       {
