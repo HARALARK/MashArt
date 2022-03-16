@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 import device from "../screen_sizes/devices"
@@ -14,7 +14,7 @@ import Compressor from "compressorjs"
 const EditArtScreen = () => {
   const location = useLocation()
   const postPath =
-    location.state && location.state.path ? location.state.path : null
+    location.state && location.state.content ? location.state.content : null
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -37,6 +37,7 @@ const EditArtScreen = () => {
   const canvasRef = useRef(null)
   const socket = useRef()
   const roomCode = useRef()
+  const content = useRef(postPath)
 
   useEffect(() => {
     if (collab) {
@@ -202,6 +203,17 @@ const EditArtScreen = () => {
       drawImage(imageData)
     }
 
+    const scaleToFitDrawImage = (url) => {
+      const img = new Image()
+      img.src = url
+      // get the scale
+      var scale = Math.min(canvas.width / img.width, canvas.height / img.height)
+      // get the top left position of the image
+      var x = canvas.width / 2 - (img.width / 2) * scale
+      var y = canvas.height / 2 - (img.height / 2) * scale
+      context.drawImage(img, x, y, img.width * scale, img.height * scale)
+    }
+
     const drawImage = (url) => {
       const image = new Image()
       image.src = url
@@ -217,6 +229,19 @@ const EditArtScreen = () => {
         roomCode: roomCode.current,
         imageData,
       })
+    }
+
+    if (content.current) {
+      scaleToFitDrawImage(content.current)
+      // to make sure the canvas updates and generates an image
+      context.beginPath()
+      context.moveTo(0, 0)
+      context.lineTo(0, 0)
+      context.strokeStyle = color
+      context.lineWidth = 0
+      context.stroke()
+      context.closePath()
+      content.current = null
     }
 
     socket.current = io.connect("/")
