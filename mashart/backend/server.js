@@ -26,10 +26,20 @@ const server = http.createServer(app)
 const io = new Server(server)
 
 io.on("connection", (socket) => {
-  socket.on("join-room", (roomCode) => {
-    socket.join(roomCode)
-    socket.to(roomCode).emit("get-users")
+  socket.on("join-room", (data) => {
+    socket.join(data.roomCode)
+    socket.to(data.roomCode).emit("get-users")
+    socket.to(data.roomCode).emit("get-canvas")
   })
+
+  socket.on("updated-canvas", (data) => {
+    socket.to(data.roomCode).emit("update-canvas", data.imageData)
+  })
+
+  socket.on("image-updated", (data) => {
+    io.in(data.roomCode).emit("get-image", data.image)
+  })
+
   socket.on("drawing", (data) => socket.to(data.roomCode).emit("drawing", data))
 })
 

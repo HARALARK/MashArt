@@ -9,6 +9,7 @@ import { Input } from "../components/styled-components/Input"
 import io from "socket.io-client"
 import Message from "../components/styled-components/Message"
 import { getCollabUsers } from "../actions/collabActions"
+import Compressor from "compressorjs"
 
 const EditArtScreen = () => {
   const location = useLocation()
@@ -17,8 +18,6 @@ const EditArtScreen = () => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  const [image, setImage] = useState(postPath)
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -49,12 +48,33 @@ const EditArtScreen = () => {
     if (!users) {
       dispatch(getCollabUsers(roomCode.current))
     }
+
     if (socket.current) {
       socket.current.on("get-users", () =>
         dispatch(getCollabUsers(roomCode.current))
       )
     }
   }, [users, dispatch])
+
+  const onImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      new Compressor(e.target.files[0], {
+        width: 300,
+        height: 300,
+        success(result) {
+          const reader = new FileReader()
+          reader.onload = function () {
+            const base64 = this.result
+            socket.current.emit("image-updated", {
+              roomCode: roomCode.current,
+              image: base64,
+            })
+          }
+          reader.readAsDataURL(result)
+        },
+      })
+    }
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -178,16 +198,35 @@ const EditArtScreen = () => {
       drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color)
     }
 
+    const updateCanvas = (imageData) => {
+      drawImage(imageData)
+    }
+
+    const drawImage = (url) => {
+      const image = new Image()
+      image.src = url
+      image.onload = () => {
+        context.drawImage(image, 0, 0)
+      }
+    }
+
+    const getCanvas = async () => {
+      const imageData = await canvas.toDataURL()
+
+      socket.current.emit("updated-canvas", {
+        roomCode: roomCode.current,
+        imageData,
+      })
+    }
+
     socket.current = io.connect("/")
-    socket.current.emit("join-room", roomCode.current)
+    socket.current.emit("join-room", { roomCode: roomCode.current })
+
+    socket.current.on("get-image", drawImage)
+    socket.current.on("get-canvas", getCanvas)
+    socket.current.on("update-canvas", updateCanvas)
     socket.current.on("drawing", onDrawingEvent)
   }, [])
-
-  const onImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(URL.createObjectURL(e.target.files[0]))
-    }
-  }
 
   return (
     <Container>
@@ -213,6 +252,7 @@ const EditArtScreen = () => {
               {users ? (
                 users.users.map((user) => (
                   <img
+                    key={user._id}
                     className="collaborator"
                     src={
                       user.profileImage.imageSrc
