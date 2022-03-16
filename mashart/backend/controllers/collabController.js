@@ -129,16 +129,16 @@ export const leaveCollab = asyncHandler(async (req, res) => {
       res.json({
         message: "Successfully Deleted",
       })
+    } else {
+      res.status(200)
+      res.json({
+        _id: updatedCollab._id,
+        roomCode: updatedCollab.roomCode,
+        hostId: updatedCollab.hostId,
+        users: updatedCollab.users,
+        content: updatedCollab.content,
+      })
     }
-
-    res.status(200)
-    res.json({
-      _id: updatedCollab._id,
-      roomCode: updatedCollab.roomCode,
-      hostId: updatedCollab.hostId,
-      users: updatedCollab.users,
-      content: updatedCollab.content,
-    })
   } else {
     res.status(400)
     throw new Error("Invalid collab data")
