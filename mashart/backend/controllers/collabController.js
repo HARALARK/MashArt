@@ -175,3 +175,31 @@ export const getCollabUsers = asyncHandler(async (req, res) => {
     throw new Error("Invalid collab data")
   }
 })
+
+// @desc Join a collab room
+// @route POST /api/collab/delete
+// @access Private
+export const deleteCollab = asyncHandler(async (req, res) => {
+  const { roomCode } = req.body
+
+  const user = await User.findById(req.user._id)
+  if (!user) {
+    throw new Error("User doesn't exist")
+  }
+
+  const collab = await Collab.findOne({ roomCode })
+
+  if (!collab) {
+    throw new Error("Invalid room code")
+  }
+
+  if (!collab.users.includes(user._id)) {
+    throw new Error("Invalid Request")
+  }
+
+  await Collab.findByIdAndDelete(collab._id)
+  res.status(200)
+  res.json({
+    message: "Successfully Deleted",
+  })
+})
