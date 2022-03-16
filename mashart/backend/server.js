@@ -45,6 +45,10 @@ io.on("connection", (socket) => {
   socket.on("leave-room", (data) => {
     socket.to(data.roomCode).emit("get-users")
   })
+
+  socket.on("remove-all", (data) => {
+    socket.to(data.roomCode).emit("remove-from-room")
+  })
 })
 
 app.use(express.json())

@@ -58,12 +58,14 @@ const EditArtScreen = () => {
     }
 
     if (socket.current) {
-      socket.current.on("get-users", () => {
-        console.log("get users")
+      socket.current.on("get-users", () =>
         dispatch(getCollabUsers(roomCode.current))
+      )
+      socket.current.on("remove-from-room", () => {
+        dispatch(leaveCollab(roomCode.current))
       })
     }
-  }, [users, dispatch])
+  }, [users, dispatch, location, navigate])
 
   const onImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -83,6 +85,15 @@ const EditArtScreen = () => {
         },
       })
     }
+  }
+
+  const savePostHandler = async () => {
+    const post = await canvasRef.current.toDataURL()
+
+    dispatch(leaveCollab(roomCode.current))
+    socket.current.emit("remove-all", { roomCode: roomCode.current })
+
+    navigate("/post/create", { state: { post } })
   }
 
   const leaveRoomHandler = () => {
@@ -333,7 +344,7 @@ const EditArtScreen = () => {
               ></TextArea>
               <ButtonsContainer>
                 {collab.hostId === userInfo._id && (
-                  <Button className="save-room">
+                  <Button className="save-room" onClick={savePostHandler}>
                     Save Post
                     <FontAwesomeIcon
                       icon={faSave}
