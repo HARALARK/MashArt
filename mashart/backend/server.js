@@ -41,6 +41,10 @@ io.on("connection", (socket) => {
   })
 
   socket.on("drawing", (data) => socket.to(data.roomCode).emit("drawing", data))
+
+  socket.on("leave-room", (data) => {
+    socket.to(data.roomCode).emit("get-users")
+  })
 })
 
 app.use(express.json())

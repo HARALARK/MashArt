@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { Input } from "../components/styled-components/Input"
 import io from "socket.io-client"
 import Message from "../components/styled-components/Message"
-import { getCollabUsers } from "../actions/collabActions"
+import { getCollabUsers, leaveCollab } from "../actions/collabActions"
 import Compressor from "compressorjs"
 
 const EditArtScreen = () => {
@@ -23,7 +23,7 @@ const EditArtScreen = () => {
   const { userInfo } = userLogin
 
   const collabInfo = useSelector((state) => state.collab)
-  const { loading, collab, error } = collabInfo
+  const { loading, collab, leave, error } = collabInfo
 
   const collabUsers = useSelector((state) => state.collabUsers)
   const { loading: loadingUsers, users, error: errorUsers } = collabUsers
@@ -43,7 +43,14 @@ const EditArtScreen = () => {
     if (collab) {
       roomCode.current = collab.roomCode
     }
-  }, [collab])
+    if (leave) {
+      if (location.key !== "default") {
+        navigate(-1)
+      } else {
+        navigate("/collab")
+      }
+    }
+  }, [collab, leave, navigate, location])
 
   useEffect(() => {
     if (!users) {
@@ -51,9 +58,10 @@ const EditArtScreen = () => {
     }
 
     if (socket.current) {
-      socket.current.on("get-users", () =>
+      socket.current.on("get-users", () => {
+        console.log("get users")
         dispatch(getCollabUsers(roomCode.current))
-      )
+      })
     }
   }, [users, dispatch])
 
@@ -75,6 +83,11 @@ const EditArtScreen = () => {
         },
       })
     }
+  }
+
+  const leaveRoomHandler = () => {
+    dispatch(leaveCollab(roomCode.current))
+    socket.current.emit("leave-room", { roomCode: roomCode.current })
   }
 
   useEffect(() => {
@@ -319,16 +332,18 @@ const EditArtScreen = () => {
                 placeholder="Description"
               ></TextArea>
               <ButtonsContainer>
-                <Button className="save-room">
-                  Save Post
-                  <FontAwesomeIcon
-                    icon={faSave}
-                    className="icon"
-                    size="sm"
-                    style={{ color: "white" }}
-                  />
-                </Button>
-                <Button className="leave-room">
+                {collab.hostId === userInfo._id && (
+                  <Button className="save-room">
+                    Save Post
+                    <FontAwesomeIcon
+                      icon={faSave}
+                      className="icon"
+                      size="sm"
+                      style={{ color: "white" }}
+                    />
+                  </Button>
+                )}
+                <Button className="leave-room" onClick={leaveRoomHandler}>
                   Leave Room
                   <FontAwesomeIcon
                     icon={faDoorOpen}
