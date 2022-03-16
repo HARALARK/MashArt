@@ -8,6 +8,9 @@ import {
   JOIN_COLLAB_FAIL,
   JOIN_COLLAB_REQUEST,
   JOIN_COLLAB_SUCCESS,
+  LEAVE_COLLAB_FAIL,
+  LEAVE_COLLAB_REQUEST,
+  LEAVE_COLLAB_SUCCESS,
 } from "../constants/collabConstants"
 
 export const collabReducer = (state = {}, action) => {
@@ -23,6 +26,12 @@ export const collabReducer = (state = {}, action) => {
     case JOIN_COLLAB_SUCCESS:
       return { loading: false, collab: action.payload }
     case JOIN_COLLAB_FAIL:
+      return { loading: false, error: action.payload }
+    case LEAVE_COLLAB_REQUEST:
+      return { loading: true }
+    case LEAVE_COLLAB_SUCCESS:
+      return { loading: false, collab: null, leave: true }
+    case LEAVE_COLLAB_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state

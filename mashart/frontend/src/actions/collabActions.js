@@ -9,6 +9,9 @@ import {
   JOIN_COLLAB_FAIL,
   JOIN_COLLAB_REQUEST,
   JOIN_COLLAB_SUCCESS,
+  LEAVE_COLLAB_FAIL,
+  LEAVE_COLLAB_REQUEST,
+  LEAVE_COLLAB_SUCCESS,
 } from "../constants/collabConstants"
 
 export const createCollab = (content) => async (dispatch, getState) => {
@@ -71,6 +74,40 @@ export const joinCollab = (roomCode) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: JOIN_COLLAB_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const leaveCollab = (roomCode) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: LEAVE_COLLAB_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.post("/api/collab/leave", { roomCode }, config)
+
+    dispatch({
+      type: LEAVE_COLLAB_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: LEAVE_COLLAB_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
