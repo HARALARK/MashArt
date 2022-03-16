@@ -1,9 +1,13 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 import device from "../screen_sizes/devices"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faDoorOpen, faSave } from "@fortawesome/free-solid-svg-icons"
+import {
+  faDoorOpen,
+  faPaperPlane,
+  faSave,
+} from "@fortawesome/free-solid-svg-icons"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Input } from "../components/styled-components/Input"
 import io from "socket.io-client"
@@ -18,6 +22,9 @@ const EditArtScreen = () => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
+  const [chatMessage, setChatMessage] = useState("")
+  const [messages, setMessages] = useState([])
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -38,6 +45,7 @@ const EditArtScreen = () => {
   const socket = useRef()
   const roomCode = useRef()
   const content = useRef(postPath)
+  const usernameRef = useRef(userInfo.username)
 
   useEffect(() => {
     if (collab) {
@@ -56,16 +64,20 @@ const EditArtScreen = () => {
     if (!users) {
       dispatch(getCollabUsers(roomCode.current))
     }
-
     if (socket.current) {
       socket.current.on("get-users", () =>
         dispatch(getCollabUsers(roomCode.current))
       )
+
       socket.current.on("remove-from-room", () => {
         dispatch(leaveCollab(roomCode.current))
       })
+
+      socket.current.on("receive-message", (data) => {
+        setMessages([...messages, data])
+      })
     }
-  }, [users, dispatch, location, navigate])
+  }, [users, dispatch, messages])
 
   const onImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -84,6 +96,23 @@ const EditArtScreen = () => {
           reader.readAsDataURL(result)
         },
       })
+    }
+  }
+
+  const sendChatMessageHandler = () => {
+    if (chatMessage.trim().length !== 0) {
+      setMessages([
+        ...messages,
+        { username: usernameRef.current, message: chatMessage },
+      ])
+
+      socket.current.emit("send-message", {
+        roomCode: roomCode.current,
+        username: usernameRef.current,
+        message: chatMessage,
+      })
+
+      setChatMessage("")
     }
   }
 
@@ -269,7 +298,10 @@ const EditArtScreen = () => {
     }
 
     socket.current = io.connect("/")
-    socket.current.emit("join-room", { roomCode: roomCode.current })
+    socket.current.emit("join-room", {
+      roomCode: roomCode.current,
+      username: usernameRef.current,
+    })
 
     socket.current.on("get-image", drawImage)
     socket.current.on("get-canvas", getCanvas)
@@ -327,7 +359,7 @@ const EditArtScreen = () => {
             />
           </ImageInputContainer>
 
-          <ImgDescContainer>
+          <SubContainer>
             <CanvasContainer>
               <Whiteboard ref={canvasRef} className="whiteboard" />
               <ColorsContainer>
@@ -336,12 +368,38 @@ const EditArtScreen = () => {
               </ColorsContainer>
             </CanvasContainer>
 
-            <DescContainer>
-              <TextArea
-                rows="3"
-                name="text"
-                placeholder="Description"
-              ></TextArea>
+            <RightContainer>
+              <ChatContainer>
+                <ChatScreen>
+                  {messages.map((data, index) => {
+                    const isUser = usernameRef.current === data.username
+                    return (
+                      <ChatMessage
+                        key={index}
+                        className={isUser ? "active" : ""}
+                      >
+                        {!isUser && (
+                          <h3 className="username">{data.username}</h3>
+                        )}
+                        <p className="message">{data.message}</p>
+                      </ChatMessage>
+                    )
+                  })}
+                </ChatScreen>
+                <SendMessage>
+                  <Input
+                    type="text"
+                    placeholder="Type here..."
+                    flex={1}
+                    value={chatMessage}
+                    onChange={(e) => setChatMessage(e.target.value)}
+                  />
+                  <SendButton onClick={sendChatMessageHandler}>
+                    <FontAwesomeIcon icon={faPaperPlane} size="lg" />
+                  </SendButton>
+                </SendMessage>
+              </ChatContainer>
+
               <ButtonsContainer>
                 {collab.hostId === userInfo._id && (
                   <Button className="save-room" onClick={savePostHandler}>
@@ -364,8 +422,8 @@ const EditArtScreen = () => {
                   />
                 </Button>
               </ButtonsContainer>
-            </DescContainer>
-          </ImgDescContainer>
+            </RightContainer>
+          </SubContainer>
         </CollabContainer>
       )}
     </Container>
@@ -463,7 +521,7 @@ const ImageInputContainer = styled.div`
   padding: 1rem 0;
 `
 
-const ImgDescContainer = styled.section`
+const SubContainer = styled.section`
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -479,10 +537,6 @@ const CanvasContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  @media ${device.tablet} {
-    flex: 1.5;
-  }
 `
 
 const Whiteboard = styled.canvas`
@@ -504,19 +558,74 @@ const ColorsContainer = styled.div`
   color: var(--light);
 `
 
-const DescContainer = styled.div`
+const RightContainer = styled.div`
   flex: 1;
 `
 
-const TextArea = styled.textarea`
+const ChatContainer = styled.div`
   font-family: "Poppins";
   font-size: 0.8rem;
-  border: none;
   border-radius: 5px;
   padding: 1rem;
-  outline: none;
   width: 100%;
   height: 300px;
+  background: var(--primary);
+  display: flex;
+  flex-direction: column;
+`
+
+const ChatScreen = styled.div`
+  flex: 1;
+  overflow-y: scroll;
+  margin-bottom: 0.5rem;
+`
+
+const ChatMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: var(--grey-light);
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  margin: 0 1rem 0.5rem 0;
+
+  &.active {
+    background: var(--primary-dark);
+  }
+
+  .username {
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+
+  .message {
+  }
+`
+
+const SendMessage = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 5px;
+  background: var(--primary-dark);
+`
+
+const SendButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--primary-light);
+  background: var(--secondary-dark);
+  padding: 0.6rem;
+  border-radius: 5px;
+  margin-left: 0.5rem;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--secondary);
+  }
 `
 
 const ButtonsContainer = styled.div`

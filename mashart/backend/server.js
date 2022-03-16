@@ -27,6 +27,7 @@ const io = new Server(server)
 
 io.on("connection", (socket) => {
   socket.on("join-room", (data) => {
+    socket.name = data.username
     socket.join(data.roomCode)
     socket.to(data.roomCode).emit("get-users")
     socket.to(data.roomCode).emit("get-canvas")
@@ -48,6 +49,13 @@ io.on("connection", (socket) => {
 
   socket.on("remove-all", (data) => {
     socket.to(data.roomCode).emit("remove-from-room")
+  })
+
+  socket.on("send-message", (data) => {
+    socket.to(data.roomCode).emit("receive-message", {
+      username: data.username,
+      message: data.message,
+    })
   })
 })
 
