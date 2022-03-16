@@ -2,6 +2,9 @@ import {
   CREATE_COLLAB_FAIL,
   CREATE_COLLAB_REQUEST,
   CREATE_COLLAB_SUCCESS,
+  DELETE_COLLAB_FAIL,
+  DELETE_COLLAB_REQUEST,
+  DELETE_COLLAB_SUCCESS,
   GET_COLLAB_USERS_FAIL,
   GET_COLLAB_USERS_REQUEST,
   GET_COLLAB_USERS_SUCCESS,
@@ -32,6 +35,12 @@ export const collabReducer = (state = {}, action) => {
     case LEAVE_COLLAB_SUCCESS:
       return { loading: false, collab: null, leave: true }
     case LEAVE_COLLAB_FAIL:
+      return { loading: false, error: action.payload }
+    case DELETE_COLLAB_REQUEST:
+      return { loading: true }
+    case DELETE_COLLAB_SUCCESS:
+      return { loading: false, collab: null, leave: true }
+    case DELETE_COLLAB_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state
