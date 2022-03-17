@@ -1,23 +1,39 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 import device from "../screen_sizes/devices"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faDoorOpen, faSave } from "@fortawesome/free-solid-svg-icons"
+import {
+  faDoorOpen,
+  faPaperPlane,
+  faSave,
+} from "@fortawesome/free-solid-svg-icons"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Input } from "../components/styled-components/Input"
+import io from "socket.io-client"
+import Message from "../components/styled-components/Message"
+import { getCollabUsers, leaveCollab } from "../actions/collabActions"
+import Compressor from "compressorjs"
 
 const EditArtScreen = () => {
   const location = useLocation()
   const postPath =
-    location.state && location.state.path ? location.state.path : null
+    location.state && location.state.content ? location.state.content : null
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  const [image, setImage] = useState(postPath)
+  const [chatMessage, setChatMessage] = useState("")
+  const [messages, setMessages] = useState([])
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+
+  const collabInfo = useSelector((state) => state.collab)
+  const { loading, collab, leave, error } = collabInfo
+
+  const collabUsers = useSelector((state) => state.collabUsers)
+  const { loading: loadingUsers, users, error: errorUsers } = collabUsers
 
   useEffect(() => {
     if (!userInfo) {
@@ -25,39 +41,311 @@ const EditArtScreen = () => {
     }
   }, [userInfo, navigate])
 
+  const canvasRef = useRef(null)
+  const socket = useRef()
+  const roomCode = useRef()
+  const content = useRef(postPath)
+  const usernameRef = useRef(userInfo.username)
+
+  useEffect(() => {
+    if (collab) {
+      roomCode.current = collab.roomCode
+    }
+    if (leave) {
+      if (location.key !== "default") {
+        navigate(-1)
+      } else {
+        navigate("/collab")
+      }
+    }
+  }, [collab, leave, navigate, location])
+
+  useEffect(() => {
+    if (!users) {
+      dispatch(getCollabUsers(roomCode.current))
+    }
+    if (socket.current) {
+      socket.current.on("get-users", () =>
+        dispatch(getCollabUsers(roomCode.current))
+      )
+
+      socket.current.on("remove-from-room", () => {
+        dispatch(leaveCollab(roomCode.current))
+      })
+
+      socket.current.on("receive-message", (data) => {
+        setMessages([...messages, data])
+      })
+    }
+  }, [users, dispatch, messages])
+
   const onImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setImage(URL.createObjectURL(e.target.files[0]))
+      new Compressor(e.target.files[0], {
+        width: 300,
+        height: 300,
+        success(result) {
+          const reader = new FileReader()
+          reader.onload = function () {
+            const base64 = this.result
+            socket.current.emit("image-updated", {
+              roomCode: roomCode.current,
+              image: base64,
+            })
+          }
+          reader.readAsDataURL(result)
+        },
+      })
     }
   }
 
+  const sendChatMessageHandler = () => {
+    if (chatMessage.trim().length !== 0) {
+      setMessages([
+        ...messages,
+        { username: usernameRef.current, message: chatMessage },
+      ])
+
+      socket.current.emit("send-message", {
+        roomCode: roomCode.current,
+        username: usernameRef.current,
+        message: chatMessage,
+      })
+
+      setChatMessage("")
+    }
+  }
+
+  const savePostHandler = async () => {
+    const post = await canvasRef.current.toDataURL()
+
+    dispatch(leaveCollab(roomCode.current))
+    socket.current.emit("remove-all", { roomCode: roomCode.current })
+
+    navigate("/post/create", { state: { post } })
+  }
+
+  const leaveRoomHandler = () => {
+    dispatch(leaveCollab(roomCode.current))
+    socket.current.emit("leave-room", { roomCode: roomCode.current })
+  }
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const context = canvas.getContext("2d")
+    canvas.height = 300
+    canvas.width = 300
+
+    const color = document.getElementById("color")
+    // set the current color
+    const current = {
+      color: "#000000",
+    }
+
+    const onColorChange = (e) => {
+      current.color = e.target.value
+    }
+
+    color.addEventListener("change", onColorChange, false)
+    let drawing = false
+
+    const drawLine = (x0, y0, x1, y1, color, emit) => {
+      context.beginPath()
+      context.moveTo(x0, y0)
+      context.lineTo(x1, y1)
+      context.strokeStyle = color
+      context.lineWidth = 2
+      context.stroke()
+      context.closePath()
+
+      if (!emit) {
+        return
+      }
+      const w = canvas.width
+      const h = canvas.height
+
+      socket.current.emit("drawing", {
+        x0: x0 / w,
+        y0: y0 / h,
+        x1: x1 / w,
+        y1: y1 / h,
+        color,
+        roomCode: roomCode.current,
+      })
+    }
+
+    const onPointerDown = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      drawing = true
+
+      current.x = (e.pageX || e.touches[0].pageX) - canvas.offsetLeft
+      current.y = (e.pageY || e.touches[0].pageY) - canvas.offsetTop
+    }
+
+    const onPointerMove = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      if (!drawing) {
+        return
+      }
+      drawLine(
+        current.x,
+        current.y,
+        (e.pageX || e.touches[0].pageX) - canvas.offsetLeft,
+        (e.pageY || e.touches[0].pageY) - canvas.offsetTop,
+        current.color,
+        true
+      )
+      current.x = (e.pageX || e.touches[0].pageX) - canvas.offsetLeft
+      current.y = (e.pageY || e.touches[0].pageY) - canvas.offsetTop
+    }
+
+    const onPointerUp = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      if (!drawing) {
+        return
+      }
+      drawing = false
+      drawLine(
+        current.x,
+        current.y,
+        (e.pageX || e.changedTouches[e.changedTouches.length - 1].pageX) -
+          canvas.offsetLeft,
+        (e.pageY || e.changedTouches[e.changedTouches.length - 1].pageY) -
+          canvas.offsetTop,
+        current.color,
+        true
+      )
+    }
+
+    const throttle = (callback, delay) => {
+      let previousCall = new Date().getTime()
+      return function () {
+        const time = new Date().getTime()
+
+        if (time - previousCall >= delay) {
+          previousCall = time
+          callback.apply(null, arguments)
+        }
+      }
+    }
+
+    canvas.addEventListener("mousedown", onPointerDown, false)
+    canvas.addEventListener("mouseup", onPointerUp, false)
+    canvas.addEventListener("mouseout", onPointerUp, false)
+    canvas.addEventListener("mousemove", throttle(onPointerMove, 10), false)
+
+    // Touch support for mobile devices
+    canvas.addEventListener("touchstart", onPointerDown, false)
+    canvas.addEventListener("touchend", onPointerUp, false)
+    canvas.addEventListener("touchcancel", onPointerUp, false)
+    canvas.addEventListener("touchmove", throttle(onPointerMove, 10), false)
+
+    const onDrawingEvent = (data) => {
+      const w = canvas.width
+      const h = canvas.height
+      drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color)
+    }
+
+    const updateCanvas = (imageData) => {
+      drawImage(imageData)
+    }
+
+    const scaleToFitDrawImage = (url) => {
+      const img = new Image()
+      img.src = url
+      // get the scale
+      var scale = Math.min(canvas.width / img.width, canvas.height / img.height)
+      // get the top left position of the image
+      var x = canvas.width / 2 - (img.width / 2) * scale
+      var y = canvas.height / 2 - (img.height / 2) * scale
+      context.drawImage(img, x, y, img.width * scale, img.height * scale)
+    }
+
+    const drawImage = (url) => {
+      const image = new Image()
+      image.src = url
+      image.onload = () => {
+        context.drawImage(image, 0, 0)
+      }
+    }
+
+    const getCanvas = async () => {
+      const imageData = await canvas.toDataURL()
+
+      socket.current.emit("updated-canvas", {
+        roomCode: roomCode.current,
+        imageData,
+      })
+    }
+
+    if (content.current) {
+      scaleToFitDrawImage(content.current)
+      // to make sure the canvas updates and generates an image
+      context.beginPath()
+      context.moveTo(0, 0)
+      context.lineTo(0, 0)
+      context.strokeStyle = color
+      context.lineWidth = 0
+      context.stroke()
+      context.closePath()
+      content.current = null
+    }
+
+    socket.current = io.connect("/")
+    socket.current.emit("join-room", {
+      roomCode: roomCode.current,
+      username: usernameRef.current,
+    })
+
+    socket.current.on("get-image", drawImage)
+    socket.current.on("get-canvas", getCanvas)
+    socket.current.on("update-canvas", updateCanvas)
+    socket.current.on("drawing", onDrawingEvent)
+  }, [])
+
   return (
-    <div>
-      <Container>
+    <Container>
+      {loading && <Message>Loading...</Message>}
+      {error && <Message variant="error">{error}</Message>}
+      {collab && (
         <CollabContainer>
-          <p className="owner">{userInfo.username}'s Room</p>
+          <p className="owner">
+            {collab.hostId && collab.hostId.username
+              ? collab.hostId.username
+              : userInfo.username}
+            's Room
+          </p>
           <Header>
             <RoomContainer>
               <p className="room-code-txt">Room Code:</p>
-              <p className="room-code">ABC123</p>
+              <p className="room-code">{collab.roomCode}</p>
             </RoomContainer>
 
             <CollaboratorContainer>
-              <img
-                className="collaborator"
-                src="/images/logo/logo.png"
-                alt="collaborator1"
-              />
-              <img
-                className="collaborator"
-                src="/images/logo/logo.png"
-                alt="collaborator2"
-              />
-              <img
-                className="collaborator"
-                src="/images/logo/logo.png"
-                alt="collaborator3"
-              />
+              {loadingUsers && <Message>Loading...</Message>}
+              {errorUsers && <Message variant="error">{errorUsers}</Message>}
+              {users ? (
+                users.users.map((user) => (
+                  <img
+                    key={user._id}
+                    className="collaborator"
+                    src={
+                      user.profileImage.imageSrc
+                        ? user.profileImage.imageSrc
+                        : "/images/logo/logo.png"
+                    }
+                    alt="collaborator1"
+                  />
+                ))
+              ) : (
+                <></>
+              )}
             </CollaboratorContainer>
           </Header>
 
@@ -71,63 +359,60 @@ const EditArtScreen = () => {
             />
           </ImageInputContainer>
 
-          <ImgDescContainer>
+          <SubContainer>
             <CanvasContainer>
-              <ImgContainer>
-                {image ? (
-                  <img className="post" src={image} alt="post" />
-                ) : (
-                  <ImagePlaceHolder>
-                    <p className="no-post">No Image</p>
-                  </ImagePlaceHolder>
-                )}
-              </ImgContainer>
-              <FilterContainer>
-                <Filter
-                  className="filter"
-                  src="/images/logo/logo.png"
-                  alt="filter1"
-                />
-                <Filter
-                  className="filter"
-                  src="/images/logo/logo.png"
-                  alt="filter2"
-                />
-                <Filter
-                  className="filter"
-                  src="/images/logo/logo.png"
-                  alt="filter3"
-                />
-                <Filter
-                  className="filter"
-                  src="/images/logo/logo.png"
-                  alt="filter4"
-                />
-                <Filter
-                  className="filter"
-                  src="/images/logo/logo.png"
-                  alt="filter5"
-                />
-              </FilterContainer>
+              <Whiteboard ref={canvasRef} className="whiteboard" />
+              <ColorsContainer>
+                <p>Pick a color:</p>
+                <input type="color" id="color" />
+              </ColorsContainer>
             </CanvasContainer>
 
-            <DescContainer>
-              <TextArea
-                rows="3"
-                name="text"
-                placeholder="Description"
-              ></TextArea>
-              <ButtonsContainer>
-                <Button className="save-room">
-                  Save Post
-                  <FontAwesomeIcon
-                    icon={faSave}
-                    className="icon"
-                    size="sm"
-                    style={{ color: "white" }}
+            <RightContainer>
+              <ChatContainer>
+                <ChatScreen>
+                  {messages.map((data, index) => {
+                    const isUser = usernameRef.current === data.username
+                    return (
+                      <ChatMessage
+                        key={index}
+                        className={isUser ? "active" : ""}
+                      >
+                        {!isUser && (
+                          <h3 className="username">{data.username}</h3>
+                        )}
+                        <p className="message">{data.message}</p>
+                      </ChatMessage>
+                    )
+                  })}
+                </ChatScreen>
+                <SendMessage>
+                  <Input
+                    type="text"
+                    placeholder="Type here..."
+                    flex={1}
+                    value={chatMessage}
+                    onChange={(e) => setChatMessage(e.target.value)}
                   />
-                </Button>
-                <Button className="leave-room">
+                  <SendButton onClick={sendChatMessageHandler}>
+                    <FontAwesomeIcon icon={faPaperPlane} size="lg" />
+                  </SendButton>
+                </SendMessage>
+              </ChatContainer>
+
+              <ButtonsContainer>
+                {collab.hostId === userInfo._id && (
+                  <Button className="save-room" onClick={savePostHandler}>
+                    Save Post
+                    <FontAwesomeIcon
+                      icon={faSave}
+                      className="icon"
+                      size="sm"
+                      style={{ color: "white" }}
+                    />
+                  </Button>
+                )}
+                <Button className="leave-room" onClick={leaveRoomHandler}>
                   Leave Room
                   <FontAwesomeIcon
                     icon={faDoorOpen}
@@ -137,11 +422,11 @@ const EditArtScreen = () => {
                   />
                 </Button>
               </ButtonsContainer>
-            </DescContainer>
-          </ImgDescContainer>
+            </RightContainer>
+          </SubContainer>
         </CollabContainer>
-      </Container>
-    </div>
+      )}
+    </Container>
   )
 }
 
@@ -236,7 +521,7 @@ const ImageInputContainer = styled.div`
   padding: 1rem 0;
 `
 
-const ImgDescContainer = styled.section`
+const SubContainer = styled.section`
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -248,77 +533,99 @@ const ImgDescContainer = styled.section`
 `
 
 const CanvasContainer = styled.div`
-  @media ${device.tablet} {
-    flex: 1.5;
-  }
-`
-
-const ImgContainer = styled.div`
   display: flex;
-  width: 100%;
-  height: 300px;
-  justify-content: center;
-  background: var(--light);
-  border-radius: 5px;
-
-  .post {
-    height: 300px;
-    width: 300px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-`
-
-const ImagePlaceHolder = styled.div`
-  background-color: var(--grey-light);
-  opacity: 50%;
-  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
-  border-radius: 5px;
-
-  .no-post {
-    color: var(--dark);
-    font-size: 1.5rem;
-  }
-
-  @media ${device.tablet} {
-    width: 100%;
-    height: 100%;
-  }
 `
 
-const FilterContainer = styled.div`
+const Whiteboard = styled.canvas`
+  border-radius: 5px;
+  background: var(--light);
+  width: 300px;
+  height: 300px;
+`
+
+const ColorsContainer = styled.div`
+  width: 100%;
   display: flex;
   background-color: var(--secondary);
   padding: 1rem;
   margin: 1rem 0 0;
   border-radius: 5px;
-  justify-content: space-between;
-`
-const Filter = styled.img`
-  height: 60px;
-  width: 60px;
-  background-color: white;
-  border-radius: 5px;
+  align-items: center;
+  gap: 1rem;
+  color: var(--light);
 `
 
-const DescContainer = styled.div`
+const RightContainer = styled.div`
   flex: 1;
 `
 
-const TextArea = styled.textarea`
+const ChatContainer = styled.div`
   font-family: "Poppins";
   font-size: 0.8rem;
-  border: none;
   border-radius: 5px;
   padding: 1rem;
-  outline: none;
   width: 100%;
   height: 300px;
+  background: var(--primary);
+  display: flex;
+  flex-direction: column;
+`
+
+const ChatScreen = styled.div`
+  flex: 1;
+  overflow-y: scroll;
+  margin-bottom: 0.5rem;
+`
+
+const ChatMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: var(--grey-light);
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  margin: 0 1rem 0.5rem 0;
+
+  &.active {
+    background: var(--primary-dark);
+  }
+
+  .username {
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+
+  .message {
+  }
+`
+
+const SendMessage = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 5px;
+  background: var(--primary-dark);
+`
+
+const SendButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--primary-light);
+  background: var(--secondary-dark);
+  padding: 0.6rem;
+  border-radius: 5px;
+  margin-left: 0.5rem;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--secondary);
+  }
 `
 
 const ButtonsContainer = styled.div`

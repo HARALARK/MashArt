@@ -3,6 +3,7 @@ import styled from "styled-components"
 export const Input = styled.input`
   padding: ${(prop) => (prop.padding ? prop.padding : "0.7rem 1rem")};
   width: ${(prop) => (prop.width ? prop.width : "")};
+  flex: ${(prop) => (prop.flex ? prop.flex : "")};
   border: none;
   border-radius: 5px;
   &:focus {
@@ -17,13 +18,12 @@ export const PasswordInput = styled(Input)`
 `
 
 export const DescInput = styled.input.attrs({
-
-  placeholder: "Description..."
-}) `
+  placeholder: "Description...",
+})`
   border: none;
-  
+
   padding: ${(prop) => (prop.padding ? prop.padding : "0.7rem 1rem")};
-  
+
   border: none;
   border-radius: 5px;
   height: 100%;

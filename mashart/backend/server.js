@@ -1,4 +1,6 @@
 import express from "express"
+import http from "http"
+import { Server } from "socket.io"
 import dotenv from "dotenv"
 import colors from "colors"
 import path from "path"
@@ -19,6 +21,43 @@ dotenv.config()
 connectDB()
 
 const app = express()
+const server = http.createServer(app)
+
+const io = new Server(server)
+
+io.on("connection", (socket) => {
+  socket.on("join-room", (data) => {
+    socket.name = data.username
+    socket.join(data.roomCode)
+    socket.to(data.roomCode).emit("get-users")
+    socket.to(data.roomCode).emit("get-canvas")
+  })
+
+  socket.on("updated-canvas", (data) => {
+    socket.to(data.roomCode).emit("update-canvas", data.imageData)
+  })
+
+  socket.on("image-updated", (data) => {
+    io.in(data.roomCode).emit("get-image", data.image)
+  })
+
+  socket.on("drawing", (data) => socket.to(data.roomCode).emit("drawing", data))
+
+  socket.on("leave-room", (data) => {
+    socket.to(data.roomCode).emit("get-users")
+  })
+
+  socket.on("remove-all", (data) => {
+    socket.to(data.roomCode).emit("remove-from-room")
+  })
+
+  socket.on("send-message", (data) => {
+    socket.to(data.roomCode).emit("receive-message", {
+      username: data.username,
+      message: data.message,
+    })
+  })
+})
 
 app.use(express.json())
 
@@ -45,7 +84,7 @@ app.use(errorHandler)
 
 const PORT = process.env.PORT || 5000
 
-app.listen(
+server.listen(
   PORT,
   console.log(
     `Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow

@@ -8,7 +8,7 @@ import GameInfo from "../components/GameInfo"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { getUserPosts } from "../actions/userActions"
-import { createCollab } from "../actions/collabActions"
+import { createCollab, joinCollab } from "../actions/collabActions"
 
 const CollabScreen = () => {
   const navigate = useNavigate()
@@ -16,6 +16,7 @@ const CollabScreen = () => {
   const [message, setMessage] = useState("")
   const [createRoomPopUp, setCreateRoomPopUp] = useState(false)
   const [postsPopUp, setPostsPopUp] = useState(false)
+  const [content, setContent] = useState("")
 
   const dispatch = useDispatch()
 
@@ -23,22 +24,21 @@ const CollabScreen = () => {
   const { loading: postsLoading, posts, error: postsError } = userPosts
 
   const userLogin = useSelector((state) => state.userLogin)
-  const { loading, userInfo, error } = userLogin
+  const { userInfo } = userLogin
+
+  const collabInfo = useSelector((state) => state.collab)
+  const { loading, collab, error } = collabInfo
 
   const createRoomHandler = (path = "") => {
     dispatch(createCollab(path))
-    navigate("/collab/room", { state: { path } })
+    setContent(path)
   }
 
   const joinRoomHandler = () => {
-    /**
-     * TODO: Complete functionality of Create Room
-     * 1. dispatch request to check if room exists using the roomCode
-     * 2. redirect the user to collab screen with room id
-     */
-
     if (roomCode.length !== 6 || roomCode.trim() === "") {
       setMessage("Please enter a valid room code")
+    } else {
+      dispatch(joinCollab(roomCode))
     }
   }
 
@@ -51,7 +51,10 @@ const CollabScreen = () => {
     if (!userInfo) {
       navigate("/")
     }
-  }, [userInfo, navigate])
+    if (collab) {
+      navigate("/collab/room", { state: { content } })
+    }
+  }, [userInfo, navigate, collab, content])
 
   return (
     <Container>
@@ -142,7 +145,8 @@ const CollabScreen = () => {
         <Input
           type="text"
           placeholder="Room Code"
-          onChange={(e) => setRoomCode(e.target.value)}
+          value={roomCode}
+          onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
         />
 
         <Button className="variant" onClick={joinRoomHandler}>
