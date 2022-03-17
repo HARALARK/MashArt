@@ -597,9 +597,6 @@ const ChatMessage = styled.div`
     font-size: 0.8rem;
     letter-spacing: 1px;
   }
-
-  .message {
-  }
 `
 
 const SendMessage = styled.div`
