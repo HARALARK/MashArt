@@ -24,6 +24,7 @@ const ComicsScreen = () => {
         <img className= "comicPicture3" src="/images/comics/cloud.png" alt="cloudcomic" />
         <img className= "comicPicture4" src="/images/comics/thunder.png" alt="thundercomic" />
         <ing className= "comic1" src="https://i.postimg.cc/W14BzFRP/garfield.png" alt="Garfield Comic"/>
+
         
       </Heading>
       <SearchBar>
@@ -76,6 +77,7 @@ const Container = styled.div`
   }
 `
 const Heading = styled.section`
+
   padding: 1rem 0 1rem;
   height: 130px;
   width: 2950%;
@@ -84,6 +86,7 @@ const Heading = styled.section`
   //margin-right: 200px;
   background-color: var(--secondary-dark);
   border-radius: 10px;
+
   .title{
     color: var(--light);
     font-size: 2rem;
@@ -96,6 +99,7 @@ const Heading = styled.section`
     color: var(--light);
     margin-left: 100px;
     margin-top: 10px;
+
   }
   .comicPicture1 {
     position: relative;
@@ -136,8 +140,8 @@ const Heading = styled.section`
     margin-top: -930px;
     margin-left: 680px;
   }
-
 `
+
 const SearchBar = styled.div`
   display: flex;
   flex-direction: column;
@@ -199,6 +203,7 @@ const Body = styled.body`
     margin-bottom: 0px;
   }
 
+
   .comic3
   {
     width: 250px;
@@ -241,6 +246,7 @@ const Body = styled.body`
       margin-left: 549px; 
     }
 `
+
 
 
 

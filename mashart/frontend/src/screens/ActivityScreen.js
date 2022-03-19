@@ -43,6 +43,7 @@ const ActivityScreen = () => {
                             </ProfileImage>
                         </ProfilePanel>
 
+                      <ActivityBorder>
                         <ActivityPanel>
                             <Notifications>
                               <span className = "title"> Notifications </span>
@@ -79,10 +80,8 @@ const ActivityScreen = () => {
                               <FontAwesomeIcon icon={faComment} size = 'xs' style={{ color: '#03045E' }}/>
                               <p1 className = "notifications">  Minion commented on your artwork "Blues" <br/></p1>
                             </Notifications>
-
-                            
                         </ActivityPanel>
-                    
+                      </ActivityBorder>
                     </MegaPanel>         
               </Form>
           </Container>
@@ -96,8 +95,8 @@ const Container = styled.div`
     justify-content: center;
     flex-wrap: wrap;
     overflow: scroll;
-    width: 100%;
-
+    width: 100vw;
+    //outline: 1px dashed green;
     
     .heading {
         color: var(--light);
@@ -113,66 +112,54 @@ const Container = styled.div`
   @media ${device.tablet} {
     height: calc(100vh - 160px);
     flex-direction: row;
+    width: 100%;
     justify-content: space-between;
     overflow: visible;
-    padding: 0 2rem;
+    padding: 0 2rem;}
    
 `
 
 const Form = styled.form`
-  
   display: flex;
   flex-direction: column;
   align-content: space-between;
-
-  background-color: #0077b6;
-  padding: 1rem 2rem 1rem;
+  justify-content: center;
+  background: var(--background);
+  padding: 0rem 2rem 0rem;
   border-radius: 5px;
-  width: 100%;
   height: 95%;
   gap: 2 rem;
   color: black;
   
-  .upload {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: white;
-  }
-  .description {
-    color: black;
-    font-size: 1rem;
-    font-weight: 600;
-    
-  }
+  height: 95%;
   
+  @media ${device.tablet} {
+    background: var(--secondary-light);}
 `
 
 const ProfilePanel = styled.section`
-    border-radius: 40px;
-    background-color: #90e0ef;
+   
+    background-color: var(--primary);
     display: flex;
-    padding: 5px;
-    height: 565px;
-    width: 240px;
-    border: 1px solid #03045E;
-
-    //align-items: center;
-    //flex-direction: column;
-    //justify-content: center;
-
-
+    flex-direction: column;
+    justify-content: center;
+    height: 20%;
+    width: 100%;
+    border-radius: 40px;
+    
     font-size: 20px;
     color: black;
   
     @media ${device.tablet} {
       gap: 5rem;
+      width: 30%;
+      height: 90%;
       flex-direction: row;
       justify-content: space-between;
     }
 `
 const ProfileImage = styled.section`
     display: flex;
-    //gap: 1rem;
     align-items: center;
     flex-direction: column;
     justify-content: center;
@@ -189,13 +176,11 @@ const ProfileImage = styled.section`
     }
 `
 const ActivityPanel = styled.section`
-    background-color: white;
+    background-color: #E6FBFF;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    height: 565px;
-    width: 510px;
-    border: 1px solid #03045E;
+    width: 100%;
     
     border-radius: 40px;
     font-size: 30px;
@@ -207,6 +192,7 @@ const ActivityPanel = styled.section`
       }
   
     @media ${device.tablet} {
+      height: 100%;
       gap: 5rem;
       flex-direction: row;
       justify-content: space-between;
@@ -215,7 +201,6 @@ const ActivityPanel = styled.section`
 
 const MegaPanel = styled.div`
   display: flex;
-  
   flex-direction: column;
   align-content: space-evenly;
   align-items: center;
@@ -247,14 +232,13 @@ const Notifications = styled.section`
   
 `
 const Summary = styled.section`
-    background-color: white;
-    height: 600px;
-    width:  210px;
+    background-color: #E6FBFF;
+    height: 60%;
+    width:  90%;
     align-items: center;
     border-radius: 40px;
     font-size: 25px;
     color: black;
-    margin-top: 10px;
     padding: 20px;
     
     
@@ -273,7 +257,18 @@ const Summary = styled.section`
       justify-content: space-between;
     }
 `
+const ActivityBorder = styled.section`
 
+background-color: var(--primary);
+border-radius: 40px;
+height: 90%;
+padding: 0.5rem 1rem 0.5rem 1rem;
+
+@media ${device.tablet} {
+  background: none;
+  padding: 0rem 0rem 0rem 0rem;
+}
+`
 
 
 

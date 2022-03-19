@@ -1,113 +1,442 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 import device from "../screen_sizes/devices"
-import { DescInput } from "../components/styled-components/Input";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faDoorOpen} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {
+  faDoorOpen,
+  faPaperPlane,
+  faSave,
+} from "@fortawesome/free-solid-svg-icons"
+import { useLocation, useNavigate } from "react-router-dom"
+import { Input } from "../components/styled-components/Input"
+import io from "socket.io-client"
+import Message from "../components/styled-components/Message"
+import { getCollabUsers, leaveCollab } from "../actions/collabActions"
+import Compressor from "compressorjs"
+
 const EditArtScreen = () => {
-  const [image, setImage] = useState(null)
-  const userDetails = useSelector((state) => state.userDetails)
-  const { loading, user, error } = userDetails
+  const location = useLocation()
+  const postPath =
+    location.state && location.state.content ? location.state.content : null
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const [chatMessage, setChatMessage] = useState("")
+  const [messages, setMessages] = useState([])
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
-    return (
-    <div>
-          <Container>
-              <Form>
-                    <Header> 
-                        <RoomContainer>
-                          <img className= "profilePicture" src="/images/logo/logo.png" alt="profilepic" /> 
-                          <p1 className = "username">  {user.username}'s Room </p1>
-                          
-                          <p1 className = "roomno"> - 2nsX3 </p1>
-                        </RoomContainer>
-                        
-                        <CollaboratorContainer>
-                        <img className= "collaborator" src="/images/logo/logo.png" alt="collaborator1" />
-                        <img className= "collaborator" src="/images/logo/logo.png" alt="collaborator2" />
-                        <img className= "collaborator" src="/images/logo/logo.png" alt="collaborator3" />
-                        </CollaboratorContainer>
-                        
-                        
-                    </Header>
-                    
-                    <UploadContainer>
-                      <p className = "upload"> Upload Artwork </p>
-                      <Button className="uploadart"> Upload </Button>
-                    </UploadContainer>
-                    
-                    <ImgDescContainer>
-                      <ImgContainer>
-                        {image ? (
-                          <img className="post" src={image} alt="post" />
-                        ) : (
-                          <ImagePlaceHolder>
-                            <p className="no-post">No Image</p>
-                          </ImagePlaceHolder>
+  const collabInfo = useSelector((state) => state.collab)
+  const { loading, collab, leave, error } = collabInfo
+
+  const collabUsers = useSelector((state) => state.collabUsers)
+  const { loading: loadingUsers, users, error: errorUsers } = collabUsers
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/")
+    }
+  }, [userInfo, navigate])
+
+  const canvasRef = useRef(null)
+  const socket = useRef()
+  const roomCode = useRef()
+  const content = useRef(postPath)
+  const usernameRef = useRef(userInfo.username)
+
+  useEffect(() => {
+    if (collab) {
+      roomCode.current = collab.roomCode
+    }
+    if (leave) {
+      if (location.key !== "default") {
+        navigate(-1)
+      } else {
+        navigate("/collab")
+      }
+    }
+  }, [collab, leave, navigate, location])
+
+  useEffect(() => {
+    if (!users) {
+      dispatch(getCollabUsers(roomCode.current))
+    }
+    if (socket.current) {
+      socket.current.on("get-users", () =>
+        dispatch(getCollabUsers(roomCode.current))
+      )
+
+      socket.current.on("remove-from-room", () => {
+        dispatch(leaveCollab(roomCode.current))
+      })
+
+      socket.current.on("receive-message", (data) => {
+        setMessages([...messages, data])
+      })
+    }
+  }, [users, dispatch, messages])
+
+  const onImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      new Compressor(e.target.files[0], {
+        width: 300,
+        height: 300,
+        success(result) {
+          const reader = new FileReader()
+          reader.onload = function () {
+            const base64 = this.result
+            socket.current.emit("image-updated", {
+              roomCode: roomCode.current,
+              image: base64,
+            })
+          }
+          reader.readAsDataURL(result)
+        },
+      })
+    }
+  }
+
+  const sendChatMessageHandler = () => {
+    if (chatMessage.trim().length !== 0) {
+      setMessages([
+        ...messages,
+        { username: usernameRef.current, message: chatMessage },
+      ])
+
+      socket.current.emit("send-message", {
+        roomCode: roomCode.current,
+        username: usernameRef.current,
+        message: chatMessage,
+      })
+
+      setChatMessage("")
+    }
+  }
+
+  const savePostHandler = async () => {
+    const post = await canvasRef.current.toDataURL()
+
+    dispatch(leaveCollab(roomCode.current))
+    socket.current.emit("remove-all", { roomCode: roomCode.current })
+
+    navigate("/post/create", { state: { post } })
+  }
+
+  const leaveRoomHandler = () => {
+    dispatch(leaveCollab(roomCode.current))
+    socket.current.emit("leave-room", { roomCode: roomCode.current })
+  }
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const context = canvas.getContext("2d")
+    canvas.height = 300
+    canvas.width = 300
+
+    const color = document.getElementById("color")
+    // set the current color
+    const current = {
+      color: "#000000",
+    }
+
+    const onColorChange = (e) => {
+      current.color = e.target.value
+    }
+
+    color.addEventListener("change", onColorChange, false)
+    let drawing = false
+
+    const drawLine = (x0, y0, x1, y1, color, emit) => {
+      context.beginPath()
+      context.moveTo(x0, y0)
+      context.lineTo(x1, y1)
+      context.strokeStyle = color
+      context.lineWidth = 2
+      context.stroke()
+      context.closePath()
+
+      if (!emit) {
+        return
+      }
+      const w = canvas.width
+      const h = canvas.height
+
+      socket.current.emit("drawing", {
+        x0: x0 / w,
+        y0: y0 / h,
+        x1: x1 / w,
+        y1: y1 / h,
+        color,
+        roomCode: roomCode.current,
+      })
+    }
+
+    const onPointerDown = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      drawing = true
+
+      current.x = (e.pageX || e.touches[0].pageX) - canvas.offsetLeft
+      current.y = (e.pageY || e.touches[0].pageY) - canvas.offsetTop
+    }
+
+    const onPointerMove = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      if (!drawing) {
+        return
+      }
+      drawLine(
+        current.x,
+        current.y,
+        (e.pageX || e.touches[0].pageX) - canvas.offsetLeft,
+        (e.pageY || e.touches[0].pageY) - canvas.offsetTop,
+        current.color,
+        true
+      )
+      current.x = (e.pageX || e.touches[0].pageX) - canvas.offsetLeft
+      current.y = (e.pageY || e.touches[0].pageY) - canvas.offsetTop
+    }
+
+    const onPointerUp = (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      if (!drawing) {
+        return
+      }
+      drawing = false
+      drawLine(
+        current.x,
+        current.y,
+        (e.pageX || e.changedTouches[e.changedTouches.length - 1].pageX) -
+          canvas.offsetLeft,
+        (e.pageY || e.changedTouches[e.changedTouches.length - 1].pageY) -
+          canvas.offsetTop,
+        current.color,
+        true
+      )
+    }
+
+    const throttle = (callback, delay) => {
+      let previousCall = new Date().getTime()
+      return function () {
+        const time = new Date().getTime()
+
+        if (time - previousCall >= delay) {
+          previousCall = time
+          callback.apply(null, arguments)
+        }
+      }
+    }
+
+    canvas.addEventListener("mousedown", onPointerDown, false)
+    canvas.addEventListener("mouseup", onPointerUp, false)
+    canvas.addEventListener("mouseout", onPointerUp, false)
+    canvas.addEventListener("mousemove", throttle(onPointerMove, 10), false)
+
+    // Touch support for mobile devices
+    canvas.addEventListener("touchstart", onPointerDown, false)
+    canvas.addEventListener("touchend", onPointerUp, false)
+    canvas.addEventListener("touchcancel", onPointerUp, false)
+    canvas.addEventListener("touchmove", throttle(onPointerMove, 10), false)
+
+    const onDrawingEvent = (data) => {
+      const w = canvas.width
+      const h = canvas.height
+      drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color)
+    }
+
+    const updateCanvas = (imageData) => {
+      drawImage(imageData)
+    }
+
+    const scaleToFitDrawImage = (url) => {
+      const img = new Image()
+      img.src = url
+      // get the scale
+      var scale = Math.min(canvas.width / img.width, canvas.height / img.height)
+      // get the top left position of the image
+      var x = canvas.width / 2 - (img.width / 2) * scale
+      var y = canvas.height / 2 - (img.height / 2) * scale
+      context.drawImage(img, x, y, img.width * scale, img.height * scale)
+    }
+
+    const drawImage = (url) => {
+      const image = new Image()
+      image.src = url
+      image.onload = () => {
+        context.drawImage(image, 0, 0)
+      }
+    }
+
+    const getCanvas = async () => {
+      const imageData = await canvas.toDataURL()
+
+      socket.current.emit("updated-canvas", {
+        roomCode: roomCode.current,
+        imageData,
+      })
+    }
+
+    if (content.current) {
+      scaleToFitDrawImage(content.current)
+      // to make sure the canvas updates and generates an image
+      context.beginPath()
+      context.moveTo(0, 0)
+      context.lineTo(0, 0)
+      context.strokeStyle = color
+      context.lineWidth = 0
+      context.stroke()
+      context.closePath()
+      content.current = null
+    }
+
+    socket.current = io.connect("/")
+    socket.current.emit("join-room", {
+      roomCode: roomCode.current,
+      username: usernameRef.current,
+    })
+
+    socket.current.on("get-image", drawImage)
+    socket.current.on("get-canvas", getCanvas)
+    socket.current.on("update-canvas", updateCanvas)
+    socket.current.on("drawing", onDrawingEvent)
+  }, [])
+
+  return (
+    <Container>
+      {loading && <Message>Loading...</Message>}
+      {error && <Message variant="error">{error}</Message>}
+      {collab && (
+        <CollabContainer>
+          <p className="owner">
+            {collab.hostId && collab.hostId.username
+              ? collab.hostId.username
+              : userInfo.username}
+            's Room
+          </p>
+          <Header>
+            <RoomContainer>
+              <p className="room-code-txt">Room Code:</p>
+              <p className="room-code">{collab.roomCode}</p>
+            </RoomContainer>
+
+            <CollaboratorContainer>
+              {loadingUsers && <Message>Loading...</Message>}
+              {errorUsers && <Message variant="error">{errorUsers}</Message>}
+              {users ? (
+                users.users.map((user) => (
+                  <img
+                    key={user._id}
+                    className="collaborator"
+                    src={
+                      user.profileImage.imageSrc
+                        ? user.profileImage.imageSrc
+                        : "/images/logo/logo.png"
+                    }
+                    alt="collaborator1"
+                  />
+                ))
+              ) : (
+                <></>
+              )}
+            </CollaboratorContainer>
+          </Header>
+
+          <ImageInputContainer>
+            <p>Upload an Image:</p>
+            <Input
+              type="file"
+              padding={"0"}
+              accept="image/*"
+              onChange={onImageChange}
+            />
+          </ImageInputContainer>
+
+          <SubContainer>
+            <CanvasContainer>
+              <Whiteboard ref={canvasRef} className="whiteboard" />
+              <ColorsContainer>
+                <p>Pick a color:</p>
+                <input type="color" id="color" />
+              </ColorsContainer>
+            </CanvasContainer>
+
+            <RightContainer>
+              <ChatContainer>
+                <ChatScreen>
+                  {messages.map((data, index) => {
+                    const isUser = usernameRef.current === data.username
+                    return (
+                      <ChatMessage
+                        key={index}
+                        className={isUser ? "active" : ""}
+                      >
+                        {!isUser && (
+                          <h3 className="username">{data.username}</h3>
                         )}
-                      </ImgContainer>
+                        <p className="message">{data.message}</p>
+                      </ChatMessage>
+                    )
+                  })}
+                </ChatScreen>
+                <SendMessage>
+                  <Input
+                    type="text"
+                    placeholder="Type here..."
+                    flex={1}
+                    value={chatMessage}
+                    onChange={(e) => setChatMessage(e.target.value)}
+                  />
+                  <SendButton onClick={sendChatMessageHandler}>
+                    <FontAwesomeIcon icon={faPaperPlane} size="lg" />
+                  </SendButton>
+                </SendMessage>
+              </ChatContainer>
 
-                      <DescContainer>
-                      <TextArea
-                        rows="3"
-                        name="text"
-                        placeholder="Description"
-                      ></TextArea>
-                      </DescContainer>
-
-                    </ImgDescContainer>
-                    
-                    <FilterContainer>
-                      <Filters> 
-                          <img className= "filter" src="/images/logo/logo.png" alt="filter1" />
-                          <img className= "filter" src="/images/logo/logo.png" alt="filter2" />
-                          <img className= "filter" src="/images/logo/logo.png" alt="filter3" />
-                          <img className= "filter" src="/images/logo/logo.png" alt="filter4" />
-                          <img className= "filter" src="/images/logo/logo.png" alt="filter5" />
-                      </Filters>
-
-                      
-                    </FilterContainer>
-                    
-                    <Button className="leaveroom" >
-                      Leave Room   
-                      <FontAwesomeIcon icon={faDoorOpen} size ='m' style={{ color: 'white' }}/> 
-                      </Button>           
-              </Form>
-          </Container>
-      
-    </div>
-  )};
-
-
-
-const CollaboratorContainer = styled.section`
-  display: flex;
-  gap: 1rem;
-  
-  .collaborator{
-    height: 50px;
-    width: 50px;
-    background-color: white;
-    border-radius: 10px;
-  }
-
-  @media ${device.tablet} {
-    justify-content: space-between;
-    flex-direction: row;
-    
-  }
-`
+              <ButtonsContainer>
+                {collab.hostId === userInfo._id && (
+                  <Button className="save-room" onClick={savePostHandler}>
+                    Save Post
+                    <FontAwesomeIcon
+                      icon={faSave}
+                      className="icon"
+                      size="sm"
+                      style={{ color: "white" }}
+                    />
+                  </Button>
+                )}
+                <Button className="leave-room" onClick={leaveRoomHandler}>
+                  Leave Room
+                  <FontAwesomeIcon
+                    icon={faDoorOpen}
+                    className="icon"
+                    size="sm"
+                    style={{ color: "white" }}
+                  />
+                </Button>
+              </ButtonsContainer>
+            </RightContainer>
+          </SubContainer>
+        </CollabContainer>
+      )}
+    </Container>
+  )
+}
 
 const Container = styled.div`
+  padding: 1rem 0rem 100px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  overflow: scroll;
   width: 100%;
   .heading {
     color: var(--light);
@@ -121,249 +450,221 @@ const Container = styled.div`
 
   
   @media ${device.tablet} {
-    height: calc(100vh - 160px);
-    flex-direction: row;
+    padding: 1rem 2rem 100px;
     justify-content: space-between;
     overflow: visible;
-    padding: 0 2rem;
    
 `
 
-const DescContainer = styled.section`
-    height: 100%;
-    width: 100%;
+const CollabContainer = styled.div`
+  background-color: #0078b7;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 5px;
 
-    @media ${device.tablet} {
-      height: 100%;
-      width: 50%;
-      padding: 0rem 1rem 0rem 1rem;
-    }
+  .owner {
+    text-align: center;
+    font-size: 2rem;
+    color: #fff;
+    font-weight: 500;
+  }
 `
-const FilterContainer = styled.section`
-    height: 30%;
-    width: 100%;
-    padding: 1rem 0rem 2rem 0rem;
-    gap: 1rem;
-    @media ${device.tablet} {
-      width: 100%;
-      padding: 1rem 1rem 0rem 1rem;
-    }
-`
-const ImgDescContainer = styled.div`
+
+const Header = styled.section`
+  background-color: var(--secondary);
   display: flex;
-  
-  flex-direction: column;
-  align-content: space-evenly;
   align-items: center;
-  gap: 1rem; 
+  justify-content: space-between;
+  padding: 1rem;
+
+  border-radius: 5px;
+  color: var(--light);
 
   @media ${device.tablet} {
-    height: calc(100vh - 160px);
     flex-direction: row;
     justify-content: space-between;
-    gap: 0rem;
   }
-   
 `
 
-const ImgContainer = styled.div`
- 
+const RoomContainer = styled.div`
   display: flex;
-  width: 100%;
-  height: 300px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  .post {
-    height: 300px;
-    width: 300px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
+  .room-code-txt {
+    font-size: 1rem;
   }
+
+  .room-code {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    line-height: 90%;
+  }
+`
+
+const CollaboratorContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+
+  .collaborator {
+    height: 50px;
+    width: 50px;
+    background-color: white;
+    border-radius: 5px;
+  }
+`
+
+const ImageInputContainer = styled.div`
+  color: #fff;
+  padding: 1rem 0;
+`
+
+const SubContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
   @media ${device.tablet} {
-    height: 100%;
-    width: 50%;
+    flex-direction: row;
+    justify-content: space-between;
   }
 `
-const RoomContainer = styled.section`
-    display: flex;
-    align-content: center;
-    gap: 1rem;
 
-    .profilePicture {
-      height: 50px;
-      width: 50px;
-      background-color: #ffe6aa;
-      border-radius: 10px;
-    }
-    .username {
-      font-size: 30px;
-      
-    }
-    .roomno {
-      font-size: 20px;
-    }
+const CanvasContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
 
-const UploadContainer = styled.div`
+const Whiteboard = styled.canvas`
+  border-radius: 5px;
+  background: var(--light);
+  width: 300px;
+  height: 300px;
+`
+
+const ColorsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  background-color: var(--secondary);
+  padding: 1rem;
+  margin: 1rem 0 0;
+  border-radius: 5px;
+  align-items: center;
+  gap: 1rem;
+  color: var(--light);
+`
+
+const RightContainer = styled.div`
+  flex: 1;
+`
+
+const ChatContainer = styled.div`
+  font-family: "Poppins";
+  font-size: 0.8rem;
+  border-radius: 5px;
+  padding: 1rem;
+  width: 100%;
+  height: 300px;
+  background: var(--primary);
+  display: flex;
+  flex-direction: column;
+`
+
+const ChatScreen = styled.div`
+  flex: 1;
+  overflow-y: scroll;
+  margin-bottom: 0.5rem;
+`
+
+const ChatMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: var(--grey-light);
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  margin: 0 1rem 0.5rem 0;
+
+  &.active {
+    background: var(--primary-dark);
+  }
+
+  .username {
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+
+  .message {
+  }
+`
+
+const SendMessage = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 5px;
+  background: var(--primary-dark);
+`
+
+const SendButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  padding: 1rem;
 
-  @media ${device.tablet} {
-    padding: 0.5rem;
+  color: var(--primary-light);
+  background: var(--secondary-dark);
+  padding: 0.6rem;
+  border-radius: 5px;
+  margin-left: 0.5rem;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--secondary);
   }
 `
 
+const ButtonsContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 1rem 0;
+`
+
 const Button = styled.p`
-  flex-direction: row;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0.4rem 1rem;
   color: var(--light);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 5px;
   transition: 100ms ease-in-out;
- 
-  &.leaveroom {
-    align-self: start;
+
+  .icon {
+    margin-left: 0.8rem;
+  }
+
+  &.leave-room {
+    background-color: #bc0505;
+
+    &:hover {
+      background-color: #990000;
+    }
+  }
+
+  &.save-room {
     background-color: var(--secondary);
 
     &:hover {
-      background-color: #8b0000;
-      color: var(--light);
-    }
-  }
-
-   &.uploadart {
-    background-color: #023e8a;
-  }
-
-  &:hover {
-    background-color: var(--secondary);
-    color: var(--light);
-  }
-
-  @media ${device.tablet} {
-    margin: 0;
-    width: 20%;
-
-    &.leaveroom {
-      align-self: flex-end;
-      background-color: var(--secondary);
-  
-      &:hover {
-        background-color: #8b0000;
-        color: var(--light);
-      }
+      background-color: var(--secondary-dark);
     }
   }
 `
-const Form = styled.form`
-  
-  display: flex;
-  flex-direction: column;
-  align-content: space-between;
-
-  background-color: #0077b6;
-  padding: 1rem 2rem 1rem;
-  border-radius: 5px;
-  width: 100%;
-  height: 95%;
-  gap: 2 rem;
-  color: black;
-  
-  .upload {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: white;
-  }
-  .description {
-    color: black;
-    font-size: 1rem;
-    font-weight: 600;
-    
-  }
-  
-`
-const Filters = styled.section`
-    display: flex;
-    background-color: var(--secondary);
-    
-    align-items: center;
-    padding: 1rem 1rem 1rem 2rem;
-
-    border-radius: 20px;
-    font-size: 30px;
-    gap: 1rem;
-
-    .filter{
-        height: 50px;
-        width: 50px;
-        background-color: white;
-        border-radius: 10px;
-    }
-
-    @media ${device.tablet} {
-      flex-wrap: nowrap;
-      width: 50%;
-    }
-    
-`
-
-const Header = styled.section`
-    background-color: var(--secondary);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: space-around;
-    padding: 10px;
-    
-    border-radius: 20px;
-    font-size: 30px;
-    color: var(--light);
-  
-    @media ${device.tablet} {
-      gap: 5rem;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-   
-`
-
-const ImagePlaceHolder = styled.div`
-  
-  background-color: var(--grey-light);
-  opacity: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  border-radius: 5px;
-
-  .no-post {
-    color: var(--dark);
-    font-size: 1.5rem;
-  }
-
-  @media ${device.tablet} {
-    width: 100%;
-    height: 100%;
-  }
-`
-
-const TextArea = styled.textarea`
-  font-family: "Poppins";
-  font-size: 0.8rem;
-  border: none;
-  border-radius: 5px;
-  padding: 1rem;
-  outline: none;
-  width: 100%;
-  height: 100%;
-`
-export default EditArtScreen;
+export default EditArtScreen

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 import styled from "styled-components"
 
@@ -10,10 +10,14 @@ import device from "../screen_sizes/devices"
 import { createPost, createPostReset } from "../actions/postActions"
 
 const PostScreen = () => {
+  const location = useLocation()
+  const collabPost =
+    location.state && location.state.post ? location.state.post : null
+
   const navigate = useNavigate()
 
-  const [image, setImage] = useState(null)
-  const [post, setPost] = useState(null)
+  const [image, setImage] = useState(collabPost)
+  const [post, setPost] = useState(collabPost)
   const [title, setTitle] = useState("")
   const [subtitle, setSubtitle] = useState("")
   const [description, setDescription] = useState("")
@@ -33,6 +37,22 @@ const PostScreen = () => {
     }
   }
 
+  const dataURLtoFile = (dataurl, filename) => {
+    filename = filename + "." + dataurl.split(";")[0].split("/")[1]
+
+    var arr = dataurl.split(","),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n)
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
+
+    return new File([u8arr], filename, { type: mime })
+  }
+
   const submitHandler = (e) => {
     e.preventDefault()
 
@@ -49,7 +69,13 @@ const PostScreen = () => {
     setMessage("")
 
     const data = new FormData()
-    data.append("image", post)
+
+    if (collabPost) {
+      data.append("image", dataURLtoFile(post, title))
+    } else {
+      data.append("image", post)
+    }
+
     data.append("title", title)
     data.append("subtitle", subtitle)
     data.append("description", description)
@@ -92,7 +118,9 @@ const PostScreen = () => {
         </ImageContainer>
         <Form>
           <ImageInputContainer>
-            <Input type="file" accept="image/*" onChange={onImageChange} />
+            {!collabPost && (
+              <Input type="file" accept="image/*" onChange={onImageChange} />
+            )}
           </ImageInputContainer>
           <Input
             type="text"

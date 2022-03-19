@@ -10,6 +10,7 @@ const collabSchema = mongoose.Schema(
     hostId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "User",
     },
     users: [
       {
@@ -21,10 +22,9 @@ const collabSchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    content:{ 
-        type: String,
-        default: "", //for blank canvas
-        required: true
+    content: {
+      type: String,
+      default: "", //for blank canvas
     },
   },
   {
