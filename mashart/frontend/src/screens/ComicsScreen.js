@@ -23,6 +23,8 @@ const ComicsScreen = () => {
         <img className= "comicPicture2" src="/images/comics/zap.png" alt="zapcomic" />
         <img className= "comicPicture3" src="/images/comics/cloud.png" alt="cloudcomic" />
         <img className= "comicPicture4" src="/images/comics/thunder.png" alt="thundercomic" />
+        <ing className= "comic1" src="https://i.postimg.cc/W14BzFRP/garfield.png" alt="Garfield Comic"/>
+
         
       </Heading>
       <SearchBar>
@@ -47,7 +49,15 @@ const ComicsScreen = () => {
           </Button>
         </OptionContainer>
       </SearchBar>
-      
+      <Body>
+        <img className="comic1" src="https://i.postimg.cc/W14BzFRP/garfield.png"></img> 
+        <img className = "comic2" src="https://i.postimg.cc/mZq9FJC8/spiderman-comic.jpg"></img>
+        <img className="comic3" src="https://i.postimg.cc/ZKbqnLDV/archie-comics.jpg"></img>
+        <img className="comic4" src="https://i.postimg.cc/pXw1k0bB/tinkle-comics.jpg"></img>
+        <img className="comic5" src="https://i.postimg.cc/C1tjSx0p/superman-comic.jpg"></img>
+        <img className="comic6" src="https://i.postimg.cc/Rh5Ng69h/marvel-comics.jpg"></img>
+
+      </Body>
     </Container>
   )
 }
@@ -58,10 +68,8 @@ const Container = styled.div`
   gap: 2rem;
   width: 10%;
   padding: 1rem 2rem 100px;
-
   align-items: center;
   justify-content: center;
-
   .heading {
     color: var(--light);
     font-size: 2rem;
@@ -91,8 +99,8 @@ const Heading = styled.section`
     color: var(--light);
     margin-left: 100px;
     margin-top: 10px;
-  }
 
+  }
   .comicPicture1 {
     position: relative;
     height: 100px;
@@ -102,7 +110,6 @@ const Heading = styled.section`
     border-radius: 20px;
     margin-top: -100px;
   }
-
   .comicPicture3 {
     position: absolute;
     height: 50px;
@@ -134,6 +141,7 @@ const Heading = styled.section`
     margin-left: 680px;
   }
 `
+
 const SearchBar = styled.div`
   display: flex;
   flex-direction: column;
@@ -161,19 +169,83 @@ const Button = styled.p`
   transition: 200ms ease-in-out;
   margin-top: -1px;
   background-color: var(--secondary-dark);
-
   &.active {
     background-color: var(--secondary);
     color: var(--light);
   }
-
   &:hover {
     background-color: var(--secondary);
     color: var(--light);
   }
-
   `
+const Body = styled.body`
+  .comic1
+  {
+    width:250px;
+    height:170px;
+    border-radius:10px;
+    position: absolute;
+    margin-top: -20px;
+    margin-right: 50px;
+    margin-left: 27px;
+    margin-bottom: 0px;
+  }
 
+  .comic2
+  {
+    width: 250px;
+    height: 170px;
+    border-radius: 10px;
+    position: absolute;
+    margin-top: -20px;
+    margin-right: 0px;
+    margin-left: 289px;
+    margin-bottom: 0px;
+  }
+
+
+  .comic3
+  {
+    width: 250px;
+    height: 170px;
+    border-radius:10px;
+    position: absolute;
+    margin-top: -20px;
+    margin-right: 0px;
+    margin-left: 549px;
+    margin-bottom:0px;
+  }
+
+  .comic4
+  {
+    width: 250px;
+    height: 170px;
+    border-radius:10px;
+    position: absolute;
+    margin-top: 170px;
+    margin-left: 27px;
+  }
+  
+  .comic5
+  {
+    width: 250px;
+    height: 170px;
+    border-radius:10px;
+    position: absolute;
+    margin-top: 170px;
+    margin-left: 289px;
+  }
+
+    .comic6
+    {
+      width: 250px;
+      height: 170px;
+      border-radius:10px;
+      position: absolute;
+      margin-top: 170px;
+      margin-left: 549px; 
+    }
+`
 
 
 
