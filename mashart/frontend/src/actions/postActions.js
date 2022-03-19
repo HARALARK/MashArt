@@ -8,6 +8,9 @@ import {
   GET_POSTS_RESET,
   GET_POSTS_SUCCESS,
   POST_RESET,
+  REPORT_USER_POST_REQUEST,
+  REPORT_USER_POST_SUCCESS,
+  REPORT_USER_POST_FAIL,
 } from "../constants/postConstants"
 
 export const createPost = (post) => async (dispatch, getState) => {
@@ -79,6 +82,40 @@ export const getPosts = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_POSTS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const reportPosts = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: REPORT_POST_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/user/post`, config)
+
+    dispatch({
+      type: REPORT_POST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: REPORT_POST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
