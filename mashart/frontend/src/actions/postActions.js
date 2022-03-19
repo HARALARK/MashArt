@@ -3,6 +3,9 @@ import {
   CREATE_POST_FAIL,
   CREATE_POST_REQUEST,
   CREATE_POST_SUCCESS,
+  FLAG_POST_FAIL,
+  FLAG_POST_REQUEST,
+  FLAG_POST_SUCCESS,
   GET_POSTS_FAIL,
   GET_POSTS_REQUEST,
   GET_POSTS_RESET,
@@ -11,6 +14,9 @@ import {
   REPORT_USER_POST_REQUEST,
   REPORT_USER_POST_SUCCESS,
   REPORT_USER_POST_FAIL,
+  REPORT_POST_REQUEST,
+  REPORT_POST_SUCCESS,
+  REPORT_POST_FAIL,
 } from "../constants/postConstants"
 
 export const createPost = (post) => async (dispatch, getState) => {
@@ -90,6 +96,43 @@ export const getPosts = () => async (dispatch, getState) => {
   }
 }
 
+export const flagPost = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: FLAG_POST_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(`/api/post/${id}/flag`, {}, config)
+
+    dispatch({
+      type: FLAG_POST_SUCCESS,
+      payload: data,
+    })
+    dispatch({
+      type: GET_POSTS_RESET,
+    })
+  } catch (error) {
+    dispatch({
+      type: FLAG_POST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
 export const reportPosts = () => async (dispatch, getState) => {
   try {
     dispatch({
@@ -102,11 +145,10 @@ export const reportPosts = () => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-
     const { data } = await axios.get(`/api/user/post`, config)
 
     dispatch({
