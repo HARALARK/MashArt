@@ -4,12 +4,13 @@ import styled from "styled-components"
 import {
   faBookmark,
   faComment,
+  faFlag,
   faHeart,
 } from "@fortawesome/free-solid-svg-icons"
 import device from "../../screen_sizes/devices"
 
-const PostCard = ({ post }) => {
-  const { users, path, title, subtitle, description } = post
+const PostCard = ({ post, role, flagPostHandler }) => {
+  const { _id, users, path, title, subtitle, description } = post
 
   return (
     <Container>
@@ -40,9 +41,17 @@ const PostCard = ({ post }) => {
         <Subtitle>{subtitle}</Subtitle>
         <Description>{description}</Description>
         <PostIcons>
-          <FontAwesomeIcon icon={faHeart} size="lg" />
-          <FontAwesomeIcon icon={faComment} size="lg" />
-          <FontAwesomeIcon icon={faBookmark} size="lg" />
+          <FontAwesomeIcon className="icon" icon={faHeart} size="lg" />
+          <FontAwesomeIcon className="icon" icon={faComment} size="lg" />
+          <FontAwesomeIcon className="icon" icon={faBookmark} size="lg" />
+          {(role === "admin" || role === "moderator") && (
+            <FontAwesomeIcon
+              className="icon"
+              icon={faFlag}
+              size="lg"
+              onClick={() => flagPostHandler(_id)}
+            />
+          )}
         </PostIcons>
       </PostInfo>
     </Container>
@@ -103,6 +112,8 @@ const PostPicture = styled.img`
 const PostInfo = styled.div`
   flex: 1;
   padding: 0.5rem 0.5rem 1rem;
+  display: flex;
+  flex-direction: column;
 
   @media ${device.tablet} {
     padding: 1.5rem 1rem;
@@ -128,6 +139,7 @@ const Subtitle = styled.h2`
 `
 
 const Description = styled.p`
+  flex: 1;
   font-weight: 400;
   font-size: 0.9rem;
   line-height: 95%;
@@ -137,8 +149,12 @@ const Description = styled.p`
 const PostIcons = styled.div`
   display: flex;
   margin-top: 1rem;
-  gap: 2rem;
+  gap: 1rem;
   color: var(--secondary-dark);
+
+  .icon {
+    cursor: pointer;
+  }
 
   @media ${device.tablet} {
     margin-top: 2.5rem;
