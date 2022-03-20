@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import styled from "styled-components"
 import {
   blockUser,
+  changeRole,
   followUser,
   getblockedUsers,
   getUserDetails,
@@ -62,7 +63,9 @@ const ProfileScreen = () => {
     dispatch(unblockUser(user._id))
   }
 
-  const changeRoleHandler = () => {}
+  const changeRoleHandler = () => {
+    dispatch(changeRole(user._id))
+  }
 
   return (
     <Container>

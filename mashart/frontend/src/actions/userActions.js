@@ -3,6 +3,9 @@ import {
   BLOCK_USER_FAIL,
   BLOCK_USER_REQUEST,
   BLOCK_USER_SUCCESS,
+  CHANGE_ROLE_FAIL,
+  CHANGE_ROLE_REQUEST,
+  CHANGE_ROLE_SUCCESS,
   FOLLOW_USER_FAIL,
   FOLLOW_USER_REQUEST,
   FOLLOW_USER_SUCCESS,
@@ -346,6 +349,44 @@ export const getUserPosts = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_USER_POST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const changeRole = (_id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: CHANGE_ROLE_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(`/api/user/role`, { _id }, config)
+
+    dispatch({
+      type: CHANGE_ROLE_SUCCESS,
+      payload: data,
+    })
+
+    dispatch({
+      type: USER_DETAILS_RESET,
+    })
+  } catch (error) {
+    dispatch({
+      type: CHANGE_ROLE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
