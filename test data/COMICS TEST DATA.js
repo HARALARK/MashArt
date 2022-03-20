@@ -21,15 +21,15 @@
       '{{firstName()}}'
       ],
     
-     likes: [
-      '{{repeat(4)}}',
-       '{{firstName()}}'
-       
-      ]
-    
-    
-  }
-  ]
+      likes: [
+        '{{repeat(4)}}',
+         '{{firstName()}}'
+         
+        ]
+      
+      
+    }
+    ]
 
 
 [
