@@ -454,7 +454,7 @@ export const getblockedUsers = () => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.get(`/api/user/block`, config)
+    const { data } = await axios.get(`/api/user/blocked`, config)
 
     dispatch({
       type: GET_BLOCKED_USERS_SUCCESS,
