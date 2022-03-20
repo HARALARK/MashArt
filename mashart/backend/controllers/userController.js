@@ -356,6 +356,54 @@ export const unfollowUser = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc block a user
+// @route PUT /api/user/profile/block
+// access Private
+export const blockUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id) //current user
+  const blockUser = await User.findById(req.body._id) //user to block
+
+  if (user && blockUser) {
+    if (!user.blockedUsers.includes(blockUser._id)) {
+      //update current user's blockedUsers list
+      await user.updateOne({
+        $push: { blockedUsers: blockUser._id },
+      })
+      res.status(200).json("User Blocked")
+    } else {
+      res.status(400)
+      throw new Error("Invalid Request")
+    }
+  } else {
+    res.status(404)
+    throw new Error("User not found")
+  }
+})
+
+// @desc unblock a user
+// @route PUT /api/user/profile/unblock
+// access Private
+export const unblockUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id) //current user
+  const unblockUser = await User.findById(req.body._id) //user to block
+
+  if (user && unblockUser) {
+    if (!user.blockedUsers.includes(unblockUser._id)) {
+      //update current user's blockedUsers list
+      await user.updateOne({
+        $pull: { blockedUsers: unblockUser._id },
+      })
+      res.status(200).json("User Unblocked")
+    } else {
+      res.status(400)
+      throw new Error("Invalid Request")
+    }
+  } else {
+    res.status(404)
+    throw new Error("User not found")
+  }
+})
+
 // @desc delete user account
 // @route DELETE /api/user/profile
 // @access Private
