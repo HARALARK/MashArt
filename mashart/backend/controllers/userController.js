@@ -404,6 +404,23 @@ export const unblockUser = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc get blocked users
+// @route GET /api/user/blocked
+// access Private
+export const getBlockedUsers = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id) //current user
+
+  if (!user) {
+    res.status(404)
+    throw new Error("User not Found")
+  }
+
+  res.status(200)
+  res.json({
+    blockedUsers: user.blockedUsers,
+  })
+})
+
 // @desc delete user account
 // @route DELETE /api/user/profile
 // @access Private
