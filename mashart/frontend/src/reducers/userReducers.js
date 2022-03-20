@@ -1,4 +1,7 @@
 import {
+  FOLLOW_USER_FAIL,
+  FOLLOW_USER_REQUEST,
+  FOLLOW_USER_SUCCESS,
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
@@ -11,6 +14,9 @@ import {
   SEARCH_USER_FAIL,
   SEARCH_USER_REQUEST,
   SEARCH_USER_SUCCESS,
+  UNFOLLOW_USER_FAIL,
+  UNFOLLOW_USER_REQUEST,
+  UNFOLLOW_USER_SUCCESS,
   USER_DETAILS_FAIL,
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
@@ -136,6 +142,27 @@ export const getUserPostReducer = (state = {}, action) => {
       return { loading: false, posts: action.payload }
     case GET_USER_POST_FAIL:
       return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const followUserReducer = (state = {}, action) => {
+  switch (action.type) {
+    case FOLLOW_USER_REQUEST:
+      return { loading: true }
+    case FOLLOW_USER_SUCCESS:
+      return { loading: false, followUser: action.payload }
+    case FOLLOW_USER_FAIL:
+      return { loading: false, error: action.payload }
+    case UNFOLLOW_USER_REQUEST:
+      return { loading: true }
+    case UNFOLLOW_USER_SUCCESS:
+      return { loading: false, followUser: action.payload }
+    case UNFOLLOW_USER_FAIL:
+      return { loading: false, error: action.payload }
+    case USER_DETAILS_RESET:
+      return {}
     default:
       return state
   }

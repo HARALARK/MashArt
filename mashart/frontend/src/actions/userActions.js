@@ -1,5 +1,8 @@
 import axios from "axios"
 import {
+  FOLLOW_USER_FAIL,
+  FOLLOW_USER_REQUEST,
+  FOLLOW_USER_SUCCESS,
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
@@ -12,6 +15,9 @@ import {
   SEARCH_USER_FAIL,
   SEARCH_USER_REQUEST,
   SEARCH_USER_SUCCESS,
+  UNFOLLOW_USER_FAIL,
+  UNFOLLOW_USER_REQUEST,
+  UNFOLLOW_USER_SUCCESS,
   USER_DETAILS_FAIL,
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
@@ -331,6 +337,90 @@ export const getUserPosts = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_USER_POST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const followUser = (_id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: FOLLOW_USER_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(
+      `/api/user/profile/follow`,
+      { _id },
+      config
+    )
+
+    dispatch({
+      type: FOLLOW_USER_SUCCESS,
+      payload: data,
+    })
+
+    dispatch({
+      type: USER_DETAILS_RESET,
+    })
+  } catch (error) {
+    dispatch({
+      type: FOLLOW_USER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const unfollowUser = (_id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: UNFOLLOW_USER_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(
+      `/api/user/profile/unfollow`,
+      { _id },
+      config
+    )
+
+    dispatch({
+      type: UNFOLLOW_USER_SUCCESS,
+      payload: data,
+    })
+
+    dispatch({
+      type: USER_DETAILS_RESET,
+    })
+  } catch (error) {
+    dispatch({
+      type: UNFOLLOW_USER_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
