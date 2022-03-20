@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 
 import Message from "../components/styled-components/Message"
-import { flagPost, getPosts } from "../actions/postActions"
+import { flagPost, getPosts, reportPost } from "../actions/postActions"
 import PostCard from "../components/PostCard/PostCard"
 import WelcomeScreen from "./WelcomeScreen"
 
@@ -26,6 +26,10 @@ const Homepage = () => {
 
   const flagPostHandler = (id) => {
     dispatch(flagPost(id))
+  }
+
+  const reportPostHandler = (id) => {
+    dispatch(reportPost(id))
   }
 
   return userInfo ? (
@@ -58,6 +62,7 @@ const Homepage = () => {
               post={post}
               role={option}
               flagPostHandler={flagPostHandler}
+              reportPostHandler={reportPostHandler}
             />
           ))
         ) : (

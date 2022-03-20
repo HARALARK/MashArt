@@ -3,13 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import styled from "styled-components"
 import {
   faBookmark,
+  faBullhorn,
   faComment,
   faFlag,
   faHeart,
 } from "@fortawesome/free-solid-svg-icons"
 import device from "../../screen_sizes/devices"
 
-const PostCard = ({ post, role, flagPostHandler }) => {
+const PostCard = ({ post, role, flagPostHandler, reportPostHandler }) => {
   const { _id, users, path, title, subtitle, description } = post
 
   return (
@@ -44,12 +45,19 @@ const PostCard = ({ post, role, flagPostHandler }) => {
           <FontAwesomeIcon className="icon" icon={faHeart} size="lg" />
           <FontAwesomeIcon className="icon" icon={faComment} size="lg" />
           <FontAwesomeIcon className="icon" icon={faBookmark} size="lg" />
-          {(role === "admin" || role === "moderator") && (
+          {role === "admin" || role === "moderator" ? (
             <FontAwesomeIcon
               className="icon"
               icon={faFlag}
               size="lg"
               onClick={() => flagPostHandler(_id)}
+            />
+          ) : (
+            <FontAwesomeIcon
+              className="icon"
+              icon={faBullhorn}
+              size="lg"
+              onClick={() => reportPostHandler(_id)}
             />
           )}
         </PostIcons>
@@ -154,6 +162,10 @@ const PostIcons = styled.div`
 
   .icon {
     cursor: pointer;
+  }
+
+  .icon:hover {
+    color: var(--secondary);
   }
 
   @media ${device.tablet} {

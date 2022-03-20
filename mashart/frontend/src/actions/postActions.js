@@ -130,7 +130,7 @@ export const flagPost = (id) => async (dispatch, getState) => {
   }
 }
 
-export const reportPosts = () => async (dispatch, getState) => {
+export const reportPost = (id) => async (dispatch, getState) => {
   try {
     dispatch({
       type: REPORT_POST_REQUEST,
@@ -146,7 +146,7 @@ export const reportPosts = () => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.get(`/api/user/post`, config)
+    const { data } = await axios.put(`/api/post/${id}/report`, {}, config)
 
     dispatch({
       type: REPORT_POST_SUCCESS,
