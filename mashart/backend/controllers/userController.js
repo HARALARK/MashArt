@@ -455,6 +455,37 @@ export const deleteUser = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc change user's role
+// @route PUT /api/user/role
+// access Private
+export const changeUserRole = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id) //current user
+  const roleUser = await User.findById(req.body._id) //user to modify role
+
+  if (user && roleUser) {
+    if (user.role !== "admin") {
+      res.status(400)
+      throw new Error("Not Authorized")
+    }
+
+    if (roleUser.role === "user") {
+      roleUser.role = "moderator"
+    } else if (roleUser.role === "moderator") {
+      roleUser.role === "user"
+    } else {
+      res.status(404)
+      throw new Error("Invalid role")
+    }
+
+    await roleUser.save()
+
+    res.json("User Role Updated")
+  } else {
+    res.status(404)
+    throw new Error("User not found")
+  }
+})
+
 // @desc get list of posts related to a user
 // @route get /api/user/post/:id?
 // @access Private
