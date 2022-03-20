@@ -1,10 +1,16 @@
 import {
+  BLOCK_USER_FAIL,
+  BLOCK_USER_REQUEST,
+  BLOCK_USER_SUCCESS,
   FOLLOW_USER_FAIL,
   FOLLOW_USER_REQUEST,
   FOLLOW_USER_SUCCESS,
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
+  GET_BLOCKED_USERS_FAIL,
+  GET_BLOCKED_USERS_REQUEST,
+  GET_BLOCKED_USERS_SUCCESS,
   GET_USER_POST_FAIL,
   GET_USER_POST_REQUEST,
   GET_USER_POST_SUCCESS,
@@ -14,6 +20,9 @@ import {
   SEARCH_USER_FAIL,
   SEARCH_USER_REQUEST,
   SEARCH_USER_SUCCESS,
+  UNBLOCK_USER_FAIL,
+  UNBLOCK_USER_REQUEST,
+  UNBLOCK_USER_SUCCESS,
   UNFOLLOW_USER_FAIL,
   UNFOLLOW_USER_REQUEST,
   UNFOLLOW_USER_SUCCESS,
@@ -163,6 +172,40 @@ export const followUserReducer = (state = {}, action) => {
       return { loading: false, error: action.payload }
     case USER_DETAILS_RESET:
       return {}
+    default:
+      return state
+  }
+}
+
+export const blockUserReducer = (state = {}, action) => {
+  switch (action.type) {
+    case BLOCK_USER_REQUEST:
+      return { loading: true }
+    case BLOCK_USER_SUCCESS:
+      return { loading: false, followUser: action.payload }
+    case BLOCK_USER_FAIL:
+      return { loading: false, error: action.payload }
+    case UNBLOCK_USER_REQUEST:
+      return { loading: true }
+    case UNBLOCK_USER_SUCCESS:
+      return { loading: false, followUser: action.payload }
+    case UNBLOCK_USER_FAIL:
+      return { loading: false, error: action.payload }
+    case USER_DETAILS_RESET:
+      return {}
+    default:
+      return state
+  }
+}
+
+export const getblockedUsersReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_BLOCKED_USERS_REQUEST:
+      return { loading: true }
+    case GET_BLOCKED_USERS_SUCCESS:
+      return { loading: false, blockedUsers: action.payload }
+    case GET_BLOCKED_USERS_FAIL:
+      return { loading: false, error: action.payload }
     default:
       return state
   }
