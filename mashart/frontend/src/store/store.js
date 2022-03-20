@@ -2,6 +2,7 @@ import { applyMiddleware, combineReducers, createStore } from "redux"
 import thunk from "redux-thunk"
 import { composeWithDevTools } from "redux-devtools-extension"
 import {
+  blockedUsersReducer,
   forgotPasswordReducer,
   getUserPostReducer,
   resetPasswordReducer,
@@ -11,7 +12,11 @@ import {
   userRegisterReducer,
   userUpdateProfileReducer,
 } from "../reducers/userReducers"
-import { createPostReducer, getPostsReducer, reportPostReducer } from "../reducers/postReducers"
+import {
+  createPostReducer,
+  getPostsReducer,
+  reportPostReducer,
+} from "../reducers/postReducers"
 import { collabReducer, collabUsersReducer } from "../reducers/collabReducers"
 
 let reducer = combineReducers({
@@ -28,6 +33,7 @@ let reducer = combineReducers({
   collab: collabReducer,
   collabUsers: collabUsersReducer,
   reportPost: reportPostReducer,
+  blockedUsers: blockedUsersReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

@@ -156,49 +156,7 @@ export const getUserPostReducer = (state = {}, action) => {
   }
 }
 
-export const followUserReducer = (state = {}, action) => {
-  switch (action.type) {
-    case FOLLOW_USER_REQUEST:
-      return { loading: true }
-    case FOLLOW_USER_SUCCESS:
-      return { loading: false, followUser: action.payload }
-    case FOLLOW_USER_FAIL:
-      return { loading: false, error: action.payload }
-    case UNFOLLOW_USER_REQUEST:
-      return { loading: true }
-    case UNFOLLOW_USER_SUCCESS:
-      return { loading: false, followUser: action.payload }
-    case UNFOLLOW_USER_FAIL:
-      return { loading: false, error: action.payload }
-    case USER_DETAILS_RESET:
-      return {}
-    default:
-      return state
-  }
-}
-
-export const blockUserReducer = (state = {}, action) => {
-  switch (action.type) {
-    case BLOCK_USER_REQUEST:
-      return { loading: true }
-    case BLOCK_USER_SUCCESS:
-      return { loading: false, followUser: action.payload }
-    case BLOCK_USER_FAIL:
-      return { loading: false, error: action.payload }
-    case UNBLOCK_USER_REQUEST:
-      return { loading: true }
-    case UNBLOCK_USER_SUCCESS:
-      return { loading: false, followUser: action.payload }
-    case UNBLOCK_USER_FAIL:
-      return { loading: false, error: action.payload }
-    case USER_DETAILS_RESET:
-      return {}
-    default:
-      return state
-  }
-}
-
-export const getblockedUsersReducer = (state = {}, action) => {
+export const blockedUsersReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_BLOCKED_USERS_REQUEST:
       return { loading: true }
