@@ -2,6 +2,9 @@ import {
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
+  GET_BLOCKED_USERS_FAIL,
+  GET_BLOCKED_USERS_REQUEST,
+  GET_BLOCKED_USERS_SUCCESS,
   GET_USER_POST_FAIL,
   GET_USER_POST_REQUEST,
   GET_USER_POST_SUCCESS,
@@ -135,6 +138,19 @@ export const getUserPostReducer = (state = {}, action) => {
     case GET_USER_POST_SUCCESS:
       return { loading: false, posts: action.payload }
     case GET_USER_POST_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const blockedUsersReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_BLOCKED_USERS_REQUEST:
+      return { loading: true }
+    case GET_BLOCKED_USERS_SUCCESS:
+      return { loading: false, blockedUsers: action.payload }
+    case GET_BLOCKED_USERS_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state

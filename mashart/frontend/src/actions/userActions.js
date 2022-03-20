@@ -1,8 +1,20 @@
 import axios from "axios"
 import {
+  BLOCK_USER_FAIL,
+  BLOCK_USER_REQUEST,
+  BLOCK_USER_SUCCESS,
+  CHANGE_ROLE_FAIL,
+  CHANGE_ROLE_REQUEST,
+  CHANGE_ROLE_SUCCESS,
+  FOLLOW_USER_FAIL,
+  FOLLOW_USER_REQUEST,
+  FOLLOW_USER_SUCCESS,
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
+  GET_BLOCKED_USERS_FAIL,
+  GET_BLOCKED_USERS_REQUEST,
+  GET_BLOCKED_USERS_SUCCESS,
   GET_USER_POST_FAIL,
   GET_USER_POST_REQUEST,
   GET_USER_POST_SUCCESS,
@@ -12,6 +24,12 @@ import {
   SEARCH_USER_FAIL,
   SEARCH_USER_REQUEST,
   SEARCH_USER_SUCCESS,
+  UNBLOCK_USER_FAIL,
+  UNBLOCK_USER_REQUEST,
+  UNBLOCK_USER_SUCCESS,
+  UNFOLLOW_USER_FAIL,
+  UNFOLLOW_USER_REQUEST,
+  UNFOLLOW_USER_SUCCESS,
   USER_DETAILS_FAIL,
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
@@ -331,6 +349,241 @@ export const getUserPosts = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_USER_POST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const changeRole = (_id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: CHANGE_ROLE_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(`/api/user/role`, { _id }, config)
+
+    dispatch({
+      type: CHANGE_ROLE_SUCCESS,
+      payload: data,
+    })
+
+    dispatch({
+      type: USER_DETAILS_RESET,
+    })
+  } catch (error) {
+    dispatch({
+      type: CHANGE_ROLE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const followUser = (_id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: FOLLOW_USER_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(
+      `/api/user/profile/follow`,
+      { _id },
+      config
+    )
+
+    dispatch({
+      type: FOLLOW_USER_SUCCESS,
+      payload: data,
+    })
+
+    dispatch({
+      type: USER_DETAILS_RESET,
+    })
+  } catch (error) {
+    dispatch({
+      type: FOLLOW_USER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const unfollowUser = (_id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: UNFOLLOW_USER_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(
+      `/api/user/profile/unfollow`,
+      { _id },
+      config
+    )
+
+    dispatch({
+      type: UNFOLLOW_USER_SUCCESS,
+      payload: data,
+    })
+
+    dispatch({
+      type: USER_DETAILS_RESET,
+    })
+  } catch (error) {
+    dispatch({
+      type: UNFOLLOW_USER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const getblockedUsers = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_BLOCKED_USERS_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+    const { data } = await axios.get(`/api/user/blocked`, config)
+
+    dispatch({
+      type: GET_BLOCKED_USERS_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_BLOCKED_USERS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const blockUser = (_id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: BLOCK_USER_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(`/api/user/profile/block`, { _id }, config)
+
+    dispatch({
+      type: BLOCK_USER_SUCCESS,
+      payload: data,
+    })
+
+    dispatch({
+      type: USER_DETAILS_RESET,
+    })
+  } catch (error) {
+    dispatch({
+      type: BLOCK_USER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const unblockUser = (_id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: UNBLOCK_USER_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(
+      `/api/user/profile/unblock`,
+      { _id },
+      config
+    )
+
+    dispatch({
+      type: UNBLOCK_USER_SUCCESS,
+      payload: data,
+    })
+
+    dispatch({
+      type: USER_DETAILS_RESET,
+    })
+  } catch (error) {
+    dispatch({
+      type: UNBLOCK_USER_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
