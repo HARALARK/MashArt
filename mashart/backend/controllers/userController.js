@@ -471,7 +471,7 @@ export const changeUserRole = asyncHandler(async (req, res) => {
     if (roleUser.role === "user") {
       roleUser.role = "moderator"
     } else if (roleUser.role === "moderator") {
-      roleUser.role === "user"
+      roleUser.role = "user"
     } else {
       res.status(404)
       throw new Error("Invalid role")
