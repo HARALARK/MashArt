@@ -51,25 +51,29 @@ export const createPost = asyncHandler(async (req, res) => {
       },
       async () => {
         // Upload completed successfully, now we can get the download URL
-        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          post.path = downloadURL
+        getDownloadURL(uploadTask.snapshot.ref)
+          .then(async (downloadURL) => {
+            post.path = downloadURL
 
-          await post.save()
+            await post.save()
 
-          await user.updateOne({
-            $push: { posts: { id: post._id, path: downloadURL } },
+            await user.updateOne({
+              $push: { posts: { id: post._id, path: downloadURL } },
+            })
+
+            res.json({
+              _id: post._id,
+              path: post.path,
+              users: post.users,
+              title: post.title,
+              subtitle: post.subtitle,
+              description: post.description,
+              tags: post.tags,
+            })
           })
-
-          res.json({
-            _id: post._id,
-            path: post.path,
-            users: post.users,
-            title: post.title,
-            subtitle: post.subtitle,
-            description: post.description,
-            tags: post.tags,
+          .error(async () => {
+            await Post.findByIdAndDelete(post._id)
           })
-        })
       }
     )
   } else {
