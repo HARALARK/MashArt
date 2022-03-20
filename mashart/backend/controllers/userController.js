@@ -388,7 +388,7 @@ export const unblockUser = asyncHandler(async (req, res) => {
   const unblockUser = await User.findById(req.body._id) //user to block
 
   if (user && unblockUser) {
-    if (!user.blockedUsers.includes(unblockUser._id)) {
+    if (user.blockedUsers.includes(unblockUser._id)) {
       //update current user's blockedUsers list
       await user.updateOne({
         $pull: { blockedUsers: unblockUser._id },
