@@ -4,8 +4,11 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import styled from "styled-components"
 import {
+  blockUser,
   followUser,
+  getblockedUsers,
   getUserDetails,
+  unblockUser,
   unfollowUser,
 } from "../actions/userActions"
 import Message from "../components/styled-components/Message"
@@ -22,6 +25,9 @@ const ProfileScreen = () => {
   const userDetails = useSelector((state) => state.userDetails)
   const { loading, user, error } = userDetails
 
+  const getBlockedUsers = useSelector((state) => state.blockedUsers)
+  const { blockedUsers } = getBlockedUsers
+
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
@@ -33,6 +39,7 @@ const ProfileScreen = () => {
         navigate("/profile")
       } else if (id && (id !== user._id || !user.username)) {
         dispatch(getUserDetails(`profile?_id=${id}`))
+        dispatch(getblockedUsers())
       } else if (id === undefined) {
         if (!user.username || user._id !== userInfo._id) {
           dispatch(getUserDetails("profile"))
@@ -48,8 +55,12 @@ const ProfileScreen = () => {
     dispatch(unfollowUser(user._id))
   }
 
-  const blockHandler = () => {}
-  const unblockHandler = () => {}
+  const blockHandler = () => {
+    dispatch(blockUser(user._id))
+  }
+  const unblockHandler = () => {
+    dispatch(unblockUser(user._id))
+  }
 
   const changeRoleHandler = () => {}
 
@@ -105,11 +116,11 @@ const ProfileScreen = () => {
                 ) : (
                   <Button onClick={followHandler}>Follow</Button>
                 )}
-                {/* {userInfo.blockedUsers.includes(user._id) ? (
-              <Button onClick={unblockHandler}>unBlock</Button>
-            ) : (
-              <Button onClick={blockHandler}>Block</Button>
-            )} */}
+                {blockedUsers?.blockedUsers.includes(user._id) ? (
+                  <Button onClick={unblockHandler}>unBlock</Button>
+                ) : (
+                  <Button onClick={blockHandler}>Block</Button>
+                )}
 
                 {userInfo.role === "admin" && (
                   <Button onClick={changeRoleHandler}>
