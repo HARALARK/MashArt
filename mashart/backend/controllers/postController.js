@@ -83,10 +83,13 @@ export const createPost = asyncHandler(async (req, res) => {
 })
 
 // @desc get a post
-// @route get /api/post/
+// @route get /api/post/:sort?
 // @access Private
 export const getPosts = asyncHandler(async (req, res) => {
+  const sort = req.params.sort === "true" ? true : false
+
   const latestPosts = await Post.find({ isFlagged: false }).sort({
+    reportCount: sort ? -1 : 1,
     updatedAt: -1,
   })
 
@@ -110,6 +113,7 @@ export const getPosts = asyncHandler(async (req, res) => {
         subtitle: post.subtitle,
         description: post.description,
         tags: post.tags,
+        reportCount: post.reportCount,
         time: post.updatedAt,
       }
     })
