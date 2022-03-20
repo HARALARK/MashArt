@@ -20,9 +20,14 @@ const Homepage = () => {
 
   useEffect(() => {
     if (!posts) {
-      dispatch(getPosts())
+      dispatch(getPosts(option))
     }
-  }, [userInfo, posts, dispatch])
+  }, [userInfo, posts, dispatch, option])
+
+  const changeRole = (role) => {
+    setOption(role)
+    dispatch(getPosts(option))
+  }
 
   const flagPostHandler = (id) => {
     dispatch(flagPost(id))
@@ -41,13 +46,13 @@ const Homepage = () => {
         <OptionContainer>
           <Button
             className={option === "user" && "active"}
-            onClick={() => setOption("user")}
+            onClick={() => changeRole("user")}
           >
             User
           </Button>
           <Button
             className={option === userInfo.role && "active"}
-            onClick={() => setOption(userInfo.role)}
+            onClick={() => changeRole(userInfo.role)}
           >
             {userInfo.role}
           </Button>

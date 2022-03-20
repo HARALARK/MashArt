@@ -11,7 +11,7 @@ import {
 import device from "../../screen_sizes/devices"
 
 const PostCard = ({ post, role, flagPostHandler, reportPostHandler }) => {
-  const { _id, users, path, title, subtitle, description } = post
+  const { _id, users, path, title, subtitle, description, reportCount } = post
 
   return (
     <Container>
@@ -46,12 +46,15 @@ const PostCard = ({ post, role, flagPostHandler, reportPostHandler }) => {
           <FontAwesomeIcon className="icon" icon={faComment} size="lg" />
           <FontAwesomeIcon className="icon" icon={faBookmark} size="lg" />
           {role === "admin" || role === "moderator" ? (
-            <FontAwesomeIcon
-              className="icon"
-              icon={faFlag}
-              size="lg"
-              onClick={() => flagPostHandler(_id)}
-            />
+            <FlagIconContainer>
+              <p
+                className="flag"
+                data-report={reportCount}
+                onClick={() => flagPostHandler(_id)}
+              >
+                <FontAwesomeIcon className="icon" icon={faFlag} size="lg" />
+              </p>
+            </FlagIconContainer>
           ) : (
             <FontAwesomeIcon
               className="icon"
@@ -170,6 +173,37 @@ const PostIcons = styled.div`
 
   @media ${device.tablet} {
     margin-top: 2.5rem;
+  }
+`
+
+const FlagIconContainer = styled.div`
+  position: relative;
+
+  .flag[data-report]:after {
+    content: attr(data-report);
+    position: absolute;
+    top: -8px;
+    left: 16px;
+
+    text-align: center;
+    line-height: 18px;
+    font-size: 0.7em;
+    font-weight: 600;
+    color: var(--light);
+
+    padding: 0.1rem;
+    background: red;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+  }
+
+  .flag {
+    cursor: pointer;
+  }
+
+  .flag:hover .icon {
+    color: var(--secondary);
   }
 `
 
