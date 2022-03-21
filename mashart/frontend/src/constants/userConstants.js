@@ -56,3 +56,11 @@ export const BLOCK_USER_FAIL = "BLOCK_USER_FAIL"
 export const UNBLOCK_USER_REQUEST = "UNBLOCK_USER_REQUEST"
 export const UNBLOCK_USER_SUCCESS = "UNBLOCK_USER_SUCCESS"
 export const UNBLOCK_USER_FAIL = "UNBLOCK_USER_FAIL"
+
+export const GET_BAN_USER_REQUEST = "GET_BAN_USER_REQUEST" //ahmed
+export const GET_BAN_USER_SUCCESS = "GET_BAN_USER_SUCCESS" //ahmed
+export const GET_BAN_USER_FAIL = "GET_BAN_USER_FAIL" //ahmed
+
+export const BAN_USER_REQUEST = "BAN_USER_REQUEST" //ahmed
+export const BAN_USER_SUCCESS = "BAN_USER_SUCCESS" //ahmed
+export const BAN_USER_FAIL = "BAN_USER_FAIL" //ahmed
