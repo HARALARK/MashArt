@@ -136,10 +136,10 @@ const ProfileScreen = () => {
                 </>
               ) : (
                 <>
+                  <Button variant="primary">Playlists</Button>
                   <Link className="link" to="/edit-profile">
                     <Button>Edit Profile</Button>
                   </Link>
-                  <Button variant="primary">Playlists</Button>
                 </>
               )}
             </ButtonContainer>
