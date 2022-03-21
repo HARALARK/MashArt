@@ -39,6 +39,15 @@ const postSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    type: {
+      type: String, //could be a single post or a collection of posts i.e., a comic
+      default: "post",
+      enum: ["comic", "post"], 
+    },
+    collabStatus: { //to check if a post is a collab post or a user post
+      type: Boolean,
+      default: false
+    }
   },
   {
     timestamps: true,
