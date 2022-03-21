@@ -51,29 +51,28 @@ export const createPost = asyncHandler(async (req, res) => {
       },
       async () => {
         // Upload completed successfully, now we can get the download URL
-        getDownloadURL(uploadTask.snapshot.ref)
-          .then(async (downloadURL) => {
-            post.path = downloadURL
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+          post.path = downloadURL
 
-            await post.save()
+          await post.save()
 
-            await user.updateOne({
-              $push: { posts: { id: post._id, path: downloadURL } },
-            })
-
-            res.json({
-              _id: post._id,
-              path: post.path,
-              users: post.users,
-              title: post.title,
-              subtitle: post.subtitle,
-              description: post.description,
-              tags: post.tags,
-            })
+          await user.updateOne({
+            $push: { posts: { id: post._id, path: downloadURL } },
           })
-          .error(async () => {
+
+          res.json({
+            _id: post._id,
+            path: post.path,
+            users: post.users,
+            title: post.title,
+            subtitle: post.subtitle,
+            description: post.description,
+            tags: post.tags,
+          })
+        }),
+          async () => {
             await Post.findByIdAndDelete(post._id)
-          })
+          }
       }
     )
   } else {
@@ -83,10 +82,13 @@ export const createPost = asyncHandler(async (req, res) => {
 })
 
 // @desc get a post
-// @route get /api/post/
+// @route get /api/post/:sort?
 // @access Private
 export const getPosts = asyncHandler(async (req, res) => {
+  const sort = req.params.sort === "true" ? true : false
+
   const latestPosts = await Post.find({ isFlagged: false }).sort({
+    reportCount: sort ? -1 : 1,
     updatedAt: -1,
   })
 
@@ -110,6 +112,7 @@ export const getPosts = asyncHandler(async (req, res) => {
         subtitle: post.subtitle,
         description: post.description,
         tags: post.tags,
+        reportCount: post.reportCount,
         time: post.updatedAt,
       }
     })

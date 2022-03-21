@@ -3,14 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import styled from "styled-components"
 import {
   faBookmark,
+  faBullhorn,
   faComment,
   faFlag,
   faHeart,
 } from "@fortawesome/free-solid-svg-icons"
 import device from "../../screen_sizes/devices"
 
-const PostCard = ({ post, role, flagPostHandler }) => {
-  const { _id, users, path, title, subtitle, description } = post
+const PostCard = ({ post, role, flagPostHandler, reportPostHandler }) => {
+  const { _id, users, path, title, subtitle, description, reportCount } = post
 
   return (
     <Container>
@@ -44,12 +45,22 @@ const PostCard = ({ post, role, flagPostHandler }) => {
           <FontAwesomeIcon className="icon" icon={faHeart} size="lg" />
           <FontAwesomeIcon className="icon" icon={faComment} size="lg" />
           <FontAwesomeIcon className="icon" icon={faBookmark} size="lg" />
-          {(role === "admin" || role === "moderator") && (
+          {role === "admin" || role === "moderator" ? (
+            <FlagIconContainer>
+              <p
+                className="flag"
+                data-report={reportCount}
+                onClick={() => flagPostHandler(_id)}
+              >
+                <FontAwesomeIcon className="icon" icon={faFlag} size="lg" />
+              </p>
+            </FlagIconContainer>
+          ) : (
             <FontAwesomeIcon
               className="icon"
-              icon={faFlag}
+              icon={faBullhorn}
               size="lg"
-              onClick={() => flagPostHandler(_id)}
+              onClick={() => reportPostHandler(_id)}
             />
           )}
         </PostIcons>
@@ -156,8 +167,43 @@ const PostIcons = styled.div`
     cursor: pointer;
   }
 
+  .icon:hover {
+    color: var(--secondary);
+  }
+
   @media ${device.tablet} {
     margin-top: 2.5rem;
+  }
+`
+
+const FlagIconContainer = styled.div`
+  position: relative;
+
+  .flag[data-report]:after {
+    content: attr(data-report);
+    position: absolute;
+    top: -8px;
+    left: 16px;
+
+    text-align: center;
+    line-height: 18px;
+    font-size: 0.7em;
+    font-weight: 600;
+    color: var(--light);
+
+    padding: 0.1rem;
+    background: red;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+  }
+
+  .flag {
+    cursor: pointer;
+  }
+
+  .flag:hover .icon {
+    color: var(--secondary);
   }
 `
 

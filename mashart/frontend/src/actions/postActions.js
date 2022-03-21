@@ -59,39 +59,44 @@ export const createPostReset = () => async (dispatch) => {
   })
 }
 
-export const getPosts = () => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: GET_POSTS_REQUEST,
-    })
+export const getPosts =
+  (role = "user") =>
+  async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: GET_POSTS_REQUEST,
+      })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+      const {
+        userLogin: { userInfo },
+      } = getState()
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
-      },
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+
+      const { data } = await axios.get(
+        `/api/post/${role !== "user" ? "true" : ""}`,
+        config
+      )
+
+      dispatch({
+        type: GET_POSTS_SUCCESS,
+        payload: data,
+      })
+    } catch (error) {
+      dispatch({
+        type: GET_POSTS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
     }
-
-    const { data } = await axios.get("/api/post/", config)
-
-    dispatch({
-      type: GET_POSTS_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: GET_POSTS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
   }
-}
 
 export const flagPost = (id) => async (dispatch, getState) => {
   try {
@@ -130,7 +135,7 @@ export const flagPost = (id) => async (dispatch, getState) => {
   }
 }
 
-export const reportPosts = () => async (dispatch, getState) => {
+export const reportPost = (id) => async (dispatch, getState) => {
   try {
     dispatch({
       type: REPORT_POST_REQUEST,
@@ -146,11 +151,14 @@ export const reportPosts = () => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await axios.get(`/api/user/post`, config)
+    const { data } = await axios.put(`/api/post/${id}/report`, {}, config)
 
     dispatch({
       type: REPORT_POST_SUCCESS,
       payload: data,
+    })
+    dispatch({
+      type: GET_POSTS_RESET,
     })
   } catch (error) {
     dispatch({
