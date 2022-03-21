@@ -53,11 +53,17 @@ const userSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
-    playlist: [
+    playlists: [
       {
-        //current users saved playlists
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Playlist",
+        id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Playlist",
+          required: true,
+        },
+        name: {
+          type: String,
+          required: true,
+        },
       },
     ],
     role: {
