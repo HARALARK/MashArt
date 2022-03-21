@@ -487,6 +487,23 @@ export const changeUserRole = asyncHandler(async (req, res) => {
 })
 
 // @desc get list of posts related to a user
+// @route get /api/user/playlist/:id?
+// @access Private
+export const getUserPlaylists = asyncHandler(async (req, res) => {
+  const userId = req.params.id || req.user._id
+  const user = await User.findById(userId)
+
+  if (!user) {
+    res.status(404)
+    throw new Error("User not found")
+  }
+
+  res.json({
+    posts: user.playlists,
+  })
+})
+
+// @desc get list of posts related to a user
 // @route get /api/user/post/:id?
 // @access Private
 export const getUserPosts = asyncHandler(async (req, res) => {
