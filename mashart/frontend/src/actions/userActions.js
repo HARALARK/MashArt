@@ -15,6 +15,9 @@ import {
   GET_BLOCKED_USERS_FAIL,
   GET_BLOCKED_USERS_REQUEST,
   GET_BLOCKED_USERS_SUCCESS,
+  GET_USER_PLAYLISTS_FAIL,
+  GET_USER_PLAYLISTS_REQUEST,
+  GET_USER_PLAYLISTS_SUCCESS,
   GET_USER_POST_FAIL,
   GET_USER_POST_REQUEST,
   GET_USER_POST_SUCCESS,
@@ -349,6 +352,40 @@ export const getUserPosts = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_USER_POST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const getUserPlaylists = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_USER_PLAYLISTS_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/user/playlist`, config)
+
+    dispatch({
+      type: GET_USER_PLAYLISTS_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_USER_PLAYLISTS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
