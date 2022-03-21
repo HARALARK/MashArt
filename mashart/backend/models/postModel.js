@@ -3,8 +3,8 @@ import mongoose from "mongoose"
 const postSchema = mongoose.Schema(
   {
     path: {
-      type: String,
-      unique: true,
+      type: Array,
+      default: [],
     },
     users: {
       type: Array,
