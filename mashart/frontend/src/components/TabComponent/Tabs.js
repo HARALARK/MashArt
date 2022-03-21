@@ -34,7 +34,7 @@ const Tabs = ({ posts }) => {
       </NavMenu> */}
       <PostContainer>
         {posts?.map((post) => (
-          <Post src={post.path} />
+          <Post key={post._id} src={post.path} />
         ))}
       </PostContainer>
     </TabsContainer>
