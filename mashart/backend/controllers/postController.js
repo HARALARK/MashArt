@@ -263,6 +263,7 @@ export const createComic = asyncHandler(async (req, res) => {
     collaborators.trim().length === 0 ? [] : collaborators.split(",")
 
   const user = await User.findById(req.user._id) 
+  
 
   // validating all the collaborators
   if (
@@ -275,8 +276,8 @@ export const createComic = asyncHandler(async (req, res) => {
   }
 
   if (user) {
+    
     const users = [user._id, ...collaboratorsArray]
-
     const post = await Post.create({
       users,
       title,
@@ -284,20 +285,12 @@ export const createComic = asyncHandler(async (req, res) => {
       description,
       tags: tags.split(",").map((tag) => tag.trim()),
     })
-
-    //const storageRef = ref(storage, `posts/${post._id}.${extension}`) //create storage reference
-    //console.log("           STORAGE REFERENCE")
-    //console.log(storageRef)
-
-    //const uploadTask = await Promise.all( req.files.map(async (img) => { 
-     // ; uploadBytesResumable(ref(storage, `posts/${post._id}.${extension}`), img.buffer)} ) )
-    //console.log(uploadTask)
     var num = 0;
-    const imgUrls = await Promise.all( req.files.map(async (img) => { 
+    await Promise.all( req.files.map(async (img) => { 
       num++;
       /*create a storage ref*/ const storageRef = ref(storage, `posts/${post._id}${num}.${extension}`)
       /*create an upload task function*/  const uploadTask = uploadBytesResumable(storageRef, img.buffer)
-      /*get url*/ 
+      /*get urls*/ 
       uploadTask.on(
       "state_changed",
       (snapshot) => {},
@@ -307,14 +300,18 @@ export const createComic = asyncHandler(async (req, res) => {
       async () => {
         // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          console.log(downloadURL)
-          return downloadURL
+          
+          await post.updateOne({
+            $push: { path: downloadURL },
+          })
         })
       }
       )}))
-      console.log(" image URLS")
-      console.log(imgUrls)
-      
+
+      await user.updateOne({
+        $push: { posts: { id: post._id, path: post.path } },
+      })    
+
     } else {
       res.status(404)
       throw new Error("User not found")
