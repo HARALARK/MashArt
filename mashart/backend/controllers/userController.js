@@ -499,7 +499,7 @@ export const getUserPlaylists = asyncHandler(async (req, res) => {
   }
 
   res.json({
-    posts: user.playlists,
+    playlists: user.playlists,
   })
 })
 
