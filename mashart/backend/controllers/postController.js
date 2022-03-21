@@ -292,9 +292,10 @@ export const createComic = asyncHandler(async (req, res) => {
     //const uploadTask = await Promise.all( req.files.map(async (img) => { 
      // ; uploadBytesResumable(ref(storage, `posts/${post._id}.${extension}`), img.buffer)} ) )
     //console.log(uploadTask)
-  
+    var num = 0;
     const imgUrls = await Promise.all( req.files.map(async (img) => { 
-      /*create a storage ref*/ const storageRef = ref(storage, `posts/${post._id}.${extension}`)
+      num++;
+      /*create a storage ref*/ const storageRef = ref(storage, `posts/${post._id}` + num + `.${extension}`)
       /*create an upload task function*/  const uploadTask = uploadBytesResumable(storageRef, img.buffer)
       /*get url*/ 
       uploadTask.on(
