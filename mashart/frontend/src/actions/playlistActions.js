@@ -30,6 +30,9 @@ export const createPlaylist = (playlist) => async (dispatch, getState) => {
       type: CREATE_PLAYLIST_SUCCESS,
       payload: data,
     })
+    dispatch({
+      type: GET_USER_PLAYLISTS_RESET,
+    })
   } catch (error) {
     dispatch({
       type: CREATE_PLAYLIST_FAIL,
