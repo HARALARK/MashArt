@@ -4,6 +4,7 @@ import { composeWithDevTools } from "redux-devtools-extension"
 import {
   blockedUsersReducer,
   forgotPasswordReducer,
+  getUserPlaylistsReducer,
   getUserPostReducer,
   resetPasswordReducer,
   searchUserReducer,
@@ -34,6 +35,7 @@ let reducer = combineReducers({
   collabUsers: collabUsersReducer,
   reportPost: reportPostReducer,
   blockedUsers: blockedUsersReducer,
+  userPlaylists: getUserPlaylistsReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

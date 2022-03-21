@@ -5,6 +5,9 @@ import {
   GET_BLOCKED_USERS_FAIL,
   GET_BLOCKED_USERS_REQUEST,
   GET_BLOCKED_USERS_SUCCESS,
+  GET_USER_PLAYLISTS_FAIL,
+  GET_USER_PLAYLISTS_REQUEST,
+  GET_USER_PLAYLISTS_SUCCESS,
   GET_USER_POST_FAIL,
   GET_USER_POST_REQUEST,
   GET_USER_POST_SUCCESS,
@@ -138,6 +141,19 @@ export const getUserPostReducer = (state = {}, action) => {
     case GET_USER_POST_SUCCESS:
       return { loading: false, posts: action.payload }
     case GET_USER_POST_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const getUserPlaylistsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_USER_PLAYLISTS_REQUEST:
+      return { loading: true }
+    case GET_USER_PLAYLISTS_SUCCESS:
+      return { loading: false, playlists: action.payload }
+    case GET_USER_PLAYLISTS_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state
