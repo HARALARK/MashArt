@@ -7,6 +7,7 @@ import {
   GET_BLOCKED_USERS_SUCCESS,
   GET_USER_PLAYLISTS_FAIL,
   GET_USER_PLAYLISTS_REQUEST,
+  GET_USER_PLAYLISTS_RESET,
   GET_USER_PLAYLISTS_SUCCESS,
   GET_USER_POST_FAIL,
   GET_USER_POST_REQUEST,
@@ -155,6 +156,8 @@ export const getUserPlaylistsReducer = (state = {}, action) => {
       return { loading: false, playlists: action.payload }
     case GET_USER_PLAYLISTS_FAIL:
       return { loading: false, error: action.payload }
+    case GET_USER_PLAYLISTS_RESET:
+      return {}
     default:
       return state
   }
