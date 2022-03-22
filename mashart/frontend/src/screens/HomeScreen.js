@@ -159,7 +159,7 @@ const Homepage = () => {
               e.stopPropagation()
             }}
           >
-            <p className="heading">Select a Playlist:</p>
+            <p className="heading">Select a Bookmark:</p>
             {(loadingPlaylists || loadingAddPostPlaylist) && (
               <Message>Loading...</Message>
             )}
@@ -182,7 +182,7 @@ const Homepage = () => {
                 ))}
               </PlaylistsContainer>
             ) : (
-              <p className="no-playlists">No Playlists</p>
+              <p className="no-playlists">No Bookmarks</p>
             )}
             <Button
               className="variant"
@@ -200,7 +200,7 @@ const Homepage = () => {
               e.stopPropagation()
             }}
           >
-            <p className="heading">Add a new playlist:</p>
+            <p className="heading">Add a new bookmark:</p>
             {loadingPlaylist && <Message variant="info">Loading...</Message>}
             {errorPlaylist && (
               <Message variant="error">{errorPlaylist}</Message>
@@ -209,7 +209,7 @@ const Homepage = () => {
               <Message variant="error">{newPlaylistMessage}</Message>
             )}
             <Input
-              placeholder="Playlist Name"
+              placeholder="Bookmark Name"
               value={newPlaylistName}
               width={"100%"}
               onChange={(e) => setNewPlaylistName(e.target.value)}
