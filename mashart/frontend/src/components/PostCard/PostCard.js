@@ -40,7 +40,7 @@ const PostCard = ({
       </PostCollaborators>
 
       <PostPictureContainer>
-        <PostPicture className="picturePost" src={path} alt="postpic" />
+        <PostPicture className="picturePost" src={path[0]} alt="postpic" />
       </PostPictureContainer>
 
       <PostInfo>
