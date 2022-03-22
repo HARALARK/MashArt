@@ -250,14 +250,13 @@ export const deletePlaylist = asyncHandler(async (req, res) => {
     if (!playlist) {
       throw new Error("Playlist not found.")
     }
-    //check if playlist belongs to user then add each new post to the playlist
 
     if (req.user._id.equals(playlist.userId)) {
       await user.updateOne({
-        $pull: { playlists: playlist._id },
+        $pull: { playlists: { id: playlist._id } },
       })
       await playlist.deleteOne() //delete playlist from database
-      res.status(200).json("Deleted Playlist")
+      res.status(200).json({ id: playlist._id })
     } else {
       throw new Error("Invalid Request. You don't have access to this playlist")
     }
