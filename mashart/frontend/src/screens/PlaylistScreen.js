@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
-import { getPlaylist } from "../actions/playlistActions"
-import { getUserDetails } from "../actions/userActions"
+import { deletePlaylist, getPlaylist } from "../actions/playlistActions"
+import { getUserPlaylists } from "../actions/userActions"
 import Message from "../components/styled-components/Message"
 
 const PlaylistScreen = () => {
@@ -11,12 +11,13 @@ const PlaylistScreen = () => {
   const dispatch = useDispatch()
 
   const [playlistPopUp, setPlaylistPopUp] = useState(false)
+  const [playlistId, setPlaylistId] = useState("")
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
-  const userDetails = useSelector((state) => state.userDetails)
-  const { user } = userDetails
+  const userPlaylists = useSelector((state) => state.userPlaylists)
+  const { playlists } = userPlaylists
 
   const playlistInfo = useSelector((state) => state.getPlaylist)
   const { loading, playlist, error } = playlistInfo
@@ -25,24 +26,31 @@ const PlaylistScreen = () => {
     if (!userInfo) {
       navigate("/")
     }
+  }, [userInfo, navigate])
 
-    if (!userDetails) {
-      dispatch(getUserDetails("profile"))
+  useEffect(() => {
+    if (!playlists) {
+      dispatch(getUserPlaylists())
     }
-  }, [userInfo, navigate, userDetails, dispatch])
+  }, [playlists, dispatch])
 
   const playlistHandler = (id) => {
+    setPlaylistId(id)
     dispatch(getPlaylist(id))
     setPlaylistPopUp(true)
+  }
+
+  const deletePlaylistHandler = () => {
+    dispatch(deletePlaylist(playlistId))
   }
 
   return (
     <Container>
       <h3 className="heading">Bookmarks</h3>
       <PlaylistsContainer>
-        {user && user?.playlists?.length > 0 ? (
+        {playlists && playlists?.playlists?.length > 0 ? (
           <>
-            {user?.playlists?.map((playlist) => (
+            {playlists?.playlists?.map((playlist) => (
               <Playlist
                 key={playlist.id}
                 onClick={() => playlistHandler(playlist.id)}
@@ -59,6 +67,7 @@ const PlaylistScreen = () => {
       <BackgroundBlock
         hide={!playlistPopUp}
         onClick={() => {
+          setPlaylistId("")
           setPlaylistPopUp(false)
         }}
       >
@@ -72,9 +81,7 @@ const PlaylistScreen = () => {
             {error && <Message variant="error">{error}</Message>}
             {playlist && playlist?.content?.length > 0 ? (
               <>
-                <p className="heading" light>
-                  {playlist.name}
-                </p>
+                <p className="heading">{playlist.name}</p>
                 <PlaylistPostContainer>
                   {playlist?.content?.map((content) => (
                     <PostImg key={content._id} src={content.path} />
@@ -84,6 +91,7 @@ const PlaylistScreen = () => {
             ) : (
               <p className="no-playlists">No Bookmarks</p>
             )}
+            <Button onClick={deletePlaylistHandler}>Delete Playlist</Button>
           </PopUp>
         </PopUpContainer>
       </BackgroundBlock>
@@ -193,6 +201,60 @@ const PlaylistPostContainer = styled.div`
 const PostImg = styled.img`
   height: 300px;
   width: 300px;
+  background: var(--light);
+`
+
+const Button = styled.p`
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border: 3px solid var(--secondary);
+  color: var(--secondary);
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+  margin-top: 1rem;
+  text-transform: capitalize;
+
+  &.active {
+    background-color: var(--secondary);
+    color: var(--light);
+  }
+
+  &:hover {
+    background-color: var(--secondary);
+    color: var(--light);
+  }
+
+  width: ${(props) => (props.width ? props.width : "")};
+
+  &.primary {
+    flex: 0;
+    margin: 0;
+    background-color: var(--primary-dark);
+    color: var(--secondary);
+    border: 2px solid var(--primary-dark);
+  }
+
+  &.primary:hover {
+    color: var(--light);
+  }
+
+  &.variant {
+    flex: 0;
+    margin: 0;
+    background-color: transparent;
+    color: var(--primary-dark);
+    border: 2px solid var(--primary-dark);
+  }
+
+  &.variant:hover {
+    background-color: var(--primary-dark);
+    border: 2px solid var(--primary-dark);
+    color: var(--secondary);
+  }
 `
 
 export default PlaylistScreen
