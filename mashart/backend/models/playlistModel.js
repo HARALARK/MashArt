@@ -1,29 +1,33 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose"
 
 const playlistSchema = mongoose.Schema({
-    name: {
-        type: String,
-        required: true
+  name: {
+    type: String,
+    required: true,
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  visibility: {
+    type: Boolean,
+    default: false,
+  },
+  content: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
     },
-    userId: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'User',
-        required: true,
-    },
-    visibility: {
-        type: Boolean,
-        default: false,
-    },
-    content: [{ 
-        type: mongoose.Schema.Types.ObjectId, 
-    }],
-    tags: [String],
-    type: {
-        type: String,
-        default: "mixed",
-        enum: ["personal", "mixed"], 
-    },
+  ],
+  tags: [String],
+  type: {
+    type: String,
+    default: "mixed",
+    enum: ["personal", "mixed"],
+  },
 })
 
-const Playlist = mongoose.model('Playlist', playlistSchema)
+const Playlist = mongoose.model("Playlist", playlistSchema)
 
 export default Playlist
