@@ -8,7 +8,11 @@ import PostCard from "../components/PostCard/PostCard"
 import WelcomeScreen from "./WelcomeScreen"
 import { getUserPlaylists } from "../actions/userActions"
 import { Input } from "../components/styled-components/Input"
-import { createPlaylist, createPlaylistReset } from "../actions/playlistActions"
+import {
+  addPostToPlaylist,
+  createPlaylist,
+  createPlaylistReset,
+} from "../actions/playlistActions"
 
 const Homepage = () => {
   const dispatch = useDispatch()
@@ -38,6 +42,10 @@ const Homepage = () => {
 
   const createPlaylistsInfo = useSelector((state) => state.createPlaylist)
   const { loading: loadingPlaylist, error: errorPlaylist } = createPlaylistsInfo
+
+  const addPostToPlaylistInfo = useSelector((state) => state.addPostToPlaylist)
+  const { loading: loadingAddPostPlaylist, error: errorAddPostPlaylist } =
+    addPostToPlaylistInfo
 
   useEffect(() => {
     if (!posts) {
@@ -70,7 +78,7 @@ const Homepage = () => {
   }
 
   const addToPlaylistHandler = (id) => {
-    console.log(id, postId)
+    dispatch(addPostToPlaylist(id, postId))
   }
 
   const createPlaylistHandler = async () => {
@@ -152,9 +160,14 @@ const Homepage = () => {
             }}
           >
             <p className="heading">Select a Playlist:</p>
-            {loadingPlaylists && <Message>Loading...</Message>}
+            {(loadingPlaylists || loadingAddPostPlaylist) && (
+              <Message>Loading...</Message>
+            )}
             {errorPlaylists && (
               <Message variant="error">{errorPlaylists}</Message>
+            )}
+            {errorAddPostPlaylist && (
+              <Message variant="error">{errorAddPostPlaylist}</Message>
             )}
             {playlists && playlists.playlists.length > 0 ? (
               <PlaylistsContainer>
@@ -362,13 +375,18 @@ const PlaylistsContainer = styled.div`
   flex-direction: column;
   gap: 0.5rem;
 
-  padding: 1rem 0;
+  padding: 1rem 0.5rem;
 
   .playlist {
     background: var(--secondary-light);
     border-radius: 5px;
     padding: 0.5rem 0;
     width: 100%;
+    cursor: pointer;
+  }
+
+  .playlist:hover {
+    background: var(--secondary);
   }
 `
 const Checkbox = styled.div`
