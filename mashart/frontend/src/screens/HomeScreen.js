@@ -243,7 +243,7 @@ const Homepage = () => {
 }
 
 const Container = styled.section`
-  padding: 1rem 2rem 100px;
+  padding: 1rem 2rem 80px;
 `
 
 const OptionContainer = styled.div`
