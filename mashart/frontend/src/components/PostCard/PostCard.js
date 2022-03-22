@@ -120,7 +120,6 @@ const CollabUser = styled.img`
 const PostPictureContainer = styled.div`
   flex: 1;
   background: var(--grey-light);
-  width: 400px;
   height: 300px;
   display: flex;
   justify-content: center;
@@ -128,6 +127,7 @@ const PostPictureContainer = styled.div`
 
 const PostPicture = styled.img`
   width: 300px;
+  height: 300px;
   background-size: contain;
 `
 
