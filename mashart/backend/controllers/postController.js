@@ -10,6 +10,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 export const createPost = asyncHandler(async (req, res) => {
   const { buffer } = req.file
 
+
   const extension = req.file.originalname.split(".").pop()
 
   const { collaborators = "", title, subtitle, description, tags } = req.body
@@ -43,10 +44,10 @@ export const createPost = asyncHandler(async (req, res) => {
     const storageRef = ref(storage, `posts/${post._id}.${extension}`)
     const uploadTask = uploadBytesResumable(storageRef, buffer)
 
-    uploadTask.on(
+    uploadTask.on( //checks if the upload has taken place successfully
       "state_changed",
       (snapshot) => {},
-      (error) => {
+      (error) => {  //throw error
         throw new Error(error)
       },
       async () => {
@@ -87,24 +88,24 @@ export const createPost = asyncHandler(async (req, res) => {
 export const getPosts = asyncHandler(async (req, res) => {
   const sort = req.params.sort === "true" ? true : false
 
-  const latestPosts = await Post.find({ isFlagged: false }).sort({
+  const latestPosts = await Post.find({ isFlagged: false }).sort({ //array of latest posts
     reportCount: sort ? -1 : 1,
     updatedAt: -1,
   })
 
   const posts = await Promise.all(
-    latestPosts.map(async (post) => {
-      const users = await Promise.all(
-        post.users.map(async (id) => {
+    latestPosts.map(async (post) => { //for each latest post
+      const users = await Promise.all( //get the users array of the post
+        post.users.map(async (id) => {  //for every user in the user array of the post 
           const user = await User.findById(id)
-          return {
+          return {  
             id,
-            profileImage: user.profileImage.imageSrc,
+            profileImage: user.profileImage.imageSrc, //get the users profile pic
           }
         })
       )
 
-      return {
+      return { //return the current latest post i.e., store this to the posts array as a new element
         _id: post._id,
         path: post.path,
         users,
@@ -117,9 +118,10 @@ export const getPosts = asyncHandler(async (req, res) => {
       }
     })
   )
-
+  
+  
   res.json({
-    posts,
+    posts, 
   })
 })
 
@@ -237,3 +239,74 @@ export const flagPost = asyncHandler(async (req, res) => {
     return res.status(500).json(err)
   }
 })
+
+
+// @desc Create a comic
+// @route POST /api/post/create/comic
+// @access Private
+export const createComic = asyncHandler(async (req, res) => {
+  const { buffer } = req.files
+
+  const extension = req.files[0].originalname.split(".").pop() //get extension of first image WHAT IF IMAGE NAME HAS . ?
+
+  const { collaborators = "", title, subtitle, description, tags } = req.body
+
+  const collaboratorsArray =
+    collaborators.trim().length === 0 ? [] : collaborators.split(",")
+
+  const user = await User.findById(req.user._id) 
+  
+
+  // validating all the collaborators
+  if (
+    collaboratorsArray.length > 0 &&
+    collaboratorsArray[0].trim().length > 0
+  ) {
+    collaboratorsArray.split(",").forEach(async (collaborator) => {
+      await User.findById(collaborator)
+    })
+  }
+
+  if (user) {
+    
+    const users = [user._id, ...collaboratorsArray]
+    const post = await Post.create({
+      users,
+      title,
+      subtitle,
+      description,
+      tags: tags.split(",").map((tag) => tag.trim()),
+    })
+    var num = 0;
+    await Promise.all( req.files.map(async (img) => { 
+      num++;
+      /*create a storage ref*/ const storageRef = ref(storage, `posts/${post._id}${num}.${extension}`)
+      /*create an upload task function*/  const uploadTask = uploadBytesResumable(storageRef, img.buffer)
+      /*get urls*/ 
+      uploadTask.on(
+      "state_changed",
+      (snapshot) => {},
+      (error) => {
+        throw new Error(error)
+      },
+      async () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+          await post.updateOne({
+            $push: { path: downloadURL },
+          })
+        })
+      }
+      )}))
+
+      await user.updateOne({
+        $push: { posts: { id: post._id, path: post.path } },
+      })    
+      res.status(200).json("Comic Created")
+    } else {
+      res.status(404)
+      throw new Error("User not found")
+    }
+    })
+        
+

@@ -36,7 +36,7 @@ const userSchema = mongoose.Schema(
           required: true,
         },
         path: {
-          type: String,
+          type: Array,
           required: true,
         },
       },
