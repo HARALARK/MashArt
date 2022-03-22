@@ -1,5 +1,8 @@
 import axios from "axios"
 import {
+  ADD_POST_PLAYLIST_FAIL,
+  ADD_POST_PLAYLIST_REQUEST,
+  ADD_POST_PLAYLIST_SUCCESS,
   CREATE_PLAYLIST_FAIL,
   CREATE_PLAYLIST_REQUEST,
   CREATE_PLAYLIST_SUCCESS,
@@ -51,4 +54,42 @@ export const createPlaylistReset = () => async (dispatch) => {
   dispatch({
     type: GET_USER_PLAYLISTS_RESET,
   })
+}
+
+export const addPostToPlaylist = (id, posts) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ADD_POST_PLAYLIST_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(
+      `/api/playlist/${id}/posts/add`,
+      { posts },
+      config
+    )
+
+    dispatch({
+      type: ADD_POST_PLAYLIST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: ADD_POST_PLAYLIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
 }

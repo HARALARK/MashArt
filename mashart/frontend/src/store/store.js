@@ -19,7 +19,10 @@ import {
   reportPostReducer,
 } from "../reducers/postReducers"
 import { collabReducer, collabUsersReducer } from "../reducers/collabReducers"
-import { createPlaylistReducer } from "../reducers/playlistReducer"
+import {
+  addPostToPlaylistReducer,
+  createPlaylistReducer,
+} from "../reducers/playlistReducer"
 
 let reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -38,6 +41,7 @@ let reducer = combineReducers({
   blockedUsers: blockedUsersReducer,
   userPlaylists: getUserPlaylistsReducer,
   createPlaylist: createPlaylistReducer,
+  addPostToPlaylist: addPostToPlaylistReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
