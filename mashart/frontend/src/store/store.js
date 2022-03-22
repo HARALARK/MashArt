@@ -2,6 +2,7 @@ import { applyMiddleware, combineReducers, createStore } from "redux"
 import thunk from "redux-thunk"
 import { composeWithDevTools } from "redux-devtools-extension"
 import {
+  banUserReducer, //ahmed
   blockedUsersReducer,
   forgotPasswordReducer,
   getUserPostReducer,
@@ -34,6 +35,7 @@ let reducer = combineReducers({
   collabUsers: collabUsersReducer,
   reportPost: reportPostReducer,
   blockedUsers: blockedUsersReducer,
+  banUser: banUserReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

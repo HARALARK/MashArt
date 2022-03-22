@@ -1,5 +1,11 @@
 import axios from "axios"
 import {
+  BAN_USER_REQUEST, //ahmed
+  BAN_USER_SUCCESS, //ahmed
+  BAN_USER_FAIL, //ahmed
+  GET_BAN_USER_FAIL, //ahmed
+  GET_BAN_USER_REQUEST, //ahmed
+  GET_BAN_USER_SUCCESS, //ahmed
   BLOCK_USER_FAIL,
   BLOCK_USER_REQUEST,
   BLOCK_USER_SUCCESS,
@@ -584,6 +590,45 @@ export const unblockUser = (_id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: UNBLOCK_USER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+
+export const banUser = (_id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: BAN_USER_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(`/api/user/profile/block`, { _id }, config)
+
+    dispatch({
+      type: BAN_USER_SUCCESS,
+      payload: data,
+    })
+
+    dispatch({
+      type: USER_DETAILS_RESET,
+    })
+  } catch (error) {
+    dispatch({
+      type: BAN_USER_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
