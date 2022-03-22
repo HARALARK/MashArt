@@ -5,6 +5,7 @@ import {
   banUserReducer, //ahmed
   blockedUsersReducer,
   forgotPasswordReducer,
+  getUserPlaylistsReducer,
   getUserPostReducer,
   resetPasswordReducer,
   searchUserReducer,
@@ -19,6 +20,11 @@ import {
   reportPostReducer,
 } from "../reducers/postReducers"
 import { collabReducer, collabUsersReducer } from "../reducers/collabReducers"
+import {
+  addPostToPlaylistReducer,
+  createPlaylistReducer,
+  getPlaylistReducer,
+} from "../reducers/playlistReducer"
 
 let reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -36,6 +42,10 @@ let reducer = combineReducers({
   reportPost: reportPostReducer,
   blockedUsers: blockedUsersReducer,
   banUser: banUserReducer,
+  userPlaylists: getUserPlaylistsReducer,
+  createPlaylist: createPlaylistReducer,
+  addPostToPlaylist: addPostToPlaylistReducer,
+  getPlaylist: getPlaylistReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

@@ -66,7 +66,7 @@ const Container = styled.footer`
   bottom: 0;
   left: 0;
   background-color: var(--secondary);
-  height: 80px;
+  height: 60px;
 `
 
 const TabMenu = styled.ul`
@@ -83,11 +83,12 @@ const TabMenu = styled.ul`
     color: var(--light);
     padding: 1rem;
     display: flex;
+    align-items: center;
     gap: 0.5rem;
   }
 
   .tab-icon {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   .tab-link.active {

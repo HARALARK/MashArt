@@ -20,6 +20,7 @@ import EditArtScreen from "./screens/EditArtScreen"
 import ComicsScreen from "./screens/ComicsScreen"
 import ActivityScreen from "./screens/ActivityScreen"
 import ChatsScreen from "./screens/ChatsScreen"
+import PlaylistScreen from "./screens/PlaylistScreen"
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
               <Route path="/comics" element={<ComicsScreen />} />
               <Route path="/activity" element={<ActivityScreen />} />
               <Route path="/chat" element={<ChatsScreen />} />
+              <Route path="/playlist" element={<PlaylistScreen />} />
               <Route path="*" element={<PageNotFoundScreen />} />
             </Routes>
           </ScreensContainer>

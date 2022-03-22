@@ -19,6 +19,7 @@ import {
   unblockUser,
   getBlockedUsers,
   changeUserRole,
+  getUserPlaylists,
 } from "../controllers/userController.js"
 import { protect } from "../middleware/authMiddleware.js"
 
@@ -50,6 +51,7 @@ router.route("/profile/unblock").put(protect, unblockUser)
 
 router.route("/role").put(protect, changeUserRole)
 
+router.route("/playlist/:id?").get(protect, getUserPlaylists)
 router.route("/post/:id?").get(protect, getUserPosts)
 
 export default router

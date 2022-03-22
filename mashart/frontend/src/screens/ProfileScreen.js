@@ -112,37 +112,41 @@ const ProfileScreen = () => {
                 </MiscInfo>
               </MiscHolder>
             </InfoContainer>
-            {id ? (
-              <ButtonContainer>
-                {user.followers?.includes(userInfo._id) ? (
-                  <Button onClick={unfollowHandler}>unFollow</Button>
-                ) : (
-                  <Button onClick={followHandler}>Follow</Button>
-                )}
-                {blockedUsers?.blockedUsers.includes(user._id) ? (
-                  <Button onClick={unblockHandler}>unBlock</Button>
-                ) : (
-                  <Button onClick={blockHandler}>Block</Button>
-                )}
+            <ButtonContainer>
+              {id ? (
+                <>
+                  {user.followers?.includes(userInfo._id) ? (
+                    <Button onClick={unfollowHandler}>unFollow</Button>
+                  ) : (
+                    <Button variant="primary" onClick={followHandler}>
+                      Follow
+                    </Button>
+                  )}
+                  {blockedUsers?.blockedUsers.includes(user._id) ? (
+                    <Button onClick={unblockHandler}>unBlock</Button>
+                  ) : (
+                    <Button onClick={blockHandler}>Block</Button>
+                  )}
 
-                {userInfo.role === "admin" && (
-                  <Button onClick={changeRoleHandler}>
-                    To {user.role === "user" ? "moderator" : "user"}
-                  </Button>
-                )}
-              </ButtonContainer>
-            ) : (
-              <EditButton>
-                <Link className="link" to="/edit-profile">
-                  <Button>Edit Profile</Button>
-                </Link>
-              </EditButton>
-            )}
+                  {userInfo.role === "admin" && (
+                    <Button onClick={changeRoleHandler}>
+                      To {user.role === "user" ? "moderator" : "user"}
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Link className="link" to="/playlist">
+                    <Button variant="primary">Playlists</Button>
+                  </Link>
+                  <Link className="link" to="/edit-profile">
+                    <Button>Edit Profile</Button>
+                  </Link>
+                </>
+              )}
+            </ButtonContainer>
           </InfoSection>
-          <Tabs />
-          <PostContainer>
-            {user.posts ? <></> : <p className="no-posts">No Posts</p>}
-          </PostContainer>
+          <Tabs posts={user?.posts} />
         </>
       )}
     </Container>
@@ -165,9 +169,6 @@ const InfoSection = styled.section`
   padding: 1rem 0 1rem;
   width: calc(100% - 2rem);
   border-bottom: 2px solid var(--background-dark);
-  .link {
-    text-decoration: none;
-  }
 `
 
 const ButtonContainer = styled.div`
@@ -175,13 +176,10 @@ const ButtonContainer = styled.div`
   gap: 1rem;
   align-items: center;
   justify-content: center;
-`
 
-const EditButton = styled.div`
-  @media ${device.tablet} {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .link {
+    flex: 1;
+    text-decoration: none;
   }
 `
 
@@ -190,7 +188,10 @@ const Button = styled.p`
   text-align: center;
   padding: 0.5rem 1rem;
   border: 3px solid var(--secondary);
-  color: var(--secondary);
+  color: ${(props) =>
+    props.variant === "primary" ? "var(--light)" : "var(--secondary)"};
+  background: ${(props) =>
+    props.variant === "primary" ? "var(--secondary)" : ""};
   border-radius: 5px;
   font-size: 1rem;
   font-weight: 600;
@@ -200,13 +201,16 @@ const Button = styled.p`
   text-transform: capitalize;
 
   &:hover {
-    background-color: var(--secondary);
+    background-color: ${(props) =>
+      props.variant === "primary"
+        ? "var(--secondary-dark)"
+        : "var(--secondary)"};
+    border: 3px solid
+      ${(props) =>
+        props.variant === "primary"
+          ? "var(--secondary-dark)"
+          : "var(--secondary)"};
     color: var(--light);
-  }
-
-  @media ${device.tablet} {
-    margin: 0;
-    width: 150px;
   }
 `
 
@@ -271,21 +275,6 @@ const MiscInfo = styled.div`
 
   @media ${device.tablet} {
     width: 150px;
-  }
-`
-
-const PostContainer = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 1rem 0;
-
-  .no-posts {
-    width: 100%;
-    text-align: center;
-    font-size: 2rem;
-    color: var(--primary-dark);
-    font-weight: 500;
   }
 `
 

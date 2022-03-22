@@ -109,6 +109,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
       followers: user.followers,
       following: user.following,
       posts: user.posts,
+      playlists: user.playlists,
       role: user.role,
       profileImage: user.profileImage || null,
     })
@@ -484,6 +485,23 @@ export const changeUserRole = asyncHandler(async (req, res) => {
     res.status(404)
     throw new Error("User not found")
   }
+})
+
+// @desc get list of posts related to a user
+// @route get /api/user/playlist/:id?
+// @access Private
+export const getUserPlaylists = asyncHandler(async (req, res) => {
+  const userId = req.params.id || req.user._id
+  const user = await User.findById(userId)
+
+  if (!user) {
+    res.status(404)
+    throw new Error("User not found")
+  }
+
+  res.json({
+    playlists: user.playlists,
+  })
 })
 
 // @desc get list of posts related to a user

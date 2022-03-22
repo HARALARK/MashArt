@@ -10,7 +10,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import device from "../../screen_sizes/devices"
 
-const PostCard = ({ post, role, flagPostHandler, reportPostHandler }) => {
+const PostCard = ({
+  post,
+  role,
+  flagPostHandler,
+  reportPostHandler,
+  popupHandler,
+}) => {
   const { _id, users, path, title, subtitle, description, reportCount } = post
 
   return (
@@ -34,7 +40,7 @@ const PostCard = ({ post, role, flagPostHandler, reportPostHandler }) => {
       </PostCollaborators>
 
       <PostPictureContainer>
-        <PostPicture className="picturePost" src={path} alt="postpic" />
+        <PostPicture className="picturePost" src={path[0]} alt="postpic" />
       </PostPictureContainer>
 
       <PostInfo>
@@ -44,7 +50,12 @@ const PostCard = ({ post, role, flagPostHandler, reportPostHandler }) => {
         <PostIcons>
           <FontAwesomeIcon className="icon" icon={faHeart} size="lg" />
           <FontAwesomeIcon className="icon" icon={faComment} size="lg" />
-          <FontAwesomeIcon className="icon" icon={faBookmark} size="lg" />
+          <FontAwesomeIcon
+            className="icon"
+            icon={faBookmark}
+            size="lg"
+            onClick={popupHandler}
+          />
           {role === "admin" || role === "moderator" ? (
             <FlagIconContainer>
               <p

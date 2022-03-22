@@ -100,12 +100,12 @@ const CollabScreen = () => {
                 {posts.posts.map((post) => (
                   <ImageContainer
                     key={post._id}
-                    onClick={() => createRoomHandler(post.path)}
+                    onClick={() => createRoomHandler(post.path[0])}
                   >
                     <img
                       key={post.id}
                       className="post"
-                      src={post.path}
+                      src={post.path[0]}
                       alt="post"
                     />
                   </ImageContainer>

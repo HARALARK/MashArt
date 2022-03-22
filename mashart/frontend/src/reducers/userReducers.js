@@ -1,13 +1,17 @@
 import {
+  BAN_USER_FAIL,
+  BAN_USER_REQUEST,
+  BAN_USER_SUCCESS,
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
-  GET_BAN_USER_FAIL, //ahmed
-  GET_BAN_USER_REQUEST, //ahmed
-  GET_BAN_USER_SUCCESS, //ahmed
   GET_BLOCKED_USERS_FAIL,
   GET_BLOCKED_USERS_REQUEST,
   GET_BLOCKED_USERS_SUCCESS,
+  GET_USER_PLAYLISTS_FAIL,
+  GET_USER_PLAYLISTS_REQUEST,
+  GET_USER_PLAYLISTS_RESET,
+  GET_USER_PLAYLISTS_SUCCESS,
   GET_USER_POST_FAIL,
   GET_USER_POST_REQUEST,
   GET_USER_POST_SUCCESS,
@@ -147,6 +151,21 @@ export const getUserPostReducer = (state = {}, action) => {
   }
 }
 
+export const getUserPlaylistsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_USER_PLAYLISTS_REQUEST:
+      return { loading: true }
+    case GET_USER_PLAYLISTS_SUCCESS:
+      return { loading: false, playlists: action.payload }
+    case GET_USER_PLAYLISTS_FAIL:
+      return { loading: false, error: action.payload }
+    case GET_USER_PLAYLISTS_RESET:
+      return {}
+    default:
+      return state
+  }
+}
+
 export const blockedUsersReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_BLOCKED_USERS_REQUEST:
@@ -160,13 +179,14 @@ export const blockedUsersReducer = (state = {}, action) => {
   }
 }
 
-export const  banUserReducer = (state = {}, action) => { //ahmed
+export const banUserReducer = (state = {}, action) => {
+  //ahmed
   switch (action.type) {
-    case GET_BAN_USER_REQUEST:
+    case BAN_USER_REQUEST:
       return { loading: true }
-    case GET_BAN_USER_SUCCESS:
+    case BAN_USER_SUCCESS:
       return { loading: false, banUser: action.payload }
-    case GET_BAN_USER_FAIL:
+    case BAN_USER_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state
