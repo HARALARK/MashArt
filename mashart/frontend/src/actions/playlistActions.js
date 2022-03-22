@@ -6,6 +6,9 @@ import {
   CREATE_PLAYLIST_FAIL,
   CREATE_PLAYLIST_REQUEST,
   CREATE_PLAYLIST_SUCCESS,
+  GET_PLAYLIST_FAIL,
+  GET_PLAYLIST_REQUEST,
+  GET_PLAYLIST_SUCCESS,
   PLAYLIST_RESET,
 } from "../constants/playlistConstants"
 import { GET_USER_PLAYLISTS_RESET } from "../constants/userConstants"
@@ -86,6 +89,40 @@ export const addPostToPlaylist = (id, posts) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ADD_POST_PLAYLIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const getPlaylist = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_PLAYLIST_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/playlist/${id}`, config)
+
+    dispatch({
+      type: GET_PLAYLIST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_PLAYLIST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
