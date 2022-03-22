@@ -271,7 +271,10 @@ export const deletePlaylist = asyncHandler(async (req, res) => {
 // @access Private
 export const getPlaylist = asyncHandler(async (req, res) => {
   try {
-    const playlist = await Playlist.findById(req.params.id)
+    const playlist = await Playlist.findById(req.params.id).populate(
+      "content",
+      "path"
+    )
 
     if (!playlist) {
       res.status(404)
@@ -280,12 +283,18 @@ export const getPlaylist = asyncHandler(async (req, res) => {
 
     if (playlist.userId.equals(req.user._id)) {
       res.status(200).json({
-        playlist,
+        _id: playlist._id,
+        name: playlist.name,
+        content: playlist.content,
       })
     } else {
       //only sent other user's playlist if its visibility is set to public
       if (playlist.visibility == true) {
-        res.json({ playlist })
+        res.json({
+          _id: playlist._id,
+          name: playlist.name,
+          content: playlist.content,
+        })
       } else {
         throw new Error("Invalid Request")
       }
