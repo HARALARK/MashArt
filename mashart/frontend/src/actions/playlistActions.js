@@ -6,6 +6,9 @@ import {
   CREATE_PLAYLIST_FAIL,
   CREATE_PLAYLIST_REQUEST,
   CREATE_PLAYLIST_SUCCESS,
+  DELETE_PLAYLIST_FAIL,
+  DELETE_PLAYLIST_REQUEST,
+  DELETE_PLAYLIST_SUCCESS,
   GET_PLAYLIST_FAIL,
   GET_PLAYLIST_REQUEST,
   GET_PLAYLIST_SUCCESS,
@@ -123,6 +126,44 @@ export const getPlaylist = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_PLAYLIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const deletePlaylist = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: DELETE_PLAYLIST_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.delete(`/api/playlist/${id}/delete`, config)
+
+    dispatch({
+      type: DELETE_PLAYLIST_SUCCESS,
+      payload: data,
+    })
+
+    dispatch({
+      type: GET_USER_PLAYLISTS_RESET,
+    })
+  } catch (error) {
+    dispatch({
+      type: DELETE_PLAYLIST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
