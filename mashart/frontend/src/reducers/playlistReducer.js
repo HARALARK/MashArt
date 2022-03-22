@@ -45,7 +45,7 @@ export const getPlaylistReducer = (state = {}, action) => {
     case GET_PLAYLIST_REQUEST:
       return { loading: true }
     case GET_PLAYLIST_SUCCESS:
-      return { loading: false, playlistInfo: action.payload }
+      return { loading: false, playlist: action.payload }
     case GET_PLAYLIST_FAIL:
       return { loading: false, error: action.payload }
     case GET_PLAYLIST_RESET:
