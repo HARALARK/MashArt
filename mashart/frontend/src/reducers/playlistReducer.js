@@ -5,6 +5,10 @@ import {
   CREATE_PLAYLIST_FAIL,
   CREATE_PLAYLIST_REQUEST,
   CREATE_PLAYLIST_SUCCESS,
+  GET_PLAYLIST_FAIL,
+  GET_PLAYLIST_REQUEST,
+  GET_PLAYLIST_RESET,
+  GET_PLAYLIST_SUCCESS,
   PLAYLIST_RESET,
 } from "../constants/playlistConstants"
 
@@ -31,6 +35,21 @@ export const addPostToPlaylistReducer = (state = {}, action) => {
       return { loading: false, playlistInfo: action.payload }
     case ADD_POST_PLAYLIST_FAIL:
       return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const getPlaylistReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_PLAYLIST_REQUEST:
+      return { loading: true }
+    case GET_PLAYLIST_SUCCESS:
+      return { loading: false, playlistInfo: action.payload }
+    case GET_PLAYLIST_FAIL:
+      return { loading: false, error: action.payload }
+    case GET_PLAYLIST_RESET:
+      return {}
     default:
       return state
   }

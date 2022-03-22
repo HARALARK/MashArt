@@ -23,6 +23,7 @@ import { collabReducer, collabUsersReducer } from "../reducers/collabReducers"
 import {
   addPostToPlaylistReducer,
   createPlaylistReducer,
+  getPlaylistReducer,
 } from "../reducers/playlistReducer"
 
 let reducer = combineReducers({
@@ -44,6 +45,7 @@ let reducer = combineReducers({
   userPlaylists: getUserPlaylistsReducer,
   createPlaylist: createPlaylistReducer,
   addPostToPlaylist: addPostToPlaylistReducer,
+  getPlaylist: getPlaylistReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
