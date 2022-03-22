@@ -9,10 +9,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 // @access Private
 export const createPost = asyncHandler(async (req, res) => {
   const { buffer } = req.file
-  console.log("buffer: ") 
-  console.log(buffer)
-  console.log("req.file: ")
-  console.log(req.file)
+
 
   const extension = req.file.originalname.split(".").pop()
 
@@ -244,16 +241,11 @@ export const flagPost = asyncHandler(async (req, res) => {
 })
 
 
-
-
 // @desc Create a comic
 // @route POST /api/post/create/comic
 // @access Private
 export const createComic = asyncHandler(async (req, res) => {
   const { buffer } = req.files
-  console.log("req.files")
-  console.log(req.files[0])
-  console.log(req.files[1])
 
   const extension = req.files[0].originalname.split(".").pop() //get extension of first image WHAT IF IMAGE NAME HAS . ?
 
@@ -300,7 +292,6 @@ export const createComic = asyncHandler(async (req, res) => {
       async () => {
         // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          
           await post.updateOne({
             $push: { path: downloadURL },
           })
@@ -311,7 +302,7 @@ export const createComic = asyncHandler(async (req, res) => {
       await user.updateOne({
         $push: { posts: { id: post._id, path: post.path } },
       })    
-
+      res.status(200).json("Comic Created")
     } else {
       res.status(404)
       throw new Error("User not found")
