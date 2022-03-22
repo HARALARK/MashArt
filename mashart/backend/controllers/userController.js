@@ -109,6 +109,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
       followers: user.followers,
       following: user.following,
       posts: user.posts,
+      playlists: user.playlists,
       role: user.role,
       profileImage: user.profileImage || null,
     })
