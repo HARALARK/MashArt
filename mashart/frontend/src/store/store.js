@@ -5,6 +5,7 @@ import {
   banUserReducer, //ahmed
   blockedUsersReducer,
   forgotPasswordReducer,
+  getUserPlaylistsReducer,
   getUserPostReducer,
   resetPasswordReducer,
   searchUserReducer,
@@ -36,6 +37,7 @@ let reducer = combineReducers({
   reportPost: reportPostReducer,
   blockedUsers: blockedUsersReducer,
   banUser: banUserReducer,
+  userPlaylists: getUserPlaylistsReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
