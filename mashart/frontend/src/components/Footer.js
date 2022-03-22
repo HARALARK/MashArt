@@ -83,11 +83,12 @@ const TabMenu = styled.ul`
     color: var(--light);
     padding: 1rem;
     display: flex;
+    align-items: center;
     gap: 0.5rem;
   }
 
   .tab-icon {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   .tab-link.active {
