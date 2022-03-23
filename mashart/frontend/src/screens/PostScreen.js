@@ -122,7 +122,7 @@ const PostScreen = () => {
 
   return (
     <Container>
-      {loading && <Message>Loading</Message>}
+      {loading && <Message>Creating Post...</Message>}
       {message && <Message variant="warning">{message}</Message>}
       {error && <Message variant="error">{error}</Message>}
       {postInfo && (
@@ -144,7 +144,7 @@ const PostScreen = () => {
             </ImagePlaceHolder>
           )}
         </ImageContainer>
-        <Form>
+        <Form disabled={loading}>
           <ImageInputContainer>
             {!collabPost && (
               <Input
@@ -267,6 +267,8 @@ const Form = styled.form`
   background: var(--secondary-dark);
   color: var(--light);
 
+  pointer-events: ${(props) => (props.disabled ? "none" : "")};
+  opacity: ${(props) => (props.disabled ? "0.7" : "")};
   @media ${device.tablet} {
     width: 70%;
   }
