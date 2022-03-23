@@ -10,6 +10,9 @@ import {
   REPORT_POST_REQUEST,
   REPORT_POST_SUCCESS,
   REPORT_POST_FAIL,
+  CREATE_COMIC_REQUEST,
+  CREATE_COMIC_SUCCESS,
+  CREATE_COMIC_FAIL,
 } from "../constants/postConstants"
 
 export const createPostReducer = (state = {}, action) => {
@@ -19,6 +22,12 @@ export const createPostReducer = (state = {}, action) => {
     case CREATE_POST_SUCCESS:
       return { loading: false, postInfo: action.payload }
     case CREATE_POST_FAIL:
+      return { loading: false, error: action.payload }
+    case CREATE_COMIC_REQUEST:
+      return { loading: true }
+    case CREATE_COMIC_SUCCESS:
+      return { loading: false, postInfo: action.payload }
+    case CREATE_COMIC_FAIL:
       return { loading: false, error: action.payload }
     case POST_RESET:
       return {}
