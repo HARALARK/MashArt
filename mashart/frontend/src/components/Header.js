@@ -22,8 +22,8 @@ const Header = () => {
 
   const navLinks = {
     Collab: "/collab",
-    Activity: "/activity",
-    Chat: "/chat",
+    // Activity: "/activity",
+    // Chat: "/chat",
   }
 
   const logoutHandler = () => {
@@ -203,6 +203,7 @@ const NavMenu = styled.ul`
 `
 
 const Dropdown = styled(NavMenu)`
+  display: flex;
   flex-direction: column;
   position: absolute;
   background-color: var(--secondary-light);

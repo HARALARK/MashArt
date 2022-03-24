@@ -52,8 +52,8 @@ function App() {
               <Route path="/post/create" element={<PostScreen />} />
               <Route path="/search" element={<SearchScreen />} />
               <Route path="/comics" element={<ComicsScreen />} />
-              <Route path="/activity" element={<ActivityScreen />} />
-              <Route path="/chat" element={<ChatsScreen />} />
+              {/* <Route path="/activity" element={<ActivityScreen />} />
+              <Route path="/chat" element={<ChatsScreen />} /> */}
               <Route path="/playlist" element={<PlaylistScreen />} />
               <Route path="*" element={<PageNotFoundScreen />} />
             </Routes>
