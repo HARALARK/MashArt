@@ -12,30 +12,36 @@ export const createPost = asyncHandler(async (req, res) => {
 
   const extension = req.file.originalname.split(".").pop()
 
-  const { collaborators = "", title, subtitle, description, tags } = req.body
+  const { collaborators = "", title, description, tags } = req.body
 
   const collaboratorsArray =
     collaborators.trim().length === 0 ? [] : collaborators.split(",")
 
   const user = await User.findById(req.user._id)
 
+  let collaboratorsExist = []
   // validating all the collaborators
   if (
     collaboratorsArray.length > 0 &&
     collaboratorsArray[0].trim().length > 0
   ) {
-    collaboratorsArray.split(",").forEach(async (collaborator) => {
-      await User.findById(collaborator)
-    })
+    collaboratorsExist = await Promise.all(
+      collaboratorsArray.map(async (collaborator) => {
+        const userExist = await User.findOne({ username: collaborator.trim() })
+        if (!userExist) {
+          throw new Error("Collaborator doesnt exist")
+        }
+        return userExist._id
+      })
+    )
   }
 
   if (user) {
-    const users = [user._id, ...collaboratorsArray]
+    const users = [user._id, ...collaboratorsExist]
 
     const post = await Post.create({
       users,
       title,
-      subtitle,
       description,
       tags: tags.split(",").map((tag) => tag.trim()),
     })
@@ -114,7 +120,7 @@ export const getPosts = asyncHandler(async (req, res) => {
         path: post.path,
         users,
         title: post.title,
-        subtitle: post.subtitle,
+        type: post.type,
         description: post.description,
         tags: post.tags,
         reportCount: post.reportCount,
@@ -248,7 +254,7 @@ export const flagPost = asyncHandler(async (req, res) => {
 // @access Private
 export const createComic = asyncHandler(async (req, res) => {
   const extensions = req.files.map((file) => file.originalname.split(".").pop()) //get extension of first image
-  const { collaborators = "", title, subtitle, description, tags } = req.body
+  const { collaborators = "", title, description, tags } = req.body
 
   const collaboratorsArray =
     collaborators.trim().length === 0 ? [] : collaborators.split(",")
@@ -270,8 +276,8 @@ export const createComic = asyncHandler(async (req, res) => {
     const post = await Post.create({
       users,
       title,
-      subtitle,
       description,
+      type: "comic",
       tags: tags.split(",").map((tag) => tag.trim()),
     })
 
@@ -331,3 +337,47 @@ const uploadTaskPromise = async (num, img, post, extension) => {
     )
   })
 }
+
+// @desc get comics
+// @route get /api/post/comics
+// @access Private
+export const getComics = asyncHandler(async (req, res) => {
+  const latestComics = await Post.find({
+    isFlagged: false,
+    type: "comic",
+  }).sort({
+    updatedAt: -1,
+  })
+
+  const comics = await Promise.all(
+    latestComics.map(async (post) => {
+      //for each latest post
+      const users = await Promise.all(
+        //get the users array of the post
+        post.users.map(async (id) => {
+          //for every user in the user array of the post
+          const user = await User.findById(id)
+          return {
+            id,
+            profileImage: user.profileImage.imageSrc, //get the users profile pic
+          }
+        })
+      )
+
+      return {
+        //return the current latest post i.e., store this to the posts array as a new element
+        _id: post._id,
+        path: post.path,
+        users,
+        title: post.title,
+        type: post.type,
+        description: post.description,
+        time: post.updatedAt,
+      }
+    })
+  )
+
+  res.json({
+    comics,
+  })
+})

@@ -48,6 +48,12 @@ const EditArtScreen = () => {
   const usernameRef = useRef(userInfo.username)
 
   useEffect(() => {
+    if (!canvasRef.current) {
+      navigate("/collab")
+    }
+  })
+
+  useEffect(() => {
     if (collab) {
       roomCode.current = collab.roomCode
     }

@@ -13,6 +13,10 @@ import {
   CREATE_COMIC_REQUEST,
   CREATE_COMIC_SUCCESS,
   CREATE_COMIC_FAIL,
+  GET_COMICS_REQUEST,
+  GET_COMICS_SUCCESS,
+  GET_COMICS_FAIL,
+  GET_COMICS_RESET,
 } from "../constants/postConstants"
 
 export const createPostReducer = (state = {}, action) => {
@@ -59,6 +63,21 @@ export const reportPostReducer = (state = {}, action) => {
       return { loading: false, posts: action.payload }
     case REPORT_POST_FAIL:
       return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const getComicsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_COMICS_REQUEST:
+      return { loading: true }
+    case GET_COMICS_SUCCESS:
+      return { loading: false, comics: action.payload }
+    case GET_COMICS_FAIL:
+      return { loading: false, error: action.payload }
+    case GET_COMICS_RESET:
+      return {}
     default:
       return state
   }

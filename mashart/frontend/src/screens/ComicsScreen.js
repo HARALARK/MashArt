@@ -1,63 +1,117 @@
 import React, { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
-
-import { Input } from "../components/styled-components/Input"
+import device from "../screen_sizes/devices"
 
 import { useNavigate } from "react-router-dom"
-
+import { getComics } from "../actions/postActions"
+import Message from "../components/styled-components/Message"
+import ComicCard from "../components/ComicCard/ComicCard"
 
 const ComicsScreen = () => {
   const navigate = useNavigate()
-  
+  const dispatch = useDispatch()
+
+  const [readerPopUp, setReaderPopUp] = useState(false)
+  const [comic, setComic] = useState(null)
 
   const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
+  const comicsInfo = useSelector((state) => state.comics)
+  const { loading, comics, error } = comicsInfo
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/")
+    }
+    if (!comics) {
+      dispatch(getComics())
+    }
+  }, [userInfo, navigate, comics, dispatch])
 
   return (
     <Container>
-      <Heading>
-        <span className = "title"> Comic Collaborate</span>
-        <p className = "description"> Make your own, join or read comics you desire, anytime, anywhere.</p>
-        <img className= "comicPicture1" src="/images/comics/boom.png" alt="boomcomic" />
-        <img className= "comicPicture2" src="/images/comics/zap.png" alt="zapcomic" />
-        <img className= "comicPicture3" src="/images/comics/cloud.png" alt="cloudcomic" />
-        <img className= "comicPicture4" src="/images/comics/thunder.png" alt="thundercomic" />
-        <ing className= "comic1" src="https://i.postimg.cc/W14BzFRP/garfield.png" alt="Garfield Comic"/>
+      <Header>
+        <CustomImage>
+          <img
+            className="comicPicture1"
+            src="/images/comics/boom.png"
+            alt="boomcomic"
+          />
+          <img
+            className="comicPicture2"
+            src="/images/comics/cloud.png"
+            alt="cloudcomic"
+          />
+        </CustomImage>
 
-        
-      </Heading>
-      <SearchBar>
-        <Input
-          type="text"
-          placeholder="Search Comics"
-          // value={searchText}
-          // onChange={searchHandler}
-        />
-        <OptionContainer>
-          <Button
-            // className={option === "people" && "active"}
-            // onClick={() => setOption("people")}
-          >
-            Trending
-          </Button>
-          <Button
-            // className={option === "tags" && "active"}
-            // onClick={() => setOption("tags")}
-          >
-            Your Comics
-          </Button>
-        </OptionContainer>
-      </SearchBar>
-      <Body>
-        <img className="comic1" src="https://i.postimg.cc/W14BzFRP/garfield.png"></img> 
-        <img className = "comic2" src="https://i.postimg.cc/mZq9FJC8/spiderman-comic.jpg"></img>
-        <img className="comic3" src="https://i.postimg.cc/ZKbqnLDV/archie-comics.jpg"></img>
-        <img className="comic4" src="https://i.postimg.cc/pXw1k0bB/tinkle-comics.jpg"></img>
-        <img className="comic5" src="https://i.postimg.cc/C1tjSx0p/superman-comic.jpg"></img>
-        <img className="comic6" src="https://i.postimg.cc/Rh5Ng69h/marvel-comics.jpg"></img>
+        <Info>
+          <p className="title">Comic Collaborate</p>
+          <p className="description">
+            Make your own, join or read comics you desire, anytime, anywhere.
+          </p>
+        </Info>
 
-      </Body>
+        <CustomImage>
+          <img
+            className="comicPicture3"
+            src="/images/comics/zap.png"
+            alt="zapcomic"
+          />
+          <img
+            className="comicPicture4"
+            src="/images/comics/thunder.png"
+            alt="thundercomic"
+          />
+        </CustomImage>
+      </Header>
+      {loading && <Message>Loading...</Message>}
+      {error && <Message variant="error">{error}</Message>}
+
+      {comics && (
+        <ComicsContainer>
+          {comics?.comics.map((comic, index) => (
+            <ComicCard
+              key={index}
+              comic={comic}
+              setComic={setComic}
+              setReaderPopUp={setReaderPopUp}
+            />
+          ))}
+        </ComicsContainer>
+      )}
+
+      <BackgroundBlock
+        hide={!readerPopUp}
+        onClick={() => {
+          setReaderPopUp(false)
+          setComic(null)
+        }}
+      >
+        <PopUpContainer>
+          <PopUp
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
+          >
+            {comic && comic.path.length > 0 ? (
+              <>
+                <p className="heading">{comic.title}</p>
+                <PostsContainer>
+                  {comic.path.map((page, index) => (
+                    <ImageContainer key={index}>
+                      <img className="post" src={page} alt="page" />
+                    </ImageContainer>
+                  ))}
+                </PostsContainer>
+              </>
+            ) : (
+              <p className="no-posts">No Comic Selected</p>
+            )}
+          </PopUp>
+        </PopUpContainer>
+      </BackgroundBlock>
     </Container>
   )
 }
@@ -65,189 +119,170 @@ const ComicsScreen = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  width: 10%;
-  padding: 1rem 2rem 100px;
+  padding: 1rem 1rem 100px;
   align-items: center;
   justify-content: center;
-  .heading {
-    color: var(--light);
-    font-size: 2rem;
+`
+const Header = styled.section`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 1rem;
+  background-color: var(--secondary-dark);
+  border-radius: 5px;
+  color: var(--light);
+
+  margin-bottom: 1rem;
+`
+
+const Info = styled.div`
+  .title {
+    font-size: 1.5rem;
     text-align: center;
+    font-weight: 700;
+  }
+
+  .description {
+    display: none;
+  }
+
+  @media ${device.tablet} {
+    .title {
+      font-size: 2rem;
+      text-align: center;
+      align-items: center;
+      font-weight: 700;
+    }
+
+    .description {
+      display: block;
+      text-align: center;
+    }
   }
 `
-const Heading = styled.section`
 
-  padding: 1rem 0 1rem;
-  height: 130px;
-  width: 2950%;
-  align-items: center;
-  margin-left: 820px;
-  //margin-right: 200px;
-  background-color: var(--secondary-dark);
-  border-radius: 10px;
+const CustomImage = styled.div`
+  position: relative;
 
-  .title{
-    color: var(--light);
-    font-size: 2rem;
-    text-align: center;
-    align-items: center;
-    margin-left: 230px;
-    font-weight: 700; 
-  }
-  .description{
-    color: var(--light);
-    margin-left: 100px;
-    margin-top: 10px;
-
-  }
   .comicPicture1 {
-    position: relative;
-    height: 100px;
-    width: 100px;
-    padding: 2px;
-    background-color: var(--secondary-dark);
-    border-radius: 20px;
-    margin-top: -100px;
-  }
-  .comicPicture3 {
-    position: absolute;
-    height: 50px;
-    width: 70px;
-    padding: 2px;
-    //background-color: var(--secondary-dark);
-    border-radius: 20px;
-    margin-top: -30px;
-    margin-left: -730px;
+    height: 75px;
+    width: 75px;
   }
   .comicPicture2 {
-    position: relative;
-    height: 90px;
-    width: 90px;
-    padding: 2px;
-    background-color: var(--secondary-dark);
-    border-radius: 20px;
-    margin-top: -100px;
-    margin-left: 550px;
+    position: absolute;
+    top: 45px;
+    left: 25px;
+    height: 37px;
+    width: 52px;
+  }
+  .comicPicture3 {
+    height: 67px;
+    width: 67px;
   }
   .comicPicture4 {
-    position: relative;
-    height: 90px;
-    width: 90px;
-    padding: 2px;
-    //background-color: var(--secondary-dark);
-    border-radius: 20px;
-    margin-top: -930px;
-    margin-left: 680px;
-  }
-`
-
-const SearchBar = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 820px;
-  width: 2950%;
-  margin-top: -30px;
-  
-`
-
-const OptionContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-  
-`
-const Button = styled.p`
-  flex: 1;
-  text-align: center;
-  padding: 0.5rem 1rem;
-  border: 3px solid var(--secondary);
-  color: white;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 200ms ease-in-out;
-  margin-top: -1px;
-  background-color: var(--secondary-dark);
-  &.active {
-    background-color: var(--secondary);
-    color: var(--light);
-  }
-  &:hover {
-    background-color: var(--secondary);
-    color: var(--light);
-  }
-  `
-const Body = styled.body`
-  .comic1
-  {
-    width:250px;
-    height:170px;
-    border-radius:10px;
     position: absolute;
-    margin-top: -20px;
-    margin-right: 50px;
-    margin-left: 27px;
-    margin-bottom: 0px;
+    left: 25px;
+    height: 67px;
+    width: 67px;
   }
 
-  .comic2
-  {
-    width: 250px;
-    height: 170px;
-    border-radius: 10px;
-    position: absolute;
-    margin-top: -20px;
-    margin-right: 0px;
-    margin-left: 289px;
-    margin-bottom: 0px;
-  }
-
-
-  .comic3
-  {
-    width: 250px;
-    height: 170px;
-    border-radius:10px;
-    position: absolute;
-    margin-top: -20px;
-    margin-right: 0px;
-    margin-left: 549px;
-    margin-bottom:0px;
-  }
-
-  .comic4
-  {
-    width: 250px;
-    height: 170px;
-    border-radius:10px;
-    position: absolute;
-    margin-top: 170px;
-    margin-left: 27px;
-  }
-  
-  .comic5
-  {
-    width: 250px;
-    height: 170px;
-    border-radius:10px;
-    position: absolute;
-    margin-top: 170px;
-    margin-left: 289px;
-  }
-
-    .comic6
-    {
-      width: 250px;
-      height: 170px;
-      border-radius:10px;
-      position: absolute;
-      margin-top: 170px;
-      margin-left: 549px; 
+  @media ${device.tablet} {
+    .comicPicture1 {
+      height: 100px;
+      width: 100px;
     }
+    .comicPicture2 {
+      position: absolute;
+      top: 60px;
+      left: 25px;
+      height: 50px;
+      width: 70px;
+    }
+    .comicPicture3 {
+      height: 90px;
+      width: 90px;
+    }
+    .comicPicture4 {
+      position: absolute;
+      left: 25px;
+      height: 90px;
+      width: 90px;
+    }
+  }
 `
 
+const ComicsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+`
 
+const BackgroundBlock = styled.div`
+  display: ${(props) => (props.hide ? "none" : "")};
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgb(77, 90, 135, 0.8);
+  width: 100%;
+  height: 100%;
+`
 
+const PopUpContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`
+
+const PopUp = styled.div`
+  display: ${(props) => (props.hide ? "none" : "flex")};
+  background: var(--dark);
+  min-width: 300px;
+  min-height: 230px;
+  max-height: 400px;
+
+  color: var(--light);
+
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 2rem 2rem;
+  flex-direction: column;
+  border-radius: 5px;
+
+  .heading {
+    text-align: left;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .no-posts {
+    color: var(--light);
+    padding-bottom: 1rem;
+  }
+`
+
+const ImageContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--grey-light);
+
+  .post {
+    height: 300px;
+    width: 300px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+`
+const PostsContainer = styled.div`
+  overflow: auto;
+  padding: 1rem 0.5rem;
+`
 
 export default ComicsScreen

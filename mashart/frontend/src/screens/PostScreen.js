@@ -23,7 +23,7 @@ const PostScreen = () => {
   const [image, setImage] = useState(collabPost)
   const [post, setPost] = useState([collabPost])
   const [title, setTitle] = useState("")
-  const [subtitle, setSubtitle] = useState("")
+  const [collaborators, setCollaborators] = useState("")
   const [description, setDescription] = useState("")
   const [tags, setTags] = useState("")
 
@@ -80,6 +80,11 @@ const PostScreen = () => {
       return
     }
 
+    if (description.trim().length > 100) {
+      setMessage("Description should be less equal to 100 characters.")
+      return
+    }
+
     setMessage("")
 
     const data = new FormData()
@@ -95,7 +100,7 @@ const PostScreen = () => {
     }
 
     data.append("title", title)
-    data.append("subtitle", subtitle)
+    data.append("collaborators", collaborators)
     data.append("description", description)
     data.append("tags", tags)
 
@@ -108,7 +113,7 @@ const PostScreen = () => {
     setPost(null)
     setImage(null)
     setTitle("")
-    setSubtitle("")
+    setCollaborators("")
     setDescription("")
     setTags("")
   }
@@ -177,19 +182,26 @@ const PostScreen = () => {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Title*"
           />
+          <TextAreaContainer>
+            <TextArea
+              rows="3"
+              name="text"
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value)
+              }}
+              placeholder="Description"
+            ></TextArea>
+            <DescriptionCounter red={description.length > 100}>
+              {description.length} of 100 characters
+            </DescriptionCounter>
+          </TextAreaContainer>
           <Input
             type="text"
-            value={subtitle}
-            onChange={(e) => setSubtitle(e.target.value)}
-            placeholder="Subtitle"
+            value={collaborators}
+            onChange={(e) => setCollaborators(e.target.value)}
+            placeholder="Add Collaborators (user1, user2,...)"
           />
-          <TextArea
-            rows="3"
-            name="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Description"
-          ></TextArea>
           <Input
             type="text"
             value={tags}
@@ -267,6 +279,8 @@ const Form = styled.form`
   background: var(--secondary-dark);
   color: var(--light);
 
+  width: 100%;
+
   pointer-events: ${(props) => (props.disabled ? "none" : "")};
   opacity: ${(props) => (props.disabled ? "0.7" : "")};
   @media ${device.tablet} {
@@ -285,6 +299,11 @@ const CheckBox = styled.div`
   gap: 1rem;
 `
 
+const TextAreaContainer = styled.div`
+  background: var(--light);
+  border-radius: 5px;
+`
+
 const TextArea = styled.textarea`
   font-family: "Poppins";
   font-size: 0.8rem;
@@ -292,6 +311,17 @@ const TextArea = styled.textarea`
   border-radius: 5px;
   padding: 1rem;
   outline: none;
+  width: 100%;
+`
+
+const DescriptionCounter = styled.p`
+  width: 100%;
+  background: var(--light);
+  border-radius: 5px;
+  text-align: right;
+  color: ${(props) => (props.red ? "red" : "green")};
+  padding: 0 1rem;
+  font-size: 0.8rem;
 `
 
 const Button = styled.p`
