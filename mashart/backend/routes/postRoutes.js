@@ -16,8 +16,8 @@ import { protect } from "../middleware/authMiddleware.js"
 
 const router = express.Router()
 
-router.route("/:sort?").get(protect, getPosts)
 router.route("/comics").get(protect, getComics)
+router.route("/:sort?").get(protect, getPosts)
 router.route("/create").post([protect, upload.single("image")], createPost)
 router
   .route("/create/comic")

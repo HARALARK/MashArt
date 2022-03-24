@@ -228,7 +228,7 @@ export const getComics = () => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.get(`/api/post/comcis`, config)
+    const { data } = await axios.get(`/api/post/comics`, config)
 
     dispatch({
       type: GET_COMICS_SUCCESS,
