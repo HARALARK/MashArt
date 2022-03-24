@@ -337,3 +337,47 @@ const uploadTaskPromise = async (num, img, post, extension) => {
     )
   })
 }
+
+// @desc get comics
+// @route get /api/post/comics
+// @access Private
+export const getComics = asyncHandler(async (req, res) => {
+  const latestComics = await Post.find({
+    isFlagged: false,
+    type: "comic",
+  }).sort({
+    updatedAt: -1,
+  })
+
+  const comics = await Promise.all(
+    latestComics.map(async (post) => {
+      //for each latest post
+      const users = await Promise.all(
+        //get the users array of the post
+        post.users.map(async (id) => {
+          //for every user in the user array of the post
+          const user = await User.findById(id)
+          return {
+            id,
+            profileImage: user.profileImage.imageSrc, //get the users profile pic
+          }
+        })
+      )
+
+      return {
+        //return the current latest post i.e., store this to the posts array as a new element
+        _id: post._id,
+        path: post.path,
+        users,
+        title: post.title,
+        type: post.type,
+        description: post.description,
+        time: post.updatedAt,
+      }
+    })
+  )
+
+  res.json({
+    comics,
+  })
+})
