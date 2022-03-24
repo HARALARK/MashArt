@@ -4,11 +4,9 @@ import styled from "styled-components"
 import {
   faBookmark,
   faBullhorn,
-  faComment,
   faFlag,
   faHeart,
 } from "@fortawesome/free-solid-svg-icons"
-import device from "../../screen_sizes/devices"
 
 const PostCard = ({
   post,
@@ -17,43 +15,46 @@ const PostCard = ({
   reportPostHandler,
   popupHandler,
 }) => {
-  const { _id, users, path, title, subtitle, description, reportCount } = post
+  const { _id, users, path, title, description, reportCount } = post
 
   return (
     <Container>
-      <PostCollaborators>
-        {users ? (
-          users.map((user) =>
-            user.profileImage ? (
-              <CollabUser key={user.id} src={user.profileImage} alt="profile" />
-            ) : (
-              <CollabUser
-                key={user.id}
-                src="/images/logo/logo.png"
-                alt="profile"
-              />
-            )
-          )
-        ) : (
-          <CollabUser src="/images/logo/logo.png" alt="profile" />
-        )}
-      </PostCollaborators>
-
       <PostPictureContainer>
         <PostPicture className="picturePost" src={path[0]} alt="postpic" />
       </PostPictureContainer>
 
       <PostInfo>
+        <PostCollaborators>
+          {users ? (
+            users.map((user) =>
+              user.profileImage ? (
+                <CollabUser
+                  key={user.id}
+                  src={user.profileImage}
+                  alt="profile"
+                />
+              ) : (
+                <CollabUser
+                  key={user.id}
+                  src="/images/logo/logo.png"
+                  alt="profile"
+                />
+              )
+            )
+          ) : (
+            <CollabUser src="/images/logo/logo.png" alt="profile" />
+          )}
+        </PostCollaborators>
         <Title>{title}</Title>
-        <Subtitle>{subtitle}</Subtitle>
-        <Description>{description}</Description>
+        <Description>
+          {description ? description : "No Description..."}
+        </Description>
         <PostIcons>
-          <FontAwesomeIcon className="icon" icon={faHeart} size="lg" />
-          <FontAwesomeIcon className="icon" icon={faComment} size="lg" />
+          <FontAwesomeIcon className="icon" icon={faHeart} size="md" />
           <FontAwesomeIcon
             className="icon"
             icon={faBookmark}
-            size="lg"
+            size="md"
             onClick={popupHandler}
           />
           {role === "admin" || role === "moderator" ? (
@@ -63,14 +64,14 @@ const PostCard = ({
                 data-report={reportCount}
                 onClick={() => flagPostHandler(_id)}
               >
-                <FontAwesomeIcon className="icon" icon={faFlag} size="lg" />
+                <FontAwesomeIcon className="icon" icon={faFlag} size="md" />
               </p>
             </FlagIconContainer>
           ) : (
             <FontAwesomeIcon
               className="icon"
               icon={faBullhorn}
-              size="lg"
+              size="md"
               onClick={() => reportPostHandler(_id)}
             />
           )}
@@ -81,19 +82,12 @@ const PostCard = ({
 }
 
 const Container = styled.div`
-  background-color: var(--primary-dark);
+  background-color: var(--light);
   color: var(--secondary-dark);
-  border-radius: 10px;
-  padding: 0 1rem;
+  border-radius: 5px;
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
-  width: 100%;
-
-  @media ${device.tablet} {
-    flex-direction: row;
-    gap: 1rem;
-  }
+  flex: 1;
 `
 
 const PostCollaborators = styled.div`
@@ -101,11 +95,6 @@ const PostCollaborators = styled.div`
   flex-direction: row;
   padding: 0.5rem 0;
   gap: 0.5rem;
-
-  @media ${device.tablet} {
-    flex-direction: column;
-    gap: 0.2rem;
-  }
 `
 
 const CollabUser = styled.img`
@@ -136,41 +125,24 @@ const PostInfo = styled.div`
   padding: 0.5rem 0.5rem 1rem;
   display: flex;
   flex-direction: column;
-
-  @media ${device.tablet} {
-    padding: 1.5rem 1rem;
-  }
 `
 
 const Title = styled.h1`
   font-weight: 700;
-  font-size: 1.8rem;
-  letter-spacing: 2px;
-  line-height: 90%;
-`
-
-const Subtitle = styled.h2`
-  font-weight: 500;
   font-size: 1.3rem;
-  line-height: 90%;
-  margin-bottom: 1rem;
-
-  @media ${device.tablet} {
-    margin-bottom: 2rem;
-  }
+  letter-spacing: 2px;
 `
 
 const Description = styled.p`
   flex: 1;
-  font-weight: 400;
-  font-size: 0.9rem;
-  line-height: 95%;
+  font-size: 0.75rem;
   text-align: justify;
+  padding-bottom: 0.5rem;
+  line-height: 1rem;
 `
 
 const PostIcons = styled.div`
   display: flex;
-  margin-top: 1rem;
   gap: 1rem;
   color: var(--secondary-dark);
 
@@ -180,10 +152,6 @@ const PostIcons = styled.div`
 
   .icon:hover {
     color: var(--secondary);
-  }
-
-  @media ${device.tablet} {
-    margin-top: 2.5rem;
   }
 `
 

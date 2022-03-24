@@ -318,7 +318,12 @@ const Button = styled.p`
 `
 
 const PostsContainer = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
   padding: 1rem 0;
+
+  justify-content: center;
 `
 const BackgroundBlock = styled.div`
   display: ${(props) => (props.hide ? "none" : "")};
