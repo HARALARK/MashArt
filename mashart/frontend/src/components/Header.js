@@ -203,7 +203,6 @@ const NavMenu = styled.ul`
 `
 
 const Dropdown = styled(NavMenu)`
-  display: flex;
   flex-direction: column;
   position: absolute;
   background-color: var(--secondary-light);
@@ -217,7 +216,7 @@ const Dropdown = styled(NavMenu)`
   z-index: 9;
 
   &.active {
-    top: 80px;
+    top: 60px;
     position: fixed;
   }
 
