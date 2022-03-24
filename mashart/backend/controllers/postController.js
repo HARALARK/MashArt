@@ -12,30 +12,36 @@ export const createPost = asyncHandler(async (req, res) => {
 
   const extension = req.file.originalname.split(".").pop()
 
-  const { collaborators = "", title, subtitle, description, tags } = req.body
+  const { collaborators = "", title, description, tags } = req.body
 
   const collaboratorsArray =
     collaborators.trim().length === 0 ? [] : collaborators.split(",")
 
   const user = await User.findById(req.user._id)
 
+  let collaboratorsExist = []
   // validating all the collaborators
   if (
     collaboratorsArray.length > 0 &&
     collaboratorsArray[0].trim().length > 0
   ) {
-    collaboratorsArray.split(",").forEach(async (collaborator) => {
-      await User.findById(collaborator)
-    })
+    collaboratorsExist = await Promise.all(
+      collaboratorsArray.map(async (collaborator) => {
+        const userExist = await User.findOne({ username: collaborator.trim() })
+        if (!userExist) {
+          throw new Error("Collaborator doesnt exist")
+        }
+        return userExist._id
+      })
+    )
   }
 
   if (user) {
-    const users = [user._id, ...collaboratorsArray]
+    const users = [user._id, ...collaboratorsExist]
 
     const post = await Post.create({
       users,
       title,
-      subtitle,
       description,
       tags: tags.split(",").map((tag) => tag.trim()),
     })
@@ -248,7 +254,7 @@ export const flagPost = asyncHandler(async (req, res) => {
 // @access Private
 export const createComic = asyncHandler(async (req, res) => {
   const extensions = req.files.map((file) => file.originalname.split(".").pop()) //get extension of first image
-  const { collaborators = "", title, subtitle, description, tags } = req.body
+  const { collaborators = "", title, description, tags } = req.body
 
   const collaboratorsArray =
     collaborators.trim().length === 0 ? [] : collaborators.split(",")
