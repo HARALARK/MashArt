@@ -134,6 +134,9 @@ export const flagPost = (id) => async (dispatch, getState) => {
     dispatch({
       type: GET_POSTS_RESET,
     })
+    dispatch({
+      type: GET_COMICS_RESET,
+    })
   } catch (error) {
     dispatch({
       type: FLAG_POST_FAIL,
