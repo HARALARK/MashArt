@@ -20,6 +20,7 @@ import {
   GET_COMICS_REQUEST,
   GET_COMICS_SUCCESS,
   GET_COMICS_FAIL,
+  GET_COMICS_RESET,
 } from "../constants/postConstants"
 
 export const createPost = (post) => async (dispatch, getState) => {
@@ -62,6 +63,9 @@ export const createPostReset = () => async (dispatch) => {
   })
   dispatch({
     type: GET_POSTS_RESET,
+  })
+  dispatch({
+    type: GET_COMICS_RESET,
   })
 }
 
