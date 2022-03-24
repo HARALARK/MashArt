@@ -17,6 +17,9 @@ import {
   CREATE_COMIC_REQUEST,
   CREATE_COMIC_SUCCESS,
   CREATE_COMIC_FAIL,
+  GET_COMICS_REQUEST,
+  GET_COMICS_SUCCESS,
+  GET_COMICS_FAIL,
 } from "../constants/postConstants"
 
 export const createPost = (post) => async (dispatch, getState) => {
@@ -200,6 +203,40 @@ export const createComic = (post) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: CREATE_COMIC_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const getComics = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_COMICS_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/post/comcis`, config)
+
+    dispatch({
+      type: GET_COMICS_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_COMICS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
