@@ -50,13 +50,17 @@ const PostCard = ({
           {description ? description : "No Description..."}
         </Description>
         <PostIcons>
-          <FontAwesomeIcon className="icon" icon={faHeart} size="md" />
-          <FontAwesomeIcon
-            className="icon"
-            icon={faBookmark}
-            size="md"
-            onClick={popupHandler}
-          />
+          {role === "user" && (
+            <>
+              <FontAwesomeIcon className="icon" icon={faHeart} size="md" />
+              <FontAwesomeIcon
+                className="icon"
+                icon={faBookmark}
+                size="md"
+                onClick={popupHandler}
+              />
+            </>
+          )}
           {role === "admin" || role === "moderator" ? (
             <FlagIconContainer>
               <p
@@ -161,16 +165,18 @@ const FlagIconContainer = styled.div`
   .flag[data-report]:after {
     content: attr(data-report);
     position: absolute;
-    top: -8px;
-    left: 16px;
+    top: -5px;
+    left: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 
     text-align: center;
     line-height: 18px;
-    font-size: 0.7em;
+    font-size: 0.6rem;
     font-weight: 600;
     color: var(--light);
 
-    padding: 0.1rem;
     background: red;
     height: 18px;
     width: 18px;
