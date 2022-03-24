@@ -71,7 +71,7 @@ const AppContainer = styled.div`
 `
 
 const ScreensContainer = styled.div`
-  width: 900px;
+  width: 1000px;
 
   & .welcome-container {
     display: flex;

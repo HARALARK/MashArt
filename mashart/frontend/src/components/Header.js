@@ -134,7 +134,7 @@ const Container = styled.div`
 `
 
 const SubContainer = styled.div`
-  width: 900px;
+  width: 1000px;
   padding: 0 2rem;
   display: flex;
   justify-content: space-between;
