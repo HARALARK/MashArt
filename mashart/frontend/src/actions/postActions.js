@@ -191,8 +191,6 @@ export const createComic = (post) => async (dispatch, getState) => {
       },
     }
 
-    console.log(post)
-
     const { data } = await axios.post("/api/post/create/comic", post, config)
 
     dispatch({
