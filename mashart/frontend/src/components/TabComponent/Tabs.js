@@ -33,7 +33,7 @@ const Tabs = ({ posts }) => {
         </NavOption>
       </NavMenu> */}
       <PostContainer>
-        {posts?.map((post) => (
+        {posts?.reverse().map((post) => (
           <Post key={post._id} src={post.path} />
         ))}
       </PostContainer>
