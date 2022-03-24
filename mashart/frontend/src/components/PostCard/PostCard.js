@@ -2,6 +2,7 @@ import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import styled from "styled-components"
 import {
+  faBook,
   faBookmark,
   faBullhorn,
   faFlag,
@@ -15,7 +16,7 @@ const PostCard = ({
   reportPostHandler,
   popupHandler,
 }) => {
-  const { _id, users, path, title, description, reportCount } = post
+  const { _id, users, path, title, description, reportCount, type } = post
 
   return (
     <Container>
@@ -45,7 +46,12 @@ const PostCard = ({
             <CollabUser src="/images/logo/logo.png" alt="profile" />
           )}
         </PostCollaborators>
-        <Title>{title}</Title>
+        <Title>
+          {title}
+          {type === "comic" && (
+            <FontAwesomeIcon className="icon comic" icon={faBook} size="sm" />
+          )}
+        </Title>
         <Description>
           {description ? description : "No Description..."}
         </Description>
@@ -86,7 +92,7 @@ const PostCard = ({
 }
 
 const Container = styled.div`
-  background-color: var(--light);
+  background-color: var(--primary);
   color: var(--secondary-dark);
   border-radius: 5px;
   display: flex;
@@ -134,7 +140,11 @@ const PostInfo = styled.div`
 const Title = styled.h1`
   font-weight: 700;
   font-size: 1.3rem;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
+
+  .icon.comic {
+    margin-left: 0.5rem;
+  }
 `
 
 const Description = styled.p`

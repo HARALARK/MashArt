@@ -120,7 +120,7 @@ export const getPosts = asyncHandler(async (req, res) => {
         path: post.path,
         users,
         title: post.title,
-        subtitle: post.subtitle,
+        type: post.type,
         description: post.description,
         tags: post.tags,
         reportCount: post.reportCount,
@@ -276,8 +276,8 @@ export const createComic = asyncHandler(async (req, res) => {
     const post = await Post.create({
       users,
       title,
-      subtitle,
       description,
+      type: "comic",
       tags: tags.split(",").map((tag) => tag.trim()),
     })
 
