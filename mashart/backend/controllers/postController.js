@@ -220,9 +220,9 @@ export const reportPost = asyncHandler(async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
 
-    if (post.likes.includes(req.user._id)) {
+    if (post.reports.includes(req.user._id)) {
       await post.updateOne({
-        $pull: { reports: req.user._id, reportCount: post.count - 1 },
+        $pull: { reports: req.user._id },
       })
     } else {
       await post.updateOne({
@@ -230,7 +230,11 @@ export const reportPost = asyncHandler(async (req, res) => {
       })
     }
     const updatedPost = await Post.findById(req.params.id)
-    res.status(200).json({ post: updatedPost, reportCount: post.count + 1 })
+
+    updatedPost.reportCount = updatedPost.reports.length
+    updatedPost.save()
+
+    res.status(200).json({ post: updatedPost })
   } catch (err) {
     return res.status(500).json(err)
   }
