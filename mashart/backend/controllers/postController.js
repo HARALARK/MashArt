@@ -96,7 +96,7 @@ export const getPosts = asyncHandler(async (req, res) => {
   const latestPosts = await Post.find({ isFlagged: false }).sort({
     //array of latest posts
     reportCount: sort ? -1 : 1,
-    updatedAt: -1,
+    createdAt: -1,
   })
 
   const posts = await Promise.all(
