@@ -5,6 +5,7 @@ import styled from "styled-components"
 import { deletePlaylist, getPlaylist } from "../actions/playlistActions"
 import { getUserPlaylists } from "../actions/userActions"
 import Message from "../components/styled-components/Message"
+import device from "../screen_sizes/devices"
 
 const PlaylistScreen = () => {
   const navigate = useNavigate()
@@ -41,6 +42,8 @@ const PlaylistScreen = () => {
   }
 
   const deletePlaylistHandler = () => {
+    setPlaylistId("")
+    setPlaylistPopUp(false)
     dispatch(deletePlaylist(playlistId))
   }
 
@@ -163,10 +166,11 @@ const PopUpContainer = styled.div`
 
 const PopUp = styled.div`
   display: ${(props) => (props.hide ? "none" : "flex")};
-  background: var(--secondary-light);
+  background: var(--secondary-dark);
   min-width: 300px;
   min-height: 230px;
   max-height: 400px;
+
   color: var(--light);
 
   justify-content: center;
@@ -188,6 +192,12 @@ const PopUp = styled.div`
     color: var(--light);
     padding-bottom: 1rem;
   }
+
+  @media ${device.tablet} {
+    min-width: 600px;
+    min-height: 230px;
+    max-height: 600px;
+  }
 `
 
 const PlaylistPostContainer = styled.div`
@@ -202,14 +212,19 @@ const PostImg = styled.img`
   height: 300px;
   width: 300px;
   background: var(--light);
+
+  @media ${device.tablet} {
+    height: 400px;
+    width: 600px;
+  }
 `
 
 const Button = styled.p`
   flex: 1;
   text-align: center;
   padding: 0.5rem 1rem;
-  border: 3px solid var(--secondary);
-  color: var(--secondary);
+  border: 3px solid #c10000;
+  color: #c10000;
   border-radius: 5px;
   font-size: 1rem;
   font-weight: 600;
@@ -224,7 +239,7 @@ const Button = styled.p`
   }
 
   &:hover {
-    background-color: var(--secondary);
+    background-color: #c10000;
     color: var(--light);
   }
 
