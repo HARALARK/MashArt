@@ -57,7 +57,8 @@ export const getPostsReducer = (state = {}, action) => {
       const { post } = action.payload
       const updatedPosts = state.posts.posts.map((p) => {
         if (p._id === post._id) {
-          return post
+          p.likes = post.likes
+          return p
         } else {
           return p
         }
@@ -72,7 +73,8 @@ export const getPostsReducer = (state = {}, action) => {
       const { post } = action.payload
       const updatedPosts = state.posts.posts.map((p) => {
         if (p._id === post._id) {
-          return post
+          p.reports = post.reports
+          return p
         } else {
           return p
         }
