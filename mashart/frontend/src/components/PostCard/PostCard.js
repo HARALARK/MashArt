@@ -15,8 +15,11 @@ const PostCard = ({
   flagPostHandler,
   reportPostHandler,
   popupHandler,
+  likePostHandler,
+  userId,
 }) => {
-  const { _id, users, path, title, description, reportCount, type } = post
+  const { _id, users, path, title, description, reportCount, type, likes } =
+    post
 
   return (
     <Container>
@@ -58,7 +61,12 @@ const PostCard = ({
         <PostIcons>
           {role === "user" && (
             <>
-              <FontAwesomeIcon className="icon" icon={faHeart} size="md" />
+              <FontAwesomeIcon
+                className={likes?.includes(userId) ? "icon red" : "icon"}
+                icon={faHeart}
+                size="md"
+                onClick={() => likePostHandler(_id)}
+              />
               <FontAwesomeIcon
                 className="icon"
                 icon={faBookmark}
@@ -162,6 +170,10 @@ const PostIcons = styled.div`
 
   .icon {
     cursor: pointer;
+  }
+
+  .icon.red {
+    color: red;
   }
 
   .icon:hover {

@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 
 import Message from "../components/styled-components/Message"
-import { flagPost, getPosts, reportPost } from "../actions/postActions"
+import {
+  flagPost,
+  getPosts,
+  likePost,
+  reportPost,
+} from "../actions/postActions"
 import PostCard from "../components/PostCard/PostCard"
 import WelcomeScreen from "./WelcomeScreen"
 import { getUserPlaylists } from "../actions/userActions"
@@ -66,6 +71,10 @@ const Homepage = () => {
 
   const flagPostHandler = (id) => {
     dispatch(flagPost(id))
+  }
+
+  const likePostHandler = (id) => {
+    dispatch(likePost(id))
   }
 
   const reportPostHandler = (id) => {
@@ -136,7 +145,9 @@ const Homepage = () => {
               role={option}
               flagPostHandler={flagPostHandler}
               reportPostHandler={reportPostHandler}
+              likePostHandler={likePostHandler}
               popupHandler={() => popupHandler(post._id)}
+              userId={userInfo._id}
             />
           ))
         ) : (
