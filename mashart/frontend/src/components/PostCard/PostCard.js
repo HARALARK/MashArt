@@ -18,8 +18,17 @@ const PostCard = ({
   likePostHandler,
   userId,
 }) => {
-  const { _id, users, path, title, description, reportCount, type, likes } =
-    post
+  const {
+    _id,
+    users,
+    path,
+    title,
+    description,
+    reportCount,
+    type,
+    likes,
+    reports,
+  } = post
 
   return (
     <Container>
@@ -64,13 +73,11 @@ const PostCard = ({
               <FontAwesomeIcon
                 className={likes?.includes(userId) ? "icon red" : "icon"}
                 icon={faHeart}
-                size="md"
                 onClick={() => likePostHandler(_id)}
               />
               <FontAwesomeIcon
                 className="icon"
                 icon={faBookmark}
-                size="md"
                 onClick={popupHandler}
               />
             </>
@@ -82,14 +89,13 @@ const PostCard = ({
                 data-report={reportCount}
                 onClick={() => flagPostHandler(_id)}
               >
-                <FontAwesomeIcon className="icon" icon={faFlag} size="md" />
+                <FontAwesomeIcon className="icon" icon={faFlag} />
               </p>
             </FlagIconContainer>
           ) : (
             <FontAwesomeIcon
-              className="icon"
+              className={reports?.includes(userId) ? "icon red" : "icon"}
               icon={faBullhorn}
-              size="md"
               onClick={() => reportPostHandler(_id)}
             />
           )}
@@ -178,6 +184,10 @@ const PostIcons = styled.div`
 
   .icon:hover {
     color: var(--secondary);
+  }
+
+  .icon.red:hover {
+    color: red;
   }
 `
 
