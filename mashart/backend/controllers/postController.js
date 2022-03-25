@@ -124,6 +124,7 @@ export const getPosts = asyncHandler(async (req, res) => {
         description: post.description,
         tags: post.tags,
         reportCount: post.reportCount,
+        reports: post.reports,
         likes: post.likes,
         time: post.updatedAt,
       }
@@ -218,13 +219,18 @@ export const likePost = asyncHandler(async (req, res) => {
 export const reportPost = asyncHandler(async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-    const newCount = post.reportCount + 1
-    await post.updateOne({
-      $set: { reportCount: newCount },
-    })
 
+    if (post.likes.includes(req.user._id)) {
+      await post.updateOne({
+        $pull: { reports: req.user._id, reportCount: post.count - 1 },
+      })
+    } else {
+      await post.updateOne({
+        $push: { reports: req.user._id },
+      })
+    }
     const updatedPost = await Post.findById(req.params.id)
-    res.status(200).json({ post: updatedPost })
+    res.status(200).json({ post: updatedPost, reportCount: post.count + 1 })
   } catch (err) {
     return res.status(500).json(err)
   }
