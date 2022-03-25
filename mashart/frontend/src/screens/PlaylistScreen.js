@@ -194,9 +194,9 @@ const PopUp = styled.div`
   }
 
   @media ${device.tablet} {
-    min-width: 600px;
+    min-width: 500px;
     min-height: 230px;
-    max-height: 600px;
+    max-height: 400px;
   }
 `
 
@@ -215,7 +215,7 @@ const PostImg = styled.img`
 
   @media ${device.tablet} {
     height: 400px;
-    width: 600px;
+    width: 500px;
   }
 `
 
