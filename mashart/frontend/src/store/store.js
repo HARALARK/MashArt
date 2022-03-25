@@ -18,7 +18,6 @@ import {
   createPostReducer,
   getComicsReducer,
   getPostsReducer,
-  reportPostReducer,
 } from "../reducers/postReducers"
 import { collabReducer, collabUsersReducer } from "../reducers/collabReducers"
 import {
@@ -40,7 +39,6 @@ let reducer = combineReducers({
   userPosts: getUserPostReducer,
   collab: collabReducer,
   collabUsers: collabUsersReducer,
-  reportPost: reportPostReducer,
   blockedUsers: blockedUsersReducer,
   banUser: banUserReducer,
   userPlaylists: getUserPlaylistsReducer,
