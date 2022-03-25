@@ -189,7 +189,7 @@ const Homepage = () => {
               width="100%"
               onClick={() => setAddNewPlaylistPopUp(true)}
             >
-              Add new Playlist
+              Add new Bookmark
             </Button>
           </PopUp>
 
@@ -373,6 +373,7 @@ const PopUp = styled.div`
 
 const PlaylistsContainer = styled.div`
   overflow-y: auto;
+  overscroll-behavior: contain;
   width: 100%;
   text-align: center;
 

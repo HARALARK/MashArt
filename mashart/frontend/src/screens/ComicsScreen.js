@@ -241,9 +241,8 @@ const PopUpContainer = styled.div`
 const PopUp = styled.div`
   display: ${(props) => (props.hide ? "none" : "flex")};
   background: var(--dark);
-  min-width: 300px;
   min-height: 230px;
-  max-height: 400px;
+  max-height: 300px;
 
   color: var(--light);
 
@@ -263,6 +262,10 @@ const PopUp = styled.div`
     color: var(--light);
     padding-bottom: 1rem;
   }
+
+  @media ${device.tablet} {
+    max-height: 400px;
+  }
 `
 
 const ImageContainer = styled.div`
@@ -273,15 +276,24 @@ const ImageContainer = styled.div`
   background: var(--grey-light);
 
   .post {
-    height: 300px;
     width: 300px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
   }
+
+  @media ${device.tablet} {
+    .post {
+      width: 600px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+  }
 `
 const PostsContainer = styled.div`
   overflow: auto;
+  overscroll-behavior: contain;
   padding: 1rem 0.5rem;
 `
 
