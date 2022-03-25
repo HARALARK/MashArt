@@ -124,6 +124,7 @@ export const getPosts = asyncHandler(async (req, res) => {
         description: post.description,
         tags: post.tags,
         reportCount: post.reportCount,
+        likes: post.likes,
         time: post.updatedAt,
       }
     })
@@ -189,9 +190,8 @@ export const updatePost = asyncHandler(async (req, res) => {
 })
 
 // @desc like/unlike a post
-// @route PUT /api/post/:id
+// @route PUT /api/post/:id/like
 // @access Private
-
 export const likePost = asyncHandler(async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
@@ -199,12 +199,12 @@ export const likePost = asyncHandler(async (req, res) => {
       await post.updateOne({
         $pull: { likes: req.user._id },
       })
-      res.status(200).json("Unliked Post")
+      res.status(200).json({ id: req.user._id })
     } else {
       await post.updateOne({
         $push: { likes: req.user._id },
       })
-      res.status(200).json("Liked Post!")
+      res.status(200).json({ id: req.user._id })
     }
   } catch (err) {
     return res.status(500).json(err)
