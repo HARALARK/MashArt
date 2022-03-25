@@ -21,6 +21,9 @@ import {
   GET_COMICS_SUCCESS,
   GET_COMICS_FAIL,
   GET_COMICS_RESET,
+  LIKE_POST_REQUEST,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_FAIL,
 } from "../constants/postConstants"
 
 export const createPost = (post) => async (dispatch, getState) => {
@@ -131,12 +134,6 @@ export const flagPost = (id) => async (dispatch, getState) => {
       type: FLAG_POST_SUCCESS,
       payload: data,
     })
-    dispatch({
-      type: GET_POSTS_RESET,
-    })
-    dispatch({
-      type: GET_COMICS_RESET,
-    })
   } catch (error) {
     dispatch({
       type: FLAG_POST_FAIL,
@@ -169,9 +166,6 @@ export const reportPost = (id) => async (dispatch, getState) => {
     dispatch({
       type: REPORT_POST_SUCCESS,
       payload: data,
-    })
-    dispatch({
-      type: GET_POSTS_RESET,
     })
   } catch (error) {
     dispatch({
@@ -244,6 +238,40 @@ export const getComics = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_COMICS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const likePost = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: LIKE_POST_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(`/api/post/${id}/like`, {}, config)
+
+    dispatch({
+      type: LIKE_POST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: LIKE_POST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -17,6 +17,10 @@ import {
   GET_COMICS_SUCCESS,
   GET_COMICS_FAIL,
   GET_COMICS_RESET,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_FAIL,
+  FLAG_POST_SUCCESS,
+  FLAG_POST_FAIL,
 } from "../constants/postConstants"
 
 export const createPostReducer = (state = {}, action) => {
@@ -48,6 +52,46 @@ export const getPostsReducer = (state = {}, action) => {
       return { loading: false, posts: action.payload }
     case GET_POSTS_FAIL:
       return { loading: false, error: action.payload }
+
+    case LIKE_POST_SUCCESS: {
+      const { post } = action.payload
+      const updatedPosts = state.posts.posts.map((p) => {
+        if (p._id === post._id) {
+          return post
+        } else {
+          return p
+        }
+      })
+
+      return { ...state, posts: { posts: updatedPosts } }
+    }
+    case LIKE_POST_FAIL:
+      return { loading: false, error: action.payload }
+
+    case REPORT_POST_SUCCESS: {
+      const { post } = action.payload
+      const updatedPosts = state.posts.posts.map((p) => {
+        if (p._id === post._id) {
+          return post
+        } else {
+          return p
+        }
+      })
+
+      return { ...state, posts: { posts: updatedPosts } }
+    }
+    case REPORT_POST_FAIL:
+      return { loading: false, error: action.payload }
+
+    case FLAG_POST_SUCCESS: {
+      const { post } = action.payload
+      const updatedPosts = state.posts.posts.filter((p) => p._id !== post._id)
+
+      return { ...state, posts: { posts: updatedPosts } }
+    }
+    case FLAG_POST_FAIL:
+      return { loading: false, error: action.payload }
+
     case GET_POSTS_RESET:
       return {}
     default:

@@ -199,13 +199,14 @@ export const likePost = asyncHandler(async (req, res) => {
       await post.updateOne({
         $pull: { likes: req.user._id },
       })
-      res.status(200).json({ id: req.user._id })
     } else {
       await post.updateOne({
         $push: { likes: req.user._id },
       })
-      res.status(200).json({ id: req.user._id })
     }
+
+    const updatedPost = await Post.findById(req.params.id)
+    res.status(200).json({ post: updatedPost })
   } catch (err) {
     return res.status(500).json(err)
   }
@@ -214,7 +215,6 @@ export const likePost = asyncHandler(async (req, res) => {
 // @desc report a post
 // @route PUT /api/post/:id/report
 // @access Private
-
 export const reportPost = asyncHandler(async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
@@ -222,7 +222,9 @@ export const reportPost = asyncHandler(async (req, res) => {
     await post.updateOne({
       $set: { reportCount: newCount },
     })
-    return res.status(200).json(post.reportCount)
+
+    const updatedPost = await Post.findById(req.params.id)
+    res.status(200).json({ post: updatedPost })
   } catch (err) {
     return res.status(500).json(err)
   }
@@ -240,7 +242,9 @@ export const flagPost = asyncHandler(async (req, res) => {
       await post.updateOne({
         $set: { isFlagged: true },
       })
-      return res.status(200).json("Post Flagged")
+
+      const updatedPost = await Post.findById(req.params.id)
+      res.status(200).json({ post: updatedPost })
     } else {
       return res.status(403).json("Invalid Request") //not authorized to flag
     }
