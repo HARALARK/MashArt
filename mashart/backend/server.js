@@ -66,10 +66,6 @@ const __dirname = path.dirname(__filename)
 
 app.use("/backend/uploads/", express.static(path.join(__dirname, "uploads")))
 
-app.get("/", (req, res) => {
-  res.send("API is running")
-})
-
 app.use("/api/user", userRoutes)
 app.use("/api/post", postRoutes)
 app.use("/api/chat", chatRoutes)
@@ -77,6 +73,18 @@ app.use("/api/message", chatMessageRoutes)
 app.use("/api/comment", commentRoutes)
 app.use("/api/playlist", playlistRoutes)
 app.use("/api/collab", collabRoutes)
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/build/")))
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+  )
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running...")
+  })
+}
 
 app.use(notFound)
 
