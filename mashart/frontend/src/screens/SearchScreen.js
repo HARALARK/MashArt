@@ -6,6 +6,7 @@ import Message from "../components/styled-components/Message"
 import { Input } from "../components/styled-components/Input"
 import UserCard from "../components/UserCard/UserCard"
 import { searchUser } from "../actions/userActions"
+import { searchPost } from "../actions/postActions"
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState("")
@@ -13,6 +14,9 @@ const SearchScreen = () => {
 
   const searchUserInfo = useSelector((state) => state.searchUser)
   let { loading, usersInfo, error } = searchUserInfo
+
+  const searchPostInfo = useSelector((state) => state.searchPost)
+  let { postsInfo } = searchPostInfo
 
   const dispatch = useDispatch()
 
@@ -26,8 +30,8 @@ const SearchScreen = () => {
 
     if (option === "people") {
       dispatch(searchUser(e.target.value))
-    } else {
-      return
+    } else if (option === "posts") {
+      dispatch(searchPost(e.target.value))
     }
   }
 
@@ -48,14 +52,14 @@ const SearchScreen = () => {
             People
           </Button>
           <Button
-            className={option === "tags" && "active"}
-            onClick={() => setOption("tags")}
+            className={option === "posts" && "active"}
+            onClick={() => setOption("posts")}
           >
-            Tags
+            Posts
           </Button>
         </OptionContainer>
       </InputContainer>
-      <UserCardContainer>
+      <ResultCardContainer hide={!(option === "people")}>
         {loading && <Message>{loading}</Message>}
         {error && <Message variant="error">{error}</Message>}
         {option === "people" && usersInfo && usersInfo.users.length > 0 ? (
@@ -63,7 +67,12 @@ const SearchScreen = () => {
         ) : (
           <></>
         )}
-      </UserCardContainer>
+        {option === "post" && postsInfo && postsInfo.posts.length > 0 ? (
+          postsInfo.posts.map((post) => <UserCard key={post._id} post={post} />)
+        ) : (
+          <></>
+        )}
+      </ResultCardContainer>
     </Container>
   )
 }
@@ -83,16 +92,17 @@ const OptionContainer = styled.div`
   gap: 1rem;
 `
 
-const UserCardContainer = styled.div`
-  display: flex;
+const ResultCardContainer = styled.div`
+  display: ${(props) => (props.hide ? "none" : "flex")};
   flex-direction: column;
-
-  max-height: 100%;
-  overflow-y: auto;
 
   margin-top: 1rem;
   padding-bottom: 3rem;
   gap: 0.5rem;
+
+  overflow-y: scroll;
+  overscroll-behaviour: contain;
+  height: calc(100vh - 250px);
 
   .user-link {
     text-decoration: none;
