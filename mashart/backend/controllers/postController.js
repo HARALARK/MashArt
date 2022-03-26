@@ -409,12 +409,26 @@ export const getComics = asyncHandler(async (req, res) => {
 export const searchPost = asyncHandler(async (req, res) => {
   const query = req.query.post
 
-  const posts = await Post.find({
-    $or: [
-      { title: { $regex: query, $options: "i" } },
-      { tags: { $in: [query] } },
-    ],
-  })
+  const posts = await Post.find(
+    {
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { tags: { $in: [query] } },
+      ],
+    },
+    {
+      path: 1,
+      users: 1,
+      title: 1,
+      type: 1,
+      description: 1,
+      tags: 1,
+      reportCount: 1,
+      reports: 1,
+      likes: 1,
+      time: 1,
+    }
+  )
 
   res.json({
     posts,
