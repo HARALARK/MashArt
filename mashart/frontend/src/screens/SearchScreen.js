@@ -60,18 +60,26 @@ const SearchScreen = () => {
           </Button>
         </OptionContainer>
       </InputContainer>
-      <ResultCardContainer hide={!(option === "people")}>
-        {loading && <Message>{loading}</Message>}
-        {error && <Message variant="error">{error}</Message>}
-        {option === "people" && usersInfo?.users?.length > 0 &&
-          usersInfo?.users?.map((user) => <UserCard key={user._id} user={user} />)
-        }
-      </ResultCardContainer>
-      <PostCardContainer>
-      {option === "posts" && postsInfo?.posts.length > 0 && (
-          <PostsContainer posts={{posts: postsInfo?.posts}} option={"user"}/>
-        )}
-      </PostCardContainer>
+      {option === "people" && (
+        <ResultCardContainer hide={!(option === "people")}>
+          {loading && <Message>{loading}</Message>}
+          {error && <Message variant="error">{error}</Message>}
+          {usersInfo?.users?.length > 0 &&
+            usersInfo?.users?.map((user) => (
+              <UserCard key={user._id} user={user} />
+            ))}
+        </ResultCardContainer>
+      )}
+      {option === "posts" && (
+        <PostCardContainer>
+          {postsInfo?.posts.length > 0 && (
+            <PostsContainer
+              posts={{ posts: postsInfo?.posts }}
+              option={"user"}
+            />
+          )}
+        </PostCardContainer>
+      )}
     </Container>
   )
 }
@@ -109,7 +117,7 @@ const ResultCardContainer = styled.div`
 `
 
 const PostCardContainer = styled.div`
-margin-top: 1rem;
+  margin-top: 1rem;
   padding: 0 0.5rem 60px;
   overflow-y: scroll;
   overscroll-behaviour: contain;
