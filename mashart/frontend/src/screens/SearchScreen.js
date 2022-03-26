@@ -7,6 +7,7 @@ import { Input } from "../components/styled-components/Input"
 import UserCard from "../components/UserCard/UserCard"
 import { searchUser } from "../actions/userActions"
 import { searchPost } from "../actions/postActions"
+import PostsContainer from "../components/PostsContainer/PostsContainer"
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState("")
@@ -62,17 +63,15 @@ const SearchScreen = () => {
       <ResultCardContainer hide={!(option === "people")}>
         {loading && <Message>{loading}</Message>}
         {error && <Message variant="error">{error}</Message>}
-        {option === "people" && usersInfo && usersInfo.users.length > 0 ? (
-          usersInfo.users.map((user) => <UserCard key={user._id} user={user} />)
-        ) : (
-          <></>
-        )}
-        {option === "post" && postsInfo && postsInfo.posts.length > 0 ? (
-          postsInfo.posts.map((post) => <UserCard key={post._id} post={post} />)
-        ) : (
-          <></>
-        )}
+        {option === "people" && usersInfo?.users?.length > 0 &&
+          usersInfo?.users?.map((user) => <UserCard key={user._id} user={user} />)
+        }
       </ResultCardContainer>
+      <PostCardContainer>
+      {option === "posts" && postsInfo?.posts.length > 0 && (
+          <PostsContainer posts={{posts: postsInfo?.posts}} option={"user"}/>
+        )}
+      </PostCardContainer>
     </Container>
   )
 }
@@ -107,6 +106,14 @@ const ResultCardContainer = styled.div`
   .user-link {
     text-decoration: none;
   }
+`
+
+const PostCardContainer = styled.div`
+margin-top: 1rem;
+  padding: 0 0.5rem 60px;
+  overflow-y: scroll;
+  overscroll-behaviour: contain;
+  height: calc(100vh - 250px);
 `
 
 const Button = styled.p`

@@ -99,7 +99,7 @@ const PostsContainer = ({ posts, option = "user" }) => {
     <Container>
       <Posts>
         {posts ? (
-          posts.posts.map((post) => (
+          posts?.posts.map((post) => (
             <PostCard
               key={post._id}
               post={post}
