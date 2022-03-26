@@ -75,18 +75,6 @@ const ProfileScreen = () => {
         <>
           <InfoSection>
             <InfoContainer>
-              <MiscHolder>
-                {/* For Collaborations and Non-Collab posts */}
-                <MiscInfo>
-                  <p className="title">Collaborations</p>
-                  {/* Placeholder, should have something to identify collab posts of a user */}
-                  <p>{user.posts?.length} </p>
-                </MiscInfo>
-                <MiscInfo>
-                  <p className="title">Posts</p>
-                  <p>{user.posts?.length}</p>
-                </MiscInfo>
-              </MiscHolder>
               <ProfileHolder>
                 <ProfileImageHolder>
                   {user.profileImage && user.profileImage.imageSrc ? (
@@ -101,6 +89,11 @@ const ProfileScreen = () => {
                 <ProfileUsername>{user.username}</ProfileUsername>
               </ProfileHolder>
               <MiscHolder>
+                <MiscInfo>
+                  <p className="title">Posts</p>
+                  <p>{user.posts?.length}</p>
+                </MiscInfo>
+
                 <MiscInfo>
                   <p className="title">Followers</p>
                   <p>{user.followers?.length}</p>
@@ -250,13 +243,12 @@ const ProfileUsername = styled.p`
 const MiscHolder = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 0 1rem;
+  gap: 1rem;
   width: 100%;
-  flex-direction: column;
   @media ${device.tablet} {
     padding: 0;
-    justify-content: space-evenly;
     flex-direction: row;
   }
 `

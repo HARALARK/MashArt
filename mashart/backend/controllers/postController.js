@@ -96,7 +96,7 @@ export const getPosts = asyncHandler(async (req, res) => {
   const latestPosts = await Post.find({ isFlagged: false }).sort({
     //array of latest posts
     reportCount: sort ? -1 : 1,
-    updatedAt: -1,
+    createdAt: -1,
   })
 
   const posts = await Promise.all(
@@ -124,6 +124,8 @@ export const getPosts = asyncHandler(async (req, res) => {
         description: post.description,
         tags: post.tags,
         reportCount: post.reportCount,
+        reports: post.reports,
+        likes: post.likes,
         time: post.updatedAt,
       }
     })
@@ -189,9 +191,8 @@ export const updatePost = asyncHandler(async (req, res) => {
 })
 
 // @desc like/unlike a post
-// @route PUT /api/post/:id
+// @route PUT /api/post/:id/like
 // @access Private
-
 export const likePost = asyncHandler(async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
@@ -199,13 +200,14 @@ export const likePost = asyncHandler(async (req, res) => {
       await post.updateOne({
         $pull: { likes: req.user._id },
       })
-      res.status(200).json("Unliked Post")
     } else {
       await post.updateOne({
         $push: { likes: req.user._id },
       })
-      res.status(200).json("Liked Post!")
     }
+
+    const updatedPost = await Post.findById(req.params.id)
+    res.status(200).json({ post: updatedPost })
   } catch (err) {
     return res.status(500).json(err)
   }
@@ -214,15 +216,25 @@ export const likePost = asyncHandler(async (req, res) => {
 // @desc report a post
 // @route PUT /api/post/:id/report
 // @access Private
-
 export const reportPost = asyncHandler(async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
-    const newCount = post.reportCount + 1
-    await post.updateOne({
-      $set: { reportCount: newCount },
-    })
-    return res.status(200).json(post.reportCount)
+
+    if (post.reports.includes(req.user._id)) {
+      await post.updateOne({
+        $pull: { reports: req.user._id },
+      })
+    } else {
+      await post.updateOne({
+        $push: { reports: req.user._id },
+      })
+    }
+    const updatedPost = await Post.findById(req.params.id)
+
+    updatedPost.reportCount = updatedPost.reports.length
+    updatedPost.save()
+
+    res.status(200).json({ post: updatedPost })
   } catch (err) {
     return res.status(500).json(err)
   }
@@ -240,7 +252,9 @@ export const flagPost = asyncHandler(async (req, res) => {
       await post.updateOne({
         $set: { isFlagged: true },
       })
-      return res.status(200).json("Post Flagged")
+
+      const updatedPost = await Post.findById(req.params.id)
+      res.status(200).json({ post: updatedPost })
     } else {
       return res.status(403).json("Invalid Request") //not authorized to flag
     }
@@ -261,18 +275,25 @@ export const createComic = asyncHandler(async (req, res) => {
 
   const user = await User.findById(req.user._id)
 
+  let collaboratorsExist = []
   // validating all the collaborators
   if (
     collaboratorsArray.length > 0 &&
     collaboratorsArray[0].trim().length > 0
   ) {
-    collaboratorsArray.split(",").forEach(async (collaborator) => {
-      await User.findById(collaborator)
-    })
+    collaboratorsExist = await Promise.all(
+      collaboratorsArray.map(async (collaborator) => {
+        const userExist = await User.findOne({ username: collaborator.trim() })
+        if (!userExist) {
+          throw new Error("Collaborator doesnt exist")
+        }
+        return userExist._id
+      })
+    )
   }
 
   if (user) {
-    const users = [user._id, ...collaboratorsArray]
+    const users = [user._id, ...collaboratorsExist]
     const post = await Post.create({
       users,
       title,
@@ -379,5 +400,22 @@ export const getComics = asyncHandler(async (req, res) => {
 
   res.json({
     comics,
+  })
+})
+
+// @desc search for users using their username
+// @route GET /api/post/search
+// @access Private
+export const searchPost = asyncHandler(async (req, res) => {
+  const query = req.query.post
+
+  const posts = await User.find(
+    { title: { $regex: query, $options: "i" } },
+    { title: 1 },
+    { tags: { $in: [query] } }
+  )
+
+  res.json({
+    posts,
   })
 })

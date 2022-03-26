@@ -7,7 +7,6 @@ import {
   GET_POSTS_RESET,
   GET_POSTS_SUCCESS,
   POST_RESET,
-  REPORT_POST_REQUEST,
   REPORT_POST_SUCCESS,
   REPORT_POST_FAIL,
   CREATE_COMIC_REQUEST,
@@ -17,6 +16,10 @@ import {
   GET_COMICS_SUCCESS,
   GET_COMICS_FAIL,
   GET_COMICS_RESET,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_FAIL,
+  FLAG_POST_SUCCESS,
+  FLAG_POST_FAIL,
 } from "../constants/postConstants"
 
 export const createPostReducer = (state = {}, action) => {
@@ -48,21 +51,51 @@ export const getPostsReducer = (state = {}, action) => {
       return { loading: false, posts: action.payload }
     case GET_POSTS_FAIL:
       return { loading: false, error: action.payload }
-    case GET_POSTS_RESET:
-      return {}
-    default:
-      return state
-  }
-}
 
-export const reportPostReducer = (state = {}, action) => {
-  switch (action.type) {
-    case REPORT_POST_REQUEST:
-      return { loading: true }
-    case REPORT_POST_SUCCESS:
-      return { loading: false, posts: action.payload }
+    case LIKE_POST_SUCCESS: {
+      const { post } = action.payload
+      const updatedPosts = state.posts.posts.map((p) => {
+        if (p._id === post._id) {
+          p.likes = post.likes
+          return p
+        } else {
+          return p
+        }
+      })
+
+      return { ...state, posts: { posts: updatedPosts } }
+    }
+    case LIKE_POST_FAIL:
+      return { loading: false, error: action.payload }
+
+    case REPORT_POST_SUCCESS: {
+      const { post } = action.payload
+      const updatedPosts = state.posts.posts.map((p) => {
+        if (p._id === post._id) {
+          p.reports = post.reports
+          p.reportCount = post.reportCount
+          return p
+        } else {
+          return p
+        }
+      })
+
+      return { ...state, posts: { posts: updatedPosts } }
+    }
     case REPORT_POST_FAIL:
       return { loading: false, error: action.payload }
+
+    case FLAG_POST_SUCCESS: {
+      const { post } = action.payload
+      const updatedPosts = state.posts.posts.filter((p) => p._id !== post._id)
+
+      return { ...state, posts: { posts: updatedPosts } }
+    }
+    case FLAG_POST_FAIL:
+      return { loading: false, error: action.payload }
+
+    case GET_POSTS_RESET:
+      return {}
     default:
       return state
   }

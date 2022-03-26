@@ -202,6 +202,7 @@ const PopUpContainer = styled.div`
 
 const PostsContainer = styled.div`
   overflow: auto;
+  overscroll-behavior: contain;
   width: 400px;
 `
 
