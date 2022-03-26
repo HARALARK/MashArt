@@ -237,6 +237,7 @@ const ImageContainer = styled.div`
   .post {
     height: 300px;
     width: 300px;
+    background: var(--light);
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
