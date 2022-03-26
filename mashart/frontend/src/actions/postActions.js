@@ -24,6 +24,9 @@ import {
   LIKE_POST_REQUEST,
   LIKE_POST_SUCCESS,
   LIKE_POST_FAIL,
+  SEARCH_POST_REQUEST,
+  SEARCH_POST_SUCCESS,
+  SEARCH_POST_FAIL,
 } from "../constants/postConstants"
 
 export const createPost = (post) => async (dispatch, getState) => {
@@ -92,7 +95,7 @@ export const getPosts =
       }
 
       const { data } = await axios.get(
-        `/api/post/${role !== "user" ? "true" : ""}`,
+        `/api/post/sort/${role !== "user" ? "true" : ""}`,
         config
       )
 
@@ -272,6 +275,40 @@ export const likePost = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: LIKE_POST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const searchPost = (post) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: SEARCH_POST_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/post/search?post=${post}`, config)
+
+    dispatch({
+      type: SEARCH_POST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: SEARCH_POST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

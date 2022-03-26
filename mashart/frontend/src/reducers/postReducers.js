@@ -20,6 +20,9 @@ import {
   LIKE_POST_FAIL,
   FLAG_POST_SUCCESS,
   FLAG_POST_FAIL,
+  SEARCH_POST_REQUEST,
+  SEARCH_POST_SUCCESS,
+  SEARCH_POST_FAIL,
 } from "../constants/postConstants"
 
 export const createPostReducer = (state = {}, action) => {
@@ -111,6 +114,22 @@ export const getComicsReducer = (state = {}, action) => {
       return { loading: false, error: action.payload }
     case GET_COMICS_RESET:
       return {}
+    default:
+      return state
+  }
+}
+
+export const searchPostReducer = (
+  state = { postsInfo: { posts: [] } },
+  action
+) => {
+  switch (action.type) {
+    case SEARCH_POST_REQUEST:
+      return { loading: true }
+    case SEARCH_POST_SUCCESS:
+      return { loading: false, postsInfo: action.payload }
+    case SEARCH_POST_FAIL:
+      return { loading: false, error: action.payload }
     default:
       return state
   }
