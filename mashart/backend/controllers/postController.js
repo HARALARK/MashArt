@@ -88,7 +88,7 @@ export const createPost = asyncHandler(async (req, res) => {
 })
 
 // @desc get a post
-// @route get /api/post/:sort?
+// @route get /api/post/sort/:sort?
 // @access Private
 export const getPosts = asyncHandler(async (req, res) => {
   const sort = req.params.sort === "true" ? true : false
@@ -137,7 +137,7 @@ export const getPosts = asyncHandler(async (req, res) => {
 })
 
 // @desc get a post
-// @route get /api/post/:id
+// @route get /api/post/detail/:id
 // @access Private
 export const getPostDetails = asyncHandler(async (req, res) => {
   const postId = req.params.id
@@ -409,11 +409,12 @@ export const getComics = asyncHandler(async (req, res) => {
 export const searchPost = asyncHandler(async (req, res) => {
   const query = req.query.post
 
-  const posts = await User.find(
-    { title: { $regex: query, $options: "i" } },
-    { title: 1 },
-    { tags: { $in: [query] } }
-  )
+  const posts = await Post.find({
+    $or: [
+      { title: { $regex: query, $options: "i" } },
+      { tags: { $in: [query] } },
+    ],
+  })
 
   res.json({
     posts,
