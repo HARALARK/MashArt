@@ -275,18 +275,25 @@ export const createComic = asyncHandler(async (req, res) => {
 
   const user = await User.findById(req.user._id)
 
+  let collaboratorsExist = []
   // validating all the collaborators
   if (
     collaboratorsArray.length > 0 &&
     collaboratorsArray[0].trim().length > 0
   ) {
-    collaboratorsArray.split(",").forEach(async (collaborator) => {
-      await User.findById(collaborator)
-    })
+    collaboratorsExist = await Promise.all(
+      collaboratorsArray.map(async (collaborator) => {
+        const userExist = await User.findOne({ username: collaborator.trim() })
+        if (!userExist) {
+          throw new Error("Collaborator doesnt exist")
+        }
+        return userExist._id
+      })
+    )
   }
 
   if (user) {
-    const users = [user._id, ...collaboratorsArray]
+    const users = [user._id, ...collaboratorsExist]
     const post = await Post.create({
       users,
       title,
@@ -393,5 +400,22 @@ export const getComics = asyncHandler(async (req, res) => {
 
   res.json({
     comics,
+  })
+})
+
+// @desc search for users using their username
+// @route GET /api/post/search
+// @access Private
+export const searchPost = asyncHandler(async (req, res) => {
+  const query = req.query.post
+
+  const posts = await User.find(
+    { title: { $regex: query, $options: "i" } },
+    { title: 1 },
+    { tags: { $in: [query] } }
+  )
+
+  res.json({
+    posts,
   })
 })
