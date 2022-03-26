@@ -65,9 +65,14 @@ export const createPost = asyncHandler(async (req, res) => {
 
           await post.save()
 
-          await user.updateOne({
-            $push: { posts: { id: post._id, path: downloadURL } },
-          })
+          await Promise.all(
+            users.map(async (user) => {
+              const collaborator = await User.findById(user)
+              return await collaborator.updateOne({
+                $push: { posts: { id: post._id, path: downloadURL } },
+              })
+            })
+          )
 
           res.json({
             _id: post._id,
