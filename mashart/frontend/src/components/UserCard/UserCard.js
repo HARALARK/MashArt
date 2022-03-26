@@ -9,11 +9,11 @@ const UserCard = ({ user }) => {
     <Link className="user-link" to={`/profile/${user._id}`}>
       <Container>
         <div>
-          <ProfileImageHolder size={"60px"}>
+          <ProfileImageHolder size={"40px"}>
             {user.profileImg ? (
               <ProfileImage src={user.profileImg} alt="profile" />
             ) : (
-              <FontAwesomeIcon icon={faUser} size="2x" />
+              <FontAwesomeIcon icon={faUser} size="lg" />
             )}
           </ProfileImageHolder>
         </div>
@@ -29,7 +29,7 @@ const Container = styled.section`
   gap: 1rem;
   background: var(--secondary-light);
   color: var(--light);
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 0.5rem;
   transition: 200ms ease-in-out;
 
   border-radius: 5px;
@@ -41,7 +41,7 @@ const Container = styled.section`
   }
 
   .username {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
   }
 `
 
