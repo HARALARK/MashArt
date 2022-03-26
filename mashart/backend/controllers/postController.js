@@ -319,9 +319,14 @@ export const createComic = asyncHandler(async (req, res) => {
     post.path = paths
     await post.save()
 
-    await user.updateOne({
-      $push: { posts: { id: post._id, path: post.path } },
-    })
+    await Promise.all(
+      users.map(async (user) => {
+        const collaborator = await User.findById(user)
+        return await collaborator.updateOne({
+          $push: { posts: { id: post._id, path: post.path } },
+        })
+      })
+    )
 
     res.status(200).json({
       _id: post._id,
