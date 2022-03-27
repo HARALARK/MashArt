@@ -16,6 +16,7 @@ const PostCard = ({
   flagPostHandler,
   reportPostHandler,
   popupHandler,
+  comicReaderPopupHandler,
   likePostHandler,
   userId,
 }) => {
@@ -33,7 +34,14 @@ const PostCard = ({
 
   return (
     <Container>
-      <PostPictureContainer>
+      <PostPictureContainer
+        pointer={type === "comic"}
+        onClick={
+          type === "comic"
+            ? () => comicReaderPopupHandler(title, path)
+            : () => {}
+        }
+      >
         <PostPicture className="picturePost" src={path[0]} alt="postpic" />
       </PostPictureContainer>
 
@@ -42,12 +50,8 @@ const PostCard = ({
           {users ? (
             users.map((user) =>
               user.profileImage ? (
-                <Link to={`/profile/${user.id}`}>
-                  <CollabUser
-                    key={user.id}
-                    src={user.profileImage}
-                    alt="profile"
-                  />
+                <Link key={user.id} to={`/profile/${user.id}`}>
+                  <CollabUser src={user.profileImage} alt="profile" />
                 </Link>
               ) : (
                 <CollabUser
@@ -139,6 +143,8 @@ const PostPictureContainer = styled.div`
   height: 300px;
   display: flex;
   justify-content: center;
+
+  cursor: ${(props) => (props.pointer ? "pointer" : "")};
 `
 
 const PostPicture = styled.img`
