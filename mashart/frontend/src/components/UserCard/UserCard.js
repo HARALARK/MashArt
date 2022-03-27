@@ -10,8 +10,13 @@ const UserCard = ({ user }) => {
       <Container>
         <div>
           <ProfileImageHolder size={"40px"}>
-            {user.profileImg ? (
-              <ProfileImage src={user.profileImg} alt="profile" />
+            {user?.profileImage?.imageSrc ? (
+              <ProfileImage
+                src={user?.profileImage?.imageSrc}
+                alt="profile"
+                height={"40px"}
+                width={"40px"}
+              />
             ) : (
               <FontAwesomeIcon icon={faUser} size="lg" />
             )}
@@ -48,6 +53,7 @@ const Container = styled.section`
 const ProfileImage = styled.img`
   height: ${(props) => props.height || "80px"};
   width: ${(props) => props.width || "80px"};
+  border-radius: 10px;
 `
 
 const ProfileImageHolder = styled.div`

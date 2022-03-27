@@ -295,7 +295,7 @@ export const searchUser = asyncHandler(async (req, res) => {
 
   const users = await User.find(
     { username: { $regex: username, $options: "i" } },
-    { username: 1 }
+    { username: 1, profileImage: 1 }
   )
 
   res.json({
