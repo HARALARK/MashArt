@@ -49,26 +49,28 @@ const PostCard = ({
 
       <PostInfo>
         <PostCollaborators>
-          {users ? (
-            users.map((user) =>
-              user.profileImage ? (
-                <Link
-                  key={user.id}
-                  to={`/profile/${user.id}`}
-                  onClick={() => setPostPopUp(false)}
-                >
-                  <CollabUser src={user.profileImage} alt="profile" />
-                </Link>
-              ) : (
+          {users?.map((user) =>
+            user.profileImage ? (
+              <Link
+                key={user.id}
+                to={`/profile/${user.id}`}
+                onClick={() => setPostPopUp(false)}
+              >
+                <CollabUser src={user.profileImage} alt="profile" />
+              </Link>
+            ) : (
+              <Link
+                key={user.id}
+                to={`/profile/${user.id}`}
+                onClick={() => setPostPopUp(false)}
+              >
                 <CollabUser
                   key={user.id}
                   src="/images/logo/logo.png"
                   alt="profile"
                 />
-              )
+              </Link>
             )
-          ) : (
-            <CollabUser src="/images/logo/logo.png" alt="profile" />
           )}
         </PostCollaborators>
         <Title>
