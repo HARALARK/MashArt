@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import styled from "styled-components"
 
 import Message from "../components/styled-components/Message"
-import { getPosts } from "../actions/postActions"
+import { getPosts, resetPosts } from "../actions/postActions"
 
 import WelcomeScreen from "./WelcomeScreen"
 import PostsContainer from "../components/PostsContainer/PostsContainer"
@@ -25,10 +25,12 @@ const Homepage = () => {
     }
   }, [userInfo, posts, dispatch, option])
 
-  const changeRole = (role) => {
+  const changeRole = async (role) => {
     setOption(role)
-    dispatch(getPosts(option))
+    dispatch(resetPosts())
   }
+
+  console.log(posts)
 
   return userInfo ? (
     <Container>
