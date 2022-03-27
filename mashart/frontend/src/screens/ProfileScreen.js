@@ -45,11 +45,11 @@ const ProfileScreen = () => {
     } else {
       if (id === userInfo._id) {
         navigate("/profile")
-      } else if (id && (id !== user._id || !user.username)) {
+      } else if (id && (id !== user?._id || !user?.username)) {
         dispatch(getUserDetails(`profile?_id=${id}`))
         dispatch(getblockedUsers())
       } else if (id === undefined) {
-        if (!user.username || user._id !== userInfo._id) {
+        if (!user?.username || user?._id !== userInfo._id) {
           dispatch(getUserDetails("profile"))
         }
       }
@@ -333,8 +333,8 @@ const PopUpContainer = styled.div`
 
 const PopUp = styled.div`
   display: ${(props) => (props.hide ? "none" : "flex")};
-  min-height: 230px;
-  max-height: 300px;
+
+  width: 300px;
 
   color: var(--light);
 
@@ -343,21 +343,6 @@ const PopUp = styled.div`
   padding: 1rem 2rem 2rem;
   flex-direction: column;
   border-radius: 5px;
-
-  .heading {
-    text-align: left;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .no-posts {
-    color: var(--light);
-    padding-bottom: 1rem;
-  }
-
-  @media ${device.tablet} {
-    max-height: 400px;
-  }
 `
 
 export default ProfileScreen
