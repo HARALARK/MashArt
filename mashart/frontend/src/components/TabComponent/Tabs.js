@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import device from "../../screen_sizes/devices"
 
-const Tabs = ({ posts }) => {
+const Tabs = ({ posts, popupHandler }) => {
   const [activeTab, setActiveTab] = useState("CollabTab")
 
   const handleCTab = () => {
@@ -33,8 +33,12 @@ const Tabs = ({ posts }) => {
         </NavOption>
       </NavMenu> */}
       <PostContainer>
-        {posts?.reverse().map((post) => (
-          <Post key={post._id} src={post.path} />
+        {posts?.map((post) => (
+          <Post
+            key={post._id}
+            src={post.path}
+            onClick={() => popupHandler(post.id)}
+          />
         ))}
       </PostContainer>
     </TabsContainer>
@@ -84,6 +88,8 @@ const Post = styled.img`
   width: 100%;
   height: 300px;
   background: var(--light);
+
+  cursor: pointer;
 
   @media ${device.tablet} {
     width: calc(50% - 5px);

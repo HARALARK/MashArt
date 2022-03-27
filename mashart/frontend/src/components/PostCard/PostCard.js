@@ -20,6 +20,7 @@ const PostCard = ({
   likePostHandler,
   userId,
   noaction = false,
+  setPostPopUp = () => {},
 }) => {
   const {
     _id,
@@ -51,7 +52,11 @@ const PostCard = ({
           {users ? (
             users.map((user) =>
               user.profileImage ? (
-                <Link key={user.id} to={`/profile/${user.id}`}>
+                <Link
+                  key={user.id}
+                  to={`/profile/${user.id}`}
+                  onClick={() => setPostPopUp(false)}
+                >
                   <CollabUser src={user.profileImage} alt="profile" />
                 </Link>
               ) : (
