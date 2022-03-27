@@ -48,6 +48,7 @@ let reducer = combineReducers({
   getPlaylist: getPlaylistReducer,
   comics: getComicsReducer,
   searchPost: searchPostReducer,
+  getPost: getPostsReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

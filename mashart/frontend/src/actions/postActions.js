@@ -30,6 +30,7 @@ import {
   GET_POST_REQUEST,
   GET_POST_SUCCESS,
   GET_POST_FAIL,
+  GET_POST_RESET,
 } from "../constants/postConstants"
 
 export const createPost = (post) => async (dispatch, getState) => {
@@ -80,6 +81,10 @@ export const createPostReset = () => async (dispatch) => {
 
 export const getPost = (id) => async (dispatch, getState) => {
   try {
+    dispatch({
+      type: GET_POST_RESET,
+    })
+
     dispatch({
       type: GET_POST_REQUEST,
     })

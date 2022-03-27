@@ -26,6 +26,7 @@ import {
   GET_POST_REQUEST,
   GET_POST_SUCCESS,
   GET_POST_FAIL,
+  GET_POST_RESET,
 } from "../constants/postConstants"
 
 export const createPostReducer = (state = {}, action) => {
@@ -54,10 +55,10 @@ export const getPostReducer = (state = {}, action) => {
     case GET_POST_REQUEST:
       return { loading: true }
     case GET_POST_SUCCESS:
-      return { loading: false, posts: action.payload }
+      return { loading: false, post: action.payload }
     case GET_POST_FAIL:
       return { loading: false, error: action.payload }
-    case GET_POSTS_RESET:
+    case GET_POST_RESET:
       return {}
     default:
       return state
