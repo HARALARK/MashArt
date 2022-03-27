@@ -24,6 +24,9 @@ const ProfileScreen = () => {
 
   const [postPopUp, setPostPopUp] = useState(false)
 
+  const [readerPopUp, setReaderPopUp] = useState(false)
+  const [comic, setComic] = useState(null)
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -76,7 +79,14 @@ const ProfileScreen = () => {
 
   const popupHandler = (id) => {
     dispatch(getPost(id))
+    setReaderPopUp(false)
     setPostPopUp(true)
+  }
+
+  const comicReaderPopupHandler = (title, path) => {
+    setComic({ title, path })
+    setPostPopUp(false)
+    setReaderPopUp(true)
   }
 
   return (
@@ -156,33 +166,61 @@ const ProfileScreen = () => {
       )}
 
       <BackgroundBlock
-        hide={!postPopUp}
+        hide={!postPopUp && !readerPopUp}
         onClick={() => {
+          setReaderPopUp(false)
           setPostPopUp(false)
         }}
       >
         <PopUpContainer>
-          <PopUp
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
-          >
-            {postLoading && <Message>Loading...</Message>}
-            {postError && <Message variant="error">{postError}</Message>}
-            {post && (
-              <PostCard
-                post={post}
-                flagPostHandler={() => {}}
-                reportPostHandler={() => {}}
-                likePostHandler={() => {}}
-                comicReaderPopupHandler={() => {}}
-                popupHandler={() => {}}
-                userId={userInfo._id}
-                noaction={true}
-                setPostPopUp={setPostPopUp}
-              />
-            )}
-          </PopUp>
+          <PostPopUp hide={readerPopUp}>
+            <PopUp
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+            >
+              {postLoading && <Message>Loading...</Message>}
+              {postError && <Message variant="error">{postError}</Message>}
+              {post && (
+                <PostCard
+                  post={post}
+                  flagPostHandler={() => {}}
+                  reportPostHandler={() => {}}
+                  likePostHandler={() => {}}
+                  comicReaderPopupHandler={comicReaderPopupHandler}
+                  popupHandler={() => {}}
+                  userId={userInfo._id}
+                  noaction={true}
+                  setPostPopUp={setPostPopUp}
+                />
+              )}
+            </PopUp>
+          </PostPopUp>
+
+          {console.log(postPopUp, readerPopUp)}
+
+          <ComicReaderPopUpContainer hide={postPopUp}>
+            <ReaderPopUp
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+            >
+              {comic && comic.path.length > 0 ? (
+                <>
+                  <p className="heading">{comic.title}</p>
+                  <ComicContainer>
+                    {comic.path.map((page, index) => (
+                      <ImageContainer key={index}>
+                        <img className="post" src={page} alt="page" />
+                      </ImageContainer>
+                    ))}
+                  </ComicContainer>
+                </>
+              ) : (
+                <p className="no-posts">No Comic Selected</p>
+              )}
+            </ReaderPopUp>
+          </ComicReaderPopUpContainer>
         </PopUpContainer>
       </BackgroundBlock>
     </Container>
@@ -343,6 +381,74 @@ const PopUp = styled.div`
   padding: 1rem 2rem 2rem;
   flex-direction: column;
   border-radius: 5px;
+`
+
+const PostPopUp = styled.div`
+  display: ${(props) => (props.hide ? "none" : "flex")};
+`
+
+const ComicReaderPopUpContainer = styled.div`
+  display: ${(props) => (props.hide ? "none" : "flex")};
+`
+
+const ReaderPopUp = styled.div`
+  display: ${(props) => (props.hide ? "none" : "flex")};
+  background: var(--dark);
+  min-height: 230px;
+  max-height: 300px;
+
+  color: var(--light);
+
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 2rem 2rem;
+  flex-direction: column;
+  border-radius: 5px;
+
+  .heading {
+    text-align: left;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .no-posts {
+    color: var(--light);
+    padding-bottom: 1rem;
+  }
+
+  @media ${device.tablet} {
+    max-height: 400px;
+  }
+`
+const ComicContainer = styled.div`
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 1rem 0.5rem;
+`
+
+const ImageContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--grey-light);
+
+  .post {
+    width: 300px;
+    height: 300px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  @media ${device.tablet} {
+    .post {
+      width: 600px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+  }
 `
 
 export default ProfileScreen
