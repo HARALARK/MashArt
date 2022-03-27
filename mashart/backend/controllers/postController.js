@@ -158,8 +158,8 @@ export const getPostDetails = asyncHandler(async (req, res) => {
     path: post.path,
     users: post.users,
     title: post.title,
-    subtitle: post.subtitle,
     description: post.description,
+    type: post.type,
     tags: post.tags,
   })
 })
