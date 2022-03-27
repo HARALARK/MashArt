@@ -17,6 +17,7 @@ import {
 import {
   createPostReducer,
   getComicsReducer,
+  getPostReducer,
   getPostsReducer,
   searchPostReducer,
 } from "../reducers/postReducers"
@@ -48,6 +49,7 @@ let reducer = combineReducers({
   getPlaylist: getPlaylistReducer,
   comics: getComicsReducer,
   searchPost: searchPostReducer,
+  getPost: getPostReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

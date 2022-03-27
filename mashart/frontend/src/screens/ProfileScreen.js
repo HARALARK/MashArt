@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -16,15 +16,22 @@ import Message from "../components/styled-components/Message"
 import { faUser } from "@fortawesome/free-solid-svg-icons"
 import device from "../screen_sizes/devices"
 import Tabs from "../components/TabComponent/Tabs"
+import PostCard from "../components/PostCard/PostCard"
+import { getPost } from "../actions/postActions"
 
 const ProfileScreen = () => {
   const { id } = useParams()
+
+  const [postPopUp, setPostPopUp] = useState(false)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const userDetails = useSelector((state) => state.userDetails)
   const { loading, user, error } = userDetails
+
+  const getPostInfo = useSelector((state) => state.getPost)
+  const { loading: postLoading, post, error: postError } = getPostInfo
 
   const getBlockedUsers = useSelector((state) => state.blockedUsers)
   const { blockedUsers } = getBlockedUsers
@@ -65,6 +72,11 @@ const ProfileScreen = () => {
 
   const changeRoleHandler = () => {
     dispatch(changeRole(user._id))
+  }
+
+  const popupHandler = (id) => {
+    dispatch(getPost(id))
+    setPostPopUp(true)
   }
 
   return (
@@ -139,9 +151,40 @@ const ProfileScreen = () => {
               )}
             </ButtonContainer>
           </InfoSection>
-          <Tabs posts={user?.posts} />
+          <Tabs posts={user?.posts} popupHandler={popupHandler} />
         </>
       )}
+
+      <BackgroundBlock
+        hide={!postPopUp}
+        onClick={() => {
+          setPostPopUp(false)
+        }}
+      >
+        <PopUpContainer>
+          <PopUp
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
+          >
+            {postLoading && <Message>Loading...</Message>}
+            {postError && <Message variant="error">{postError}</Message>}
+            {post && (
+              <PostCard
+                post={post}
+                flagPostHandler={() => {}}
+                reportPostHandler={() => {}}
+                likePostHandler={() => {}}
+                comicReaderPopupHandler={() => {}}
+                popupHandler={() => {}}
+                userId={userInfo._id}
+                noaction={true}
+                setPostPopUp={setPostPopUp}
+              />
+            )}
+          </PopUp>
+        </PopUpContainer>
+      </BackgroundBlock>
     </Container>
   )
 }
@@ -267,6 +310,53 @@ const MiscInfo = styled.div`
 
   @media ${device.tablet} {
     width: 150px;
+  }
+`
+
+const BackgroundBlock = styled.div`
+  display: ${(props) => (props.hide ? "none" : "")};
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgb(77, 90, 135, 0.8);
+  width: 100%;
+  height: 100%;
+`
+
+const PopUpContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`
+
+const PopUp = styled.div`
+  display: ${(props) => (props.hide ? "none" : "flex")};
+  min-height: 230px;
+  max-height: 300px;
+
+  color: var(--light);
+
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 2rem 2rem;
+  flex-direction: column;
+  border-radius: 5px;
+
+  .heading {
+    text-align: left;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .no-posts {
+    color: var(--light);
+    padding-bottom: 1rem;
+  }
+
+  @media ${device.tablet} {
+    max-height: 400px;
   }
 `
 

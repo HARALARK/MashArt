@@ -153,13 +153,25 @@ export const getPostDetails = asyncHandler(async (req, res) => {
     throw new Error("Post not found")
   }
 
+  const users = await Promise.all(
+    //get the users array of the post
+    post.users.map(async (id) => {
+      //for every user in the user array of the post
+      const user = await User.findById(id)
+      return {
+        id,
+        profileImage: user.profileImage.imageSrc, //get the users profile pic
+      }
+    })
+  )
+
   res.json({
     _id: post._id,
     path: post.path,
-    users: post.users,
+    users,
     title: post.title,
-    subtitle: post.subtitle,
     description: post.description,
+    type: post.type,
     tags: post.tags,
   })
 })
