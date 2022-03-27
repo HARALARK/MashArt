@@ -151,6 +151,10 @@ export const getPosts =
     }
   }
 
+export const resetPosts = () => async (dispatch) => {
+  dispatch({ type: GET_POSTS_RESET })
+}
+
 export const flagPost = (id) => async (dispatch, getState) => {
   try {
     dispatch({
