@@ -3,9 +3,6 @@ import {
   BAN_USER_REQUEST, //ahmed
   BAN_USER_SUCCESS, //ahmed
   BAN_USER_FAIL, //ahmed
-  GET_BAN_USER_FAIL, //ahmed
-  GET_BAN_USER_REQUEST, //ahmed
-  GET_BAN_USER_SUCCESS, //ahmed
   BLOCK_USER_FAIL,
   BLOCK_USER_REQUEST,
   BLOCK_USER_SUCCESS,
@@ -634,7 +631,6 @@ export const unblockUser = (_id) => async (dispatch, getState) => {
     })
   }
 }
-
 
 export const banUser = (_id) => async (dispatch, getState) => {
   try {
