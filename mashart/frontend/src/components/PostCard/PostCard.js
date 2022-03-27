@@ -8,6 +8,7 @@ import {
   faFlag,
   faHeart,
 } from "@fortawesome/free-solid-svg-icons"
+import { Link } from "react-router-dom"
 
 const PostCard = ({
   post,
@@ -41,11 +42,13 @@ const PostCard = ({
           {users ? (
             users.map((user) =>
               user.profileImage ? (
-                <CollabUser
-                  key={user.id}
-                  src={user.profileImage}
-                  alt="profile"
-                />
+                <Link to={`/profile/${user.id}`}>
+                  <CollabUser
+                    key={user.id}
+                    src={user.profileImage}
+                    alt="profile"
+                  />
+                </Link>
               ) : (
                 <CollabUser
                   key={user.id}
