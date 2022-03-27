@@ -153,6 +153,11 @@ export const getPostDetails = asyncHandler(async (req, res) => {
     throw new Error("Post not found")
   }
 
+  if (post.isFlagged) {
+    res.status(400)
+    throw new Error("This post has been flagged.")
+  }
+
   const users = await Promise.all(
     //get the users array of the post
     post.users.map(async (id) => {
@@ -433,6 +438,7 @@ export const searchPost = asyncHandler(async (req, res) => {
 
   const posts = await Post.find(
     {
+      isFlagged: false,
       $or: [
         { title: { $regex: query, $options: "i" } },
         { tags: { $in: [query] } },
