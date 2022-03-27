@@ -30,8 +30,6 @@ const Homepage = () => {
     dispatch(resetPosts())
   }
 
-  console.log(posts)
-
   return userInfo ? (
     <Container>
       {loading && <Message>Loading...</Message>}
