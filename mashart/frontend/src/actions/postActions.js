@@ -27,6 +27,9 @@ import {
   SEARCH_POST_REQUEST,
   SEARCH_POST_SUCCESS,
   SEARCH_POST_FAIL,
+  GET_POST_REQUEST,
+  GET_POST_SUCCESS,
+  GET_POST_FAIL,
 } from "../constants/postConstants"
 
 export const createPost = (post) => async (dispatch, getState) => {
@@ -73,6 +76,40 @@ export const createPostReset = () => async (dispatch) => {
   dispatch({
     type: GET_COMICS_RESET,
   })
+}
+
+export const getPost = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_POST_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/post/detail/${id}`, config)
+
+    dispatch({
+      type: GET_POST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_POST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
 }
 
 export const getPosts =

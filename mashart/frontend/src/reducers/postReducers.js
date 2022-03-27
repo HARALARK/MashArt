@@ -23,6 +23,9 @@ import {
   SEARCH_POST_REQUEST,
   SEARCH_POST_SUCCESS,
   SEARCH_POST_FAIL,
+  GET_POST_REQUEST,
+  GET_POST_SUCCESS,
+  GET_POST_FAIL,
 } from "../constants/postConstants"
 
 export const createPostReducer = (state = {}, action) => {
@@ -40,6 +43,21 @@ export const createPostReducer = (state = {}, action) => {
     case CREATE_COMIC_FAIL:
       return { loading: false, error: action.payload }
     case POST_RESET:
+      return {}
+    default:
+      return state
+  }
+}
+
+export const getPostReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_POST_REQUEST:
+      return { loading: true }
+    case GET_POST_SUCCESS:
+      return { loading: false, posts: action.payload }
+    case GET_POST_FAIL:
+      return { loading: false, error: action.payload }
+    case GET_POSTS_RESET:
       return {}
     default:
       return state
