@@ -75,8 +75,8 @@ const PostScreen = () => {
       return
     }
 
-    if (title.trim().length < 5) {
-      setMessage("Title should be more than 5 characters.")
+    if (title.trim().length < 5 || title.trim().length > 15) {
+      setMessage("Title should be between 5-15 characters.")
       return
     }
 
