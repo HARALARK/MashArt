@@ -19,6 +19,7 @@ const PostCard = ({
   comicReaderPopupHandler,
   likePostHandler,
   userId,
+  noaction = false,
 }) => {
   const {
     _id,
@@ -74,7 +75,7 @@ const PostCard = ({
         <Description>
           {description ? description : "No Description..."}
         </Description>
-        <PostIcons>
+        <PostIcons hide={noaction}>
           {role === "user" && (
             <>
               <FontAwesomeIcon
@@ -179,7 +180,7 @@ const Description = styled.p`
 `
 
 const PostIcons = styled.div`
-  display: flex;
+  display: ${(props) => (props.hide ? "none" : "flex")};
   gap: 1rem;
   color: var(--secondary-dark);
 
