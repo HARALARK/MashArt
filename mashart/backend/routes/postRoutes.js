@@ -11,6 +11,7 @@ import {
   createComic,
   getComics,
   searchPost,
+  deletePost,
 } from "../controllers/postController.js"
 
 import { protect } from "../middleware/authMiddleware.js"
@@ -31,5 +32,6 @@ router.route("/update").put(protect, updatePost)
 router.route("/:id/like").put(protect, likePost)
 router.route("/:id/report").put(protect, reportPost)
 router.route("/:id/flag").put(protect, flagPost)
+router.route("/:id/delete").delete(protect, deletePost)
 
 export default router

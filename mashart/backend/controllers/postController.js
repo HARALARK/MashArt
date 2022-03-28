@@ -285,6 +285,38 @@ export const flagPost = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc delete a post
+// @route DELETE /api/post/:id/delete
+// @access Private
+export const deletePost = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.id)
+  const user = await User.findById(req.user._id)
+
+  try {
+    if (post.users.contains(user._id)) {
+      const deletedPost = await Post.findByIdAndDelete(req.params.id)
+      res.status(200).json({ post: deletedPost })
+
+      await Promise.all(
+        post.users.forEach(async (user) => {
+          const collaborator = await User.findById(user)
+          collaborator.posts = collaborator.posts.filter(
+            (postId) => postId !== deletedPost._id
+          )
+
+          // also delete image/images from firebase
+
+          await collaborator.save()
+        })
+      )
+    } else {
+      return res.status(403).json("Invalid Request") //not authorized to flag
+    }
+  } catch (err) {
+    return res.status(500).json(err)
+  }
+})
+
 // @desc Create a comic
 // @route POST /api/post/create/comic
 // @access Private
