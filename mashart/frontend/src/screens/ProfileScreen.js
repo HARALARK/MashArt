@@ -152,7 +152,7 @@ const ProfileScreen = () => {
               ) : (
                 <>
                   <Link className="link" to="/playlist">
-                    <Button variant="primary">Playlists</Button>
+                    <Button variant="primary">Bookmarks</Button>
                   </Link>
                   <Link className="link" to="/edit-profile">
                     <Button>Edit Profile</Button>
