@@ -109,17 +109,16 @@ const PostScreen = () => {
     } else {
       dispatch(createPost(data))
     }
-
-    setPost(null)
-    setImage(null)
-    setTitle("")
-    setCollaborators("")
-    setDescription("")
-    setTags("")
   }
 
   useEffect(() => {
     if (postInfo) {
+      setPost(null)
+      setImage(null)
+      setTitle("")
+      setCollaborators("")
+      setDescription("")
+      setTags("")
       dispatch(createPostReset())
       navigate("/")
     }
