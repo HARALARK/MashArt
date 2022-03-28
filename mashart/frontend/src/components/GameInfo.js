@@ -21,8 +21,8 @@ const GameInfo = () => {
         <RuleContainer>
           <Number dark>3</Number>
           <Rule dark>
-            Room members collaborate on a drawing based off the host's sentence
-            given in the description!
+            Room members collaborate on a drawing together, then the host can post 
+            the finished piece at the end! 
           </Rule>
         </RuleContainer>
       </Container>

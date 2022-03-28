@@ -13,11 +13,7 @@ const WelcomeScreen = () => {
           <h1 className="welcome">Welcome to</h1>
           <h2 className="mashart">MashArt</h2>
           <p className="para">
-            Est et duis pariatur deserunt esse eu est ut velit dolore eu elit
-            esse quis. Quis occaecat consequat non amet est magna sint dolore
-            eiusmod cupidatat quis fugiat veniam nulla.Quis occaecat consequat
-            non amet est magna sint dolore eiusmod cupidatat quis fugiat veniam
-            nulla.
+            Where Creativity thrives. 
           </p>
           <div className="button-container">
             <Link to="/signup">
