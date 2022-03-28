@@ -13,7 +13,10 @@ const WelcomeScreen = () => {
           <h1 className="welcome">Welcome to</h1>
           <h2 className="mashart">MashArt</h2>
           <p className="para">
-            Where Creativity thrives. 
+            A place where users can show off their creativity
+            with posts, comics and collaboration with others. A place
+            where every artist has a platform share and create. 
+            MashArt is where creativity thrives. 
           </p>
           <div className="button-container">
             <Link to="/signup">
