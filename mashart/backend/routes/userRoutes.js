@@ -15,6 +15,11 @@ import {
   unfollowUser,
   deleteUser,
   getUserPosts,
+  blockUser,
+  unblockUser,
+  getBlockedUsers,
+  changeUserRole,
+  getUserPlaylists,
 } from "../controllers/userController.js"
 import { protect } from "../middleware/authMiddleware.js"
 
@@ -40,6 +45,13 @@ router.route("/search").get(protect, searchUser)
 router.route("/profile/follow").put(protect, followUser)
 router.route("/profile/unfollow").put(protect, unfollowUser)
 
+router.route("/blocked").get(protect, getBlockedUsers)
+router.route("/profile/block").put(protect, blockUser)
+router.route("/profile/unblock").put(protect, unblockUser)
+
+router.route("/role").put(protect, changeUserRole)
+
+router.route("/playlist/:id?").get(protect, getUserPlaylists)
 router.route("/post/:id?").get(protect, getUserPosts)
 
 export default router

@@ -24,7 +24,7 @@ export const authUser = asyncHandler(async (req, res) => {
       _id: user._id,
       username: user.username,
       email: user.email,
-      profileImage: user.profileImage || null,
+      role: user.role,
       token: generateToken(user._id),
     })
   } else {
@@ -106,6 +106,11 @@ export const getUserProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       username: user.username,
       email: user.email,
+      followers: user.followers,
+      following: user.following,
+      posts: user.posts.reverse(),
+      playlists: user.playlists,
+      role: user.role,
       profileImage: user.profileImage || null,
     })
   } else {
@@ -290,7 +295,7 @@ export const searchUser = asyncHandler(async (req, res) => {
 
   const users = await User.find(
     { username: { $regex: username, $options: "i" } },
-    { username: 1 }
+    { username: 1, profileImage: 1 }
   )
 
   res.json({
@@ -352,6 +357,71 @@ export const unfollowUser = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc block a user
+// @route PUT /api/user/profile/block
+// access Private
+export const blockUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id) //current user
+  const blockUser = await User.findById(req.body._id) //user to block
+
+  if (user && blockUser) {
+    if (!user.blockedUsers.includes(blockUser._id)) {
+      //update current user's blockedUsers list
+      await user.updateOne({
+        $push: { blockedUsers: blockUser._id },
+      })
+      res.status(200).json("User Blocked")
+    } else {
+      res.status(400)
+      throw new Error("Invalid Request")
+    }
+  } else {
+    res.status(404)
+    throw new Error("User not found")
+  }
+})
+
+// @desc unblock a user
+// @route PUT /api/user/profile/unblock
+// access Private
+export const unblockUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id) //current user
+  const unblockUser = await User.findById(req.body._id) //user to block
+
+  if (user && unblockUser) {
+    if (user.blockedUsers.includes(unblockUser._id)) {
+      //update current user's blockedUsers list
+      await user.updateOne({
+        $pull: { blockedUsers: unblockUser._id },
+      })
+      res.status(200).json("User Unblocked")
+    } else {
+      res.status(400)
+      throw new Error("Invalid Request")
+    }
+  } else {
+    res.status(404)
+    throw new Error("User not found")
+  }
+})
+
+// @desc get blocked users
+// @route GET /api/user/blocked
+// access Private
+export const getBlockedUsers = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id) //current user
+
+  if (!user) {
+    res.status(404)
+    throw new Error("User not Found")
+  }
+
+  res.status(200)
+  res.json({
+    blockedUsers: user.blockedUsers,
+  })
+})
+
 // @desc delete user account
 // @route DELETE /api/user/profile
 // @access Private
@@ -384,6 +454,54 @@ export const deleteUser = asyncHandler(async (req, res) => {
     await User.findByIdAndDelete(user._id) //delete user from database
     res.status(200).json("You have successfully deleted your account")
   }
+})
+
+// @desc change user's role
+// @route PUT /api/user/role
+// access Private
+export const changeUserRole = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id) //current user
+  const roleUser = await User.findById(req.body._id) //user to modify role
+
+  if (user && roleUser) {
+    if (user.role !== "admin") {
+      res.status(400)
+      throw new Error("Not Authorized")
+    }
+
+    if (roleUser.role === "user") {
+      roleUser.role = "moderator"
+    } else if (roleUser.role === "moderator") {
+      roleUser.role = "user"
+    } else {
+      res.status(404)
+      throw new Error("Invalid role")
+    }
+
+    await roleUser.save()
+
+    res.json("User Role Updated")
+  } else {
+    res.status(404)
+    throw new Error("User not found")
+  }
+})
+
+// @desc get list of posts related to a user
+// @route get /api/user/playlist/:id?
+// @access Private
+export const getUserPlaylists = asyncHandler(async (req, res) => {
+  const userId = req.params.id || req.user._id
+  const user = await User.findById(userId)
+
+  if (!user) {
+    res.status(404)
+    throw new Error("User not found")
+  }
+
+  res.json({
+    playlists: user.playlists,
+  })
 })
 
 // @desc get list of posts related to a user

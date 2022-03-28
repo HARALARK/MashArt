@@ -3,8 +3,8 @@ import mongoose from "mongoose"
 const postSchema = mongoose.Schema(
   {
     path: {
-      type: String,
-      unique: true,
+      type: Array,
+      default: [],
     },
     users: {
       type: Array,
@@ -26,16 +26,30 @@ const postSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
-    likes: [{type: mongoose.Types.ObjectId, ref: 'User'}],
-    comments: [{
-      type: mongoose.Types.ObjectId, ref: 'Comment',
-      default: [],
-    }],
+    likes: [{ type: mongoose.Types.ObjectId, ref: "User" }],
+    comments: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Comment",
+        default: [],
+      },
+    ],
     reportCount: {
       type: Number,
       default: 0,
     },
+    reports: [{ type: mongoose.Types.ObjectId, ref: "User" }],
     isFlagged: {
+      type: Boolean,
+      default: false,
+    },
+    type: {
+      type: String, //could be a single post or a collection of posts i.e., a comic
+      default: "post",
+      enum: ["comic", "post"],
+    },
+    collabStatus: {
+      //to check if a post is a collab post or a user post
       type: Boolean,
       default: false,
     },

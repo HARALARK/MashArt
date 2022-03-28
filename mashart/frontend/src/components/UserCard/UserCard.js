@@ -9,11 +9,16 @@ const UserCard = ({ user }) => {
     <Link className="user-link" to={`/profile/${user._id}`}>
       <Container>
         <div>
-          <ProfileImageHolder size={"60px"}>
-            {user.profileImg ? (
-              <ProfileImage src={user.profileImg} alt="profile" />
+          <ProfileImageHolder size={"40px"}>
+            {user?.profileImage?.imageSrc ? (
+              <ProfileImage
+                src={user?.profileImage?.imageSrc}
+                alt="profile"
+                height={"40px"}
+                width={"40px"}
+              />
             ) : (
-              <FontAwesomeIcon icon={faUser} size="2x" />
+              <FontAwesomeIcon icon={faUser} size="lg" />
             )}
           </ProfileImageHolder>
         </div>
@@ -29,7 +34,7 @@ const Container = styled.section`
   gap: 1rem;
   background: var(--secondary-light);
   color: var(--light);
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 0.5rem;
   transition: 200ms ease-in-out;
 
   border-radius: 5px;
@@ -41,13 +46,14 @@ const Container = styled.section`
   }
 
   .username {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
   }
 `
 
 const ProfileImage = styled.img`
   height: ${(props) => props.height || "80px"};
   width: ${(props) => props.width || "80px"};
+  border-radius: 10px;
 `
 
 const ProfileImageHolder = styled.div`

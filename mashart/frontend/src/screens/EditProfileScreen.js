@@ -50,10 +50,29 @@ const EditProfileScreen = () => {
   const submitHandler = (e) => {
     e.preventDefault()
 
+    if (
+      (username.length > 0 &&
+        (username.trim().length < 6 || username.trim().length > 15)) ||
+      username.trim().includes(" ")
+    ) {
+      setMessage(
+        "Username should be of length 6-15 characters (spaces not allowed)"
+      )
+      return
+    }
+
+    if (
+      password.length > 0 &&
+      (password.trim().length < 8 || password.trim().includes(" "))
+    ) {
+      setMessage("Password should be atleast 8 characters (spaces not allowed)")
+      return
+    }
+
     const data = new FormData()
     data.append("profileImage", profileImage)
-    data.append("username", username)
-    data.append("password", password)
+    data.append("username", username.trim())
+    data.append("password", password.trim())
 
     dispatch(updateUserProfile(data))
 
@@ -148,7 +167,7 @@ const Container = styled.div`
     gap: 2rem;
   }
 
-  padding: 1rem 0 80px;
+  padding: 1rem 1rem 80px;
 `
 
 const Form = styled.form`
@@ -158,6 +177,9 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  background: var(--secondary-light);
+  color: var(--light);
 `
 
 const InputContainer = styled.div``
@@ -179,7 +201,7 @@ const ImageContainer = styled.div`
 `
 
 const ImagePlaceHolder = styled.div`
-  background: var(--secondary-light);
+  background: var(--secondary);
   opacity: 50%;
   display: flex;
   justify-content: center;

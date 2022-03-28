@@ -2,7 +2,10 @@ import { applyMiddleware, combineReducers, createStore } from "redux"
 import thunk from "redux-thunk"
 import { composeWithDevTools } from "redux-devtools-extension"
 import {
+  banUserReducer, //ahmed
+  blockedUsersReducer,
   forgotPasswordReducer,
+  getUserPlaylistsReducer,
   getUserPostReducer,
   resetPasswordReducer,
   searchUserReducer,
@@ -11,8 +14,19 @@ import {
   userRegisterReducer,
   userUpdateProfileReducer,
 } from "../reducers/userReducers"
-import { createPostReducer, getPostsReducer, reportPostReducer } from "../reducers/postReducers"
+import {
+  createPostReducer,
+  getComicsReducer,
+  getPostReducer,
+  getPostsReducer,
+  searchPostReducer,
+} from "../reducers/postReducers"
 import { collabReducer, collabUsersReducer } from "../reducers/collabReducers"
+import {
+  addPostToPlaylistReducer,
+  createPlaylistReducer,
+  getPlaylistReducer,
+} from "../reducers/playlistReducer"
 
 let reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -27,7 +41,15 @@ let reducer = combineReducers({
   userPosts: getUserPostReducer,
   collab: collabReducer,
   collabUsers: collabUsersReducer,
-  reportPost: reportPostReducer,
+  blockedUsers: blockedUsersReducer,
+  banUser: banUserReducer,
+  userPlaylists: getUserPlaylistsReducer,
+  createPlaylist: createPlaylistReducer,
+  addPostToPlaylist: addPostToPlaylistReducer,
+  getPlaylist: getPlaylistReducer,
+  comics: getComicsReducer,
+  searchPost: searchPostReducer,
+  getPost: getPostReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

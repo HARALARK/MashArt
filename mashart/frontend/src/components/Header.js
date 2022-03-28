@@ -22,8 +22,8 @@ const Header = () => {
 
   const navLinks = {
     Collab: "/collab",
-    Activity: "/activity",
-    Chat: "/chat",
+    // Activity: "/activity",
+    // Chat: "/chat",
   }
 
   const logoutHandler = () => {
@@ -121,7 +121,7 @@ const Container = styled.div`
   top: 0;
   left: 0;
   background-color: var(--secondary);
-  height: 80px;
+  height: 60px;
   display: ${(props) => props.userLoggedIn};
   justify-content: center;
   align-items: center;
@@ -134,7 +134,7 @@ const Container = styled.div`
 `
 
 const SubContainer = styled.div`
-  width: 900px;
+  width: 1000px;
   padding: 0 2rem;
   display: flex;
   justify-content: space-between;
@@ -217,7 +217,7 @@ const Dropdown = styled(NavMenu)`
   z-index: 9;
 
   &.active {
-    top: 80px;
+    top: 60px;
     position: fixed;
   }
 

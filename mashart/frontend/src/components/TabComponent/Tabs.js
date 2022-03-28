@@ -1,10 +1,8 @@
 import React, { useState } from "react"
 import styled from "styled-components"
+import device from "../../screen_sizes/devices"
 
-import CollabTab from "../TabComponent/CollabTab"
-import PostsTab from "../TabComponent/PostsTab"
-
-const Tabs = () => {
+const Tabs = ({ posts, popupHandler }) => {
   const [activeTab, setActiveTab] = useState("CollabTab")
 
   const handleCTab = () => {
@@ -16,76 +14,58 @@ const Tabs = () => {
     //Updates state to post history tab
     setActiveTab("PostsTab")
   }
+
   return (
     <TabsContainer>
-      {/* Tab nav */}
-      <NavMenu>
+      {/* <NavMenu>
         <NavOption
           className={activeTab === "PostsTab" ? "active" : ""}
           onClick={handlePTab}
         >
-          {" "}
-          Posts{" "}
+          Posts
         </NavOption>
         <NavOption
           className={activeTab === "CollabTab" ? "active" : ""}
           onClick={handleCTab}
           side="right"
         >
-          {" "}
           Collaborations
         </NavOption>
-      </NavMenu>
-
-      <div className="outlet">
-        {activeTab === "CollabTab" ? <CollabTab /> : <PostsTab />}
-      </div>
+      </NavMenu> */}
+      <PostContainer>
+        {posts?.map((post) => (
+          <Post
+            key={post._id}
+            src={post.path}
+            onClick={() => popupHandler(post.id)}
+          />
+        ))}
+      </PostContainer>
     </TabsContainer>
   )
 }
 
 const TabsContainer = styled.div`
-  width: 90%;
-  height: auto;
-  min-height: 400px;
-  margin: 0.25rem auto 1.5rem;
-  padding: 2rem 1rem;
-  color: #021216;
-  border-radius: 2rem;
-  @media (max-width: 769px) {
-    padding: 2rem 0;
-  }
+  width: 100%;
+  padding: 1rem 2rem 80px;
+  color: var(--primary-dark);
 `
 
 const NavMenu = styled.ul`
-  width: 60%;
-  margin: 0 auto 2rem;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border: 1px solid #39a2db;
-  border-radius: 2rem;
-
-  @media (max-width: 768px) {
-    width: 90%;
-  }
+  border: 2px solid var(--secondary-light);
+  border-radius: 5px;
+  margin: 0 0 1rem;
 `
 
 const NavOption = styled.li`
-  width: 50%;
+  flex: 1;
   padding: 1rem;
   list-style: none;
   text-align: center;
   cursor: pointer;
-  transition: all 0.7s;
-
-  border-bottom-left-radius: ${(props) =>
-    props.side !== "right" ? "2rem" : "0"};
-  border-top-left-radius: ${(props) => (props.side !== "right" ? "2rem" : "0")};
-  border-bottom-right-radius: ${(props) =>
-    props.side === "right" ? "2rem" : "0"};
-  border-top-right-radius: ${(props) =>
-    props.side === "right" ? "2rem" : "0"};
+  transition: all 100ms;
+  color: var(--dark);
 
   &:hover {
     background: #007bbda2;
@@ -94,6 +74,25 @@ const NavOption = styled.li`
   &.active {
     background: var(--secondary-light);
     font-weight: bold;
+    color: var(--light);
+  }
+`
+
+const PostContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+`
+
+const Post = styled.img`
+  width: 100%;
+  height: 300px;
+  background: var(--light);
+
+  cursor: pointer;
+
+  @media ${device.tablet} {
+    width: calc(50% - 5px);
   }
 `
 

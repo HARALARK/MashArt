@@ -50,7 +50,7 @@ const Container = styled.div`
 
   @media ${device.tablet} {
     flex-direction: row;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 60px);
     justify-content: space-between;
     gap: 2rem;
   }
